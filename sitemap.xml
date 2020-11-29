@@ -3,26 +3,57 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://mythcen.github.io/posts/my-first-post/</loc>
-    <lastmod>2020-11-28T16:24:49+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://mythcen.github.io/</loc>
-    <lastmod>2020-11-28T16:24:49+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://mythcen.github.io/posts/</loc>
-    <lastmod>2020-11-28T16:24:49+08:00</lastmod>
+    <loc>http://mythcen.github.io/tags/blog/</loc>
+    <lastmod>2020-11-29T11:05:49+08:00</lastmod>
   </url>
   
   <url>
     <loc>http://mythcen.github.io/categories/</loc>
+    <lastmod>2020-11-29T11:05:49+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://mythcen.github.io/</loc>
+    <lastmod>2020-11-29T11:05:49+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://mythcen.github.io/post/</loc>
+    <lastmod>2020-11-29T11:05:49+08:00</lastmod>
   </url>
   
   <url>
     <loc>http://mythcen.github.io/tags/</loc>
+    <lastmod>2020-11-29T11:05:49+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://mythcen.github.io/categories/%E5%8D%9A%E5%AE%A2/</loc>
+    <lastmod>2020-11-29T11:05:49+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://mythcen.github.io/p/start-record/</loc>
+    <lastmod>2020-11-29T11:05:49+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://mythcen.github.io/about/</loc>
+    <lastmod>2020-11-29T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://mythcen.github.io/page/</loc>
+    <lastmod>2020-11-29T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://mythcen.github.io/archives/</loc>
+    <lastmod>2019-05-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://mythcen.github.io/search/</loc>
   </url>
   
 </urlset>
