@@ -7,13 +7,12 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <lastBuildDate>Sun, 29 Nov 2020 11:05:49 +0800</lastBuildDate><atom:link href="http://mythcen.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>测试文章</title>
+        <title>建站记</title>
         <link>http://mythcen.github.io/p/start-record/</link>
         <pubDate>Sun, 29 Nov 2020 11:05:49 +0800</pubDate>
         
         <guid>http://mythcen.github.io/p/start-record/</guid>
-        <description>&lt;h1 id=&#34;建站记&#34;&gt;建站记&lt;/h1&gt;
-&lt;p&gt;一个小小的个人空间在互联网上被开辟了。&lt;/p&gt;
+        <description>&lt;img src="http://mythcen.github.io/p/start-record/island.jpg" alt="Featured image of post 建站记" /&gt;&lt;p&gt;一个小小的个人空间在互联网上被开辟了。&lt;/p&gt;
 &lt;p&gt;最开始是想要有一个总结技术经验，分享自己的编程思考的一个技术博客。&lt;/p&gt;
 &lt;p&gt;由于使用过一段时间的Go，本着多了解下后端等其他开发链条的缘故，自己折腾了一个ghost系统，买了腾讯的服务器，最简化搭载nginx和nodeJs，在购买了域名以及备案之后，一个小破站出现了。&lt;/p&gt;
 &lt;p&gt;中间折腾了不少，但是最终弄好后，遇到了一个问题——该版本的ghost编辑器会吞掉中文拼音。&lt;/p&gt;
