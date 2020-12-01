@@ -8,11 +8,11 @@
         <language>en-us</language>
         <lastBuildDate>Tue, 01 Dec 2020 20:00:22 +0800</lastBuildDate><atom:link href="http://mythcen.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>宏任务与微任务</title>
-        <link>http://mythcen.github.io/p/start-record/</link>
+        <link>http://mythcen.github.io/p/macrotask-and-microtask/</link>
         <pubDate>Tue, 01 Dec 2020 20:00:22 +0800</pubDate>
         
-        <guid>http://mythcen.github.io/p/start-record/</guid>
-        <description>&lt;img src="http://mythcen.github.io/cover.jpg" alt="Featured image of post 宏任务与微任务" /&gt;&lt;h1 id=&#34;宏任务与微任务&#34;&gt;宏任务与微任务&lt;/h1&gt;
+        <guid>http://mythcen.github.io/p/macrotask-and-microtask/</guid>
+        <description>&lt;img src="http://mythcen.github.io/p/macrotask-and-microtask/cover.png" alt="Featured image of post 宏任务与微任务" /&gt;&lt;h1 id=&#34;宏任务与微任务&#34;&gt;宏任务与微任务&lt;/h1&gt;
 &lt;p&gt;在点击事件冒泡捕获的处理中，通过使用setTimeout 的方式，想要调整某个代码的执行顺序的话，其具体的执行顺序，由一套  &lt;strong&gt;机制&lt;/strong&gt;  去实现，这套机制就是通过定义 &lt;strong&gt;宏任务与微任务&lt;/strong&gt; 来安排执行顺序。&lt;/p&gt;
 &lt;h2 id=&#34;异步机制javascript事件循环&#34;&gt;异步机制：javascript事件循环&lt;/h2&gt;
 &lt;h3 id=&#34;概念&#34;&gt;概念&lt;/h3&gt;

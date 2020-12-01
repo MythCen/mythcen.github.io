@@ -9,10 +9,10 @@
     <lastBuildDate>Tue, 01 Dec 2020 20:00:22 +0800</lastBuildDate><atom:link href="http://mythcen.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>宏任务与微任务</title>
-      <link>http://mythcen.github.io/p/start-record/</link>
+      <link>http://mythcen.github.io/p/macrotask-and-microtask/</link>
       <pubDate>Tue, 01 Dec 2020 20:00:22 +0800</pubDate>
       
-      <guid>http://mythcen.github.io/p/start-record/</guid>
+      <guid>http://mythcen.github.io/p/macrotask-and-microtask/</guid>
       <description>宏任务与微任务 在点击事件冒泡捕获的处理中，通过使用setTimeout 的方式，想要调整某个代码的执行顺序的话，其具体的执行顺序，由一套 机制 去实现，这套机制就是通过定义 宏任务与微任务 来安排执行顺序。
 异步机制：javascript事件循环 概念 内存堆：这是内存分配发生的地方。当V8引擎遇到变量声明和函数声明的时候，就把它们存储在堆里面。
 调用栈：这是你的代码执行时的地方。当引擎遇到像函数调用之类的可执行单元，就会把它们推入调用栈。
