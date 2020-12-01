@@ -6,7 +6,195 @@
         <description>Recent content on MythC</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sun, 29 Nov 2020 11:05:49 +0800</lastBuildDate><atom:link href="http://mythcen.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 01 Dec 2020 20:00:22 +0800</lastBuildDate><atom:link href="http://mythcen.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>宏任务与微任务</title>
+        <link>http://mythcen.github.io/p/start-record/</link>
+        <pubDate>Tue, 01 Dec 2020 20:00:22 +0800</pubDate>
+        
+        <guid>http://mythcen.github.io/p/start-record/</guid>
+        <description>&lt;img src="http://mythcen.github.io/cover.jpg" alt="Featured image of post 宏任务与微任务" /&gt;&lt;h1 id=&#34;宏任务与微任务&#34;&gt;宏任务与微任务&lt;/h1&gt;
+&lt;p&gt;在点击事件冒泡捕获的处理中，通过使用setTimeout 的方式，想要调整某个代码的执行顺序的话，其具体的执行顺序，由一套  &lt;strong&gt;机制&lt;/strong&gt;  去实现，这套机制就是通过定义 &lt;strong&gt;宏任务与微任务&lt;/strong&gt; 来安排执行顺序。&lt;/p&gt;
+&lt;h2 id=&#34;异步机制javascript事件循环&#34;&gt;异步机制：javascript事件循环&lt;/h2&gt;
+&lt;h3 id=&#34;概念&#34;&gt;概念&lt;/h3&gt;
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;内存堆&lt;/strong&gt;：这是内存分配发生的地方。当V8引擎遇到变量声明和函数声明的时候，就把它们存储在堆里面。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;调用栈&lt;/strong&gt;：这是你的代码执行时的地方。当引擎遇到像函数调用之类的可执行单元，就会把它们推入调用栈。&lt;/p&gt;
+&lt;p&gt;JS单线程，指的是在JS引擎中，解析执行JS代码的调用栈是唯一的，所有的JS代码都在这一个调用栈里按照调用顺序执行，不能同时执行多个函数。&lt;/p&gt;
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Web APIs&lt;/strong&gt;：还有很多引擎之外的 API，我们把这些称为浏览器提供的 Web API，比如说 事件监听函数、DOM、HTTP／AJAX请求、setTimeout等等。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;回调队列&lt;/strong&gt;（Event Queue)：按照&lt;strong&gt;先进先出&lt;/strong&gt;的顺序存储所有的回调函数。在任意时间，只要Web API容器中的事件达到触发条件，就可以把回调函数添加到回调队列中去。&lt;/p&gt;
+&lt;p&gt;**事件循环 ** (Event Loop)：持续的检测调用栈和回调队列，如果检测到调用栈为空，它就会通知回调队列把队列中的第一个回调函数推入执行栈。&lt;/p&gt;
+&lt;h3 id=&#34;机制&#34;&gt;机制&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://bucket-1256530863.cos.ap-shanghai.myqcloud.com/tapd_55367591_base64_1587813146_16-20200507162034229.png&#34; alt=&#34;tapd_55367591_base64_1587813146_16&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;JS运行时环境的工作机制：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;JS引擎&lt;/strong&gt;：（唯一主线程）按顺序解析代码，遇到函数声明，入堆，遇到函数调用，入栈；&lt;/li&gt;
+&lt;li&gt;如果是同步函数调用，直接执行得到结果，同步函数弹出栈，继续下一个函数调用；&lt;/li&gt;
+&lt;li&gt;如果是异步函数调用，分发给&lt;strong&gt;Web API&lt;/strong&gt;（多个辅助线程），进入Event Table并注册函数，异步函数弹出栈，继续下一个函数调用；&lt;/li&gt;
+&lt;li&gt;Web API中，异步函数在相应辅助线程中处理完成后，即异步函数达到触发条件了，Event Table就将回调函数推入&lt;strong&gt;回调队列&lt;/strong&gt;中。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Event Loop&lt;/strong&gt;：不停地检查主线程的调用栈与回调队列，当调用栈空时，就把回调队列中的第一个任务推入栈中执行，不断循环。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;例子&#34;&gt;例子&lt;/h3&gt;
+&lt;p&gt;下面是一段简易的 &lt;code&gt;ajax&lt;/code&gt; 请求代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;let data = [];
+$.ajax({
+    url:www.javascript.com,
+    data:data,
+    success:() =&amp;gt; {
+        console.log(&#39;发送成功!&#39;);
+    }
+})
+console.log(&#39;代码执行结束&#39;);
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;ajax进入Event Table，注册回调函数 &lt;code&gt;success&lt;/code&gt; 。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;执行 &lt;code&gt;console.log(&#39;代码执行结束&#39;)&lt;/code&gt; 。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;ajax事件完成，回调函数 &lt;code&gt;success&lt;/code&gt; 进入Event Queue。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;主线程从Event Queue读取回调函数 &lt;code&gt;success&lt;/code&gt; 并执行。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;下面是一段更详细的例子：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;nx&#34;&gt;setTimeout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(){&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;Hey, Why am I last?&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;},&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+
+&lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;sayHi&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(){&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;Hello&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+&lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;sayBye&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(){&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;Goodbye&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+&lt;span class=&#34;nx&#34;&gt;sayHi&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+&lt;span class=&#34;nx&#34;&gt;sayBye&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;执行过程是这样的：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;JS引擎会检查整段代码的语法错误，如果没有错误，就从头开始深度解析&lt;/li&gt;
+&lt;li&gt;首先遇到setTimeout函数调用，把它推入执行栈顶&lt;/li&gt;
+&lt;li&gt;解析函数体，发现setTimeout函数是Web API的一种，因此就把它分发到Web API模块然后推出栈&lt;/li&gt;
+&lt;li&gt;因为定时器设置了0ms延迟，因此Web API模块立即把它的匿名回调函数推入到回调函数函数队列。事件循环检测执行栈是否是空闲，但是当前栈并不空闲，因为&amp;hellip;&lt;/li&gt;
+&lt;li&gt;当setTimeout函数一被分发到Web API模块，JS引擎发现了两个函数声明，把它们存储在堆内存里，然后遇到了sayHi函数的调用，就把它推入了栈顶&lt;/li&gt;
+&lt;li&gt;sayHi函数调用了console.log函数，因此console.log就被推入了栈顶&lt;/li&gt;
+&lt;li&gt;JS引擎开始解析console.log的函数体，它接收了一个消息去打印‘Hello’，然后被弹出栈&lt;/li&gt;
+&lt;li&gt;JS引擎返回到函数sayHi的执行，遇到函数的结束符号}之后，把sayHi弹出栈&lt;/li&gt;
+&lt;li&gt;sayHi函数一出栈，紧接着sayBye函数被调用，它就被推入栈顶，被解析，调用console.log，把console.log推入栈顶，打印一条消息，弹出栈。然后sayBye函数弹出栈&lt;/li&gt;
+&lt;li&gt;事件循环检测到执行栈终于空闲了，通知回调队列，然后回调队列把其中的匿名函数推入执行栈&lt;/li&gt;
+&lt;li&gt;匿名函数（就是setTimeout的回调函数）被解析，调用console.log，console.log推入栈顶&lt;/li&gt;
+&lt;li&gt;console.log执行完毕、再出栈&lt;/li&gt;
+&lt;li&gt;匿名函数再被推出栈，程序结束&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;另一个异步机制宏任务与微任务&#34;&gt;另一个异步机制：宏任务与微任务&lt;/h2&gt;
+&lt;p&gt;但是，JS异步还有一个机制，就是遇到宏任务，先处理宏任务——将宏任务放入Event Queue，然后再处理微任务——将微任务放入Event Queue。
+注意，这里两个Event Queue不是同一个queue。
+当js引擎的主线程执行栈为空时，它会优先从微任务queue里遍历注册的回调函数并一一执行，然后再从宏任务的queue里遍历执行注册的回调函数，如下图：&lt;/p&gt;
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Web API&lt;/strong&gt;中，异步函数在相应辅助线程中处理完成后，即异步函数达到触发条件了（比如setTimeout设置的10s后），如果异步函数是宏任务，则入&lt;strong&gt;宏任务消息队列&lt;/strong&gt;，如果是微任务，则入&lt;strong&gt;微任务消息队列&lt;/strong&gt;；&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Event Loop&lt;/strong&gt;不停地检查主线程的调用栈与回调队列，当调用栈空时，就把&lt;strong&gt;微任务&lt;/strong&gt;消息队列中的第一个任务推入栈中执行，执行完成后，再取第二个微任务，直到微任务消息队列为空；然后 去宏任务消息队列中取第一个宏任务推入栈中执行，当该宏任务执行完成后，在下一个宏任务执行前，再依次取出微任务消息队列中的所有微任务入栈执行。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;上述过程不断循环，每当微任务队列清空，可作为本轮事件循环的结束。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;宏任务&lt;/strong&gt; (macrotask/task)&lt;/p&gt;
+&lt;p&gt;包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;I/O（例如点击一次&lt;code&gt;button&lt;/code&gt;，上传一个文件，与程序产生交互的这些都可以称之为&lt;code&gt;I/O&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;setTimeout&lt;/li&gt;
+&lt;li&gt;setInterval&lt;/li&gt;
+&lt;li&gt;setImmediate（仅Node）&lt;/li&gt;
+&lt;li&gt;requestAnimationFrame（仅浏览器）&lt;/li&gt;
+&lt;li&gt;xhr&lt;/li&gt;
+&lt;li&gt;postMessage&lt;/li&gt;
+&lt;li&gt;MessageChannel&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;对于 &lt;code&gt;setInterval(fn,ms)&lt;/code&gt; 来说，不是每过 &lt;code&gt;ms&lt;/code&gt; 秒会执行一次 &lt;code&gt;fn&lt;/code&gt; ，而是每过 &lt;code&gt;ms&lt;/code&gt; 秒，会有 &lt;code&gt;fn&lt;/code&gt; 进入Event Queue。
+一旦 &lt;code&gt;setInterval&lt;/code&gt; 的回调函数 &lt;code&gt;fn&lt;/code&gt; 执行时间超过了延迟时间 &lt;code&gt;ms&lt;/code&gt; ，那么就完全看不出来有时间间隔了。&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;P.S. 有些地方会列出来&lt;code&gt;UI Rendering&lt;/code&gt;，说这个也是宏任务，可是在读了&lt;a class=&#34;link&#34; href=&#34;https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;HTML规范文档&lt;/a&gt;以后，发现这很显然是和微任务平行的一个操作步骤&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;P.S. &lt;code&gt;requestAnimationFrame&lt;/code&gt;在&lt;a class=&#34;link&#34; href=&#34;https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;MDN的定义&lt;/a&gt;为，下次页面重绘前所执行的操作，而重绘也是作为宏任务的一个步骤来存在的，且该步骤晚于微任务的执行&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;微任务&lt;/strong&gt; (microtask/job)&lt;/p&gt;
+&lt;p&gt;包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Promise.then catch finally&lt;/li&gt;
+&lt;li&gt;process.nextTick（仅Node）&lt;/li&gt;
+&lt;li&gt;MutationObserver（仅浏览器）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;P.S.&lt;/strong&gt; new Promise在实例化的过程中所执行的代码都是同步进行的，而then中注册的回调才是异步执行的。 async/await底层是基于Promise封装的，所以await前面的代码相当于new Promise，是同步进行的，await后面的代码相当于then，才是异步进行的。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;P.S&lt;/strong&gt;.  在&lt;a class=&#34;link&#34; href=&#34;https://promisesaplus.com/#notes&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Promise/A+的规范&lt;/a&gt;中，&lt;code&gt;Promise&lt;/code&gt;的实现可以是微任务，也可以是宏任务，但是普遍的共识表示(至少&lt;code&gt;Chrome&lt;/code&gt;是这么做的)，&lt;code&gt;Promise&lt;/code&gt;应该是属于微任务阵营的*&lt;/p&gt;
+&lt;h3 id=&#34;例子-1&#34;&gt;例子&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;nx&#34;&gt;setTimeout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+
+&lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;Promise&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;resolve&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;nx&#34;&gt;resolve&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+  &lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;then&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;})&lt;/span&gt;
+
+&lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;最终输出结果为：1 &amp;gt; 2 &amp;gt; 3 &amp;gt; 4&lt;/p&gt;
+&lt;p&gt;再来看一个嵌套的示例：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;nb&#34;&gt;Promise&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;resolve&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;().&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;then&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(()=&amp;gt;{&lt;/span&gt;
+  &lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;Promise1&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; 
+  &lt;span class=&#34;nb&#34;&gt;Promise&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;resolve&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;().&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;then&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(()=&amp;gt;{&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;Promise2&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;    
+  &lt;span class=&#34;p&#34;&gt;})&lt;/span&gt;
+
+&lt;span class=&#34;p&#34;&gt;})&lt;/span&gt;
+
+&lt;span class=&#34;nx&#34;&gt;setTimeout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(()=&amp;gt;{&lt;/span&gt;
+  &lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;setTimeout1&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;setTimeout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(()=&amp;gt;{&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;setTimeout2&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+  &lt;span class=&#34;p&#34;&gt;},&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;},&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;最后输出结果是Promise1 &amp;gt; setTimeout1 &amp;gt; Promise2 &amp;gt; setTimeout2&lt;/p&gt;
+&lt;p&gt;Promise1&lt;/p&gt;
+&lt;h2 id=&#34;node-环境&#34;&gt;Node 环境&lt;/h2&gt;
+&lt;h3 id=&#34;node中事件循环&#34;&gt;Node中事件循环&lt;/h3&gt;
+&lt;p&gt;Node用V8作为js的解析引擎，而I/O处理方面使用了自己设计的libuv，libuv是一个基于事件驱动的跨平台抽象层，封装了不同操作系统一些底层特性，对外提供统一的API，事件循环机制也是它里面的实现。 Node也是单线程，但是在处理Event Loop上与浏览器稍微有些不同。&lt;/p&gt;
+&lt;p&gt;在node里，有一些常用的异步API，这里简单介绍下他们：&lt;/p&gt;
+&lt;h4 id=&#34;setimmediate&#34;&gt;&lt;strong&gt;setImmediate()&lt;/strong&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;setImmediate()&lt;/code&gt;在一次Event Loop执行完毕后立刻调用。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;setTimeout&lt;/code&gt;则是通过计算一个延迟时间后进行执行。&lt;/p&gt;
+&lt;p&gt;所以如下示例，不能保证输出顺序。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;nx&#34;&gt;setTimeout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;setTimeout&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+&lt;span class=&#34;nx&#34;&gt;setImmediate&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;setImmediate&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;而如果是下面这样，则一定是setImmediate先输出。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;nx&#34;&gt;setTimeout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;setTimeout&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;nx&#34;&gt;setImmediate&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;setImmediate&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;processnexttick&#34;&gt;&lt;strong&gt;process.nextTick()&lt;/strong&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;process.nextTick()&lt;/code&gt;会将回调函数放入队列中,在下一轮Tick时取出执行&lt;/p&gt;
+&lt;p&gt;这是因为 ，process.nextTick()中的回调函数执行的优先级要高于setImmediate()。
+Node里，事件循环对观察者的检查是有先后顺序的,process.nextTick()属于idle观察者, setImmediate()属于check观察者。&lt;/p&gt;
+&lt;p&gt;process.nextTick和setImmediate的一个重要区别：多个process.nextTick语句总是在当前&amp;quot;执行栈&amp;quot;一次执行完，多个setImmediate可能则需要多次loop才能执行完。 事实上，这正是Node.js 10.0版添加setImmediate方法的原因，否则像下面这样的递归调用process.nextTick，将会没完没了，主线程根本不会去读取&amp;quot;事件队列&amp;quot;！&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;nx&#34;&gt;process&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;nextTick&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;foo&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;nx&#34;&gt;process&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;nextTick&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;foo&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://juejin.im/post/5e972f3c518825739d40874a&#34;&gt;https://juejin.im/post/5e972f3c518825739d40874a&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://juejin.im/post/5e9d0b48f265da47ff7cd9e6&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;JS核心理论之《运行机制与宏任务、微任务》&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/benyasin/js-core-theory/blob/master/JS%e5%bc%95%e6%93%8e%e3%80%81%e8%bf%90%e8%a1%8c%e6%97%b6%e4%b8%8e%e8%b0%83%e7%94%a8%e6%a4%8e%e6%a0%88.md&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;JS核心理论之《JS引擎、运行时与调用椎栈》&lt;/a&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>建站记</title>
         <link>http://mythcen.github.io/p/start-record/</link>
         <pubDate>Sun, 29 Nov 2020 11:05:49 +0800</pubDate>

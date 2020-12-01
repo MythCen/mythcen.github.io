@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on MythC</title>
-    <link>http://mythcen.github.io/post/</link>
-    <description>Recent content in Posts on MythC</description>
+    <title>JavaScript on MythC</title>
+    <link>http://mythcen.github.io/tags/javascript/</link>
+    <description>Recent content in JavaScript on MythC</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 01 Dec 2020 20:00:22 +0800</lastBuildDate><atom:link href="http://mythcen.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 01 Dec 2020 20:00:22 +0800</lastBuildDate><atom:link href="http://mythcen.github.io/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>宏任务与微任务</title>
       <link>http://mythcen.github.io/p/start-record/</link>
@@ -25,24 +25,6 @@ Web APIs：还有很多引擎之外的 API，我们把这些称为浏览器提�
 let data = []; $.ajax({ url:www.javascript.com, data:data, success:() =&amp;gt; { console.log(&#39;发送成功!&#39;); } }) console.log(&#39;代码执行结束&#39;);   ajax进入Event Table，注册回调函数 success 。
   执行 console.log(&#39;代码执行结束&#39;) 。
   ajax事件完成，回调函数 success 进入Event Queue。</description>
-    </item>
-    
-    <item>
-      <title>建站记</title>
-      <link>http://mythcen.github.io/p/start-record/</link>
-      <pubDate>Sun, 29 Nov 2020 11:05:49 +0800</pubDate>
-      
-      <guid>http://mythcen.github.io/p/start-record/</guid>
-      <description>一个小小的个人空间在互联网上被开辟了。
-最开始是想要有一个总结技术经验，分享自己的编程思考的一个技术博客。
-由于使用过一段时间的Go，本着多了解下后端等其他开发链条的缘故，自己折腾了一个ghost系统，买了腾讯的服务器，最简化搭载nginx和nodeJs，在购买了域名以及备案之后，一个小破站出现了。
-中间折腾了不少，但是最终弄好后，遇到了一个问题——该版本的ghost编辑器会吞掉中文拼音。
-了解到这可能是ghost编辑器对中文的一个bug，虽然发现修改html 的lang属性为cn即可，但是想要修改源码，一是在自己不熟悉的服务器上，二是没有git管理，三是不熟悉ghost系统。再加上工作以及懒，博客的事情就被耽搁下来了，知道服务器一年期到，也没有更新什么文章。
-最后念着初心~~(折腾精神不够)~~，博文本身才是目标，因此选择了方便的静态博客+hugo，重新开始这段旅程。
-本站系技术分享 + 个人博客。
-也许它会成为一座孤岛。
-但它在我心中不会因为无人观赏而失色半分。
-与此同时，它欢迎所有从互联网里，跨洋而来的旅人。</description>
     </item>
     
   </channel>
