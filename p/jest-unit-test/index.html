@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Jest 原理与项目实践 首先，需要明确我们的目的——单元测试
+原理 断言
+Api Jest 作用域 test.only
+beforeEach 和 afterEach
+beforeAll 和 afterAll
+jest测试异步代码 callback 默认情况下，Jest 测试一旦执行到末尾就会完成。这意味着，像这样写不会有效果——
+test(&amp;#39;the data is peanut butter&amp;#39;, () =&amp;gt; { function callback(data) { expect(data).toBe(&amp;#39;peanut butter&amp;#39;); } fetchData(callback); }); 一旦fetchData执行结束，此测试就在没有调用回调函数前结束.
+解决的方法之一，是使用jest提供的done函数，它会——【TODO】
+test(&amp;#39;the data is peanut butter&amp;#39;, done =&amp;gt; { function callback(data) { try { expect(data).toBe(&amp;#39;peanut butter&amp;#39;); done(); } catch (error) { done(error); } } fetchData(callback); }); 若 done() 函数从未被调用，测试用例会如预期的那样执行失败（显示超时错误）。
+若 expect 执行失败，它会抛出一个错误，后面的 done() 不再执行。 而try被用来捕获这个错误。'><title>Jest 原理与项目实践</title>
+
+<link rel='canonical' href='http://mythcen.github.io/p/jest-unit-test/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='Jest 原理与项目实践'>
+<meta property='og:description' content='Jest 原理与项目实践 首先，需要明确我们的目的——单元测试
+原理 断言
+Api Jest 作用域 test.only
+beforeEach 和 afterEach
+beforeAll 和 afterAll
+jest测试异步代码 callback 默认情况下，Jest 测试一旦执行到末尾就会完成。这意味着，像这样写不会有效果——
+test(&amp;#39;the data is peanut butter&amp;#39;, () =&amp;gt; { function callback(data) { expect(data).toBe(&amp;#39;peanut butter&amp;#39;); } fetchData(callback); }); 一旦fetchData执行结束，此测试就在没有调用回调函数前结束.
+解决的方法之一，是使用jest提供的done函数，它会——【TODO】
+test(&amp;#39;the data is peanut butter&amp;#39;, done =&amp;gt; { function callback(data) { try { expect(data).toBe(&amp;#39;peanut butter&amp;#39;); done(); } catch (error) { done(error); } } fetchData(callback); }); 若 done() 函数从未被调用，测试用例会如预期的那样执行失败（显示超时错误）。
+若 expect 执行失败，它会抛出一个错误，后面的 done() 不再执行。 而try被用来捕获这个错误。'>
+<meta property='og:url' content='http://mythcen.github.io/p/jest-unit-test/'>
+<meta property='og:site_name' content='MythC'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='工程化' /><meta property='article:published_time' content='2020-12-02T20:00:22&#43;08:00'/><meta property='article:modified_time' content='2020-12-02T20:00:22&#43;08:00'/>
+<meta name="twitter:title" content="Jest 原理与项目实践">
+<meta name="twitter:description" content="Jest 原理与项目实践 首先，需要明确我们的目的——单元测试
+原理 断言
+Api Jest 作用域 test.only
+beforeEach 和 afterEach
+beforeAll 和 afterAll
+jest测试异步代码 callback 默认情况下，Jest 测试一旦执行到末尾就会完成。这意味着，像这样写不会有效果——
+test(&amp;#39;the data is peanut butter&amp;#39;, () =&amp;gt; { function callback(data) { expect(data).toBe(&amp;#39;peanut butter&amp;#39;); } fetchData(callback); }); 一旦fetchData执行结束，此测试就在没有调用回调函数前结束.
+解决的方法之一，是使用jest提供的done函数，它会——【TODO】
+test(&amp;#39;the data is peanut butter&amp;#39;, done =&amp;gt; { function callback(data) { try { expect(data).toBe(&amp;#39;peanut butter&amp;#39;); done(); } catch (error) { done(error); } } fetchData(callback); }); 若 done() 函数从未被调用，测试用例会如预期的那样执行失败（显示超时错误）。
+若 expect 执行失败，它会抛出一个错误，后面的 done() 不再执行。 而try被用来捕获这个错误。"><style>
+    :root {
+        --article-font-family: "Noto Serif SC", var(--base-font-family);
+    }
+</style>
+
+<script>
+		(function () {
+		    const customFont = document.createElement('link');
+		    customFont.href = "https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap";
+		
+		    customFont.type = "text/css";
+		    customFont.rel = "stylesheet";
+		
+		    document.head.appendChild(customFont);
+		}());
+</script>
+    </head>
+    <body class="">
+        <div class="container flex on-phone--column align-items--flex-start extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+
+                
+                    
+                    <img src="/img/avatar_hu2c09e6aabb14b66209d5ed2fe464c329_484573_300x300_resize_q75_box.jpg" width="300"
+                        height="300" class="site-logo" loading="lazy" alt="Avatar">
+                
+
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        <h1 class="site-name"><a href="http://mythcen.github.io/">MythC</a></h1>
+        <h2 class="site-description"></h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/about'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+    </ol>
+</aside>
+
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a href="http://mythcen.github.io/" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+                <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+            
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/jest-unit-test/">Jest 原理与项目实践</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Dec 02, 2020</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <h1 id="jest-原理与项目实践">Jest 原理与项目实践</h1>
+<p>首先，需要明确我们的目的——单元测试</p>
+<h2 id="原理">原理</h2>
+<p>断言</p>
+<h2 id="api">Api</h2>
+<h3 id="jest-作用域">Jest 作用域</h3>
+<p><code>test.only</code></p>
+<p><code>beforeEach</code> 和 <code>afterEach</code></p>
+<p><code>beforeAll</code> 和 <code>afterAll</code></p>
+<h3 id="jest测试异步代码">jest测试异步代码</h3>
+<h4 id="callback">callback</h4>
+<p>默认情况下，Jest 测试一旦执行到末尾就会完成。这意味着，像这样写不会有效果——</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;the data is peanut butter&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="kd">function</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">data</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;peanut butter&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="nx">fetchData</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div><p>一旦<code>fetchData</code>执行结束，此测试就在没有调用回调函数前结束.</p>
+<p>解决的方法之一，是使用jest提供的done函数，它会——【TODO】</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;the data is peanut butter&#39;</span><span class="p">,</span> <span class="nx">done</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="kd">function</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="nx">expect</span><span class="p">(</span><span class="nx">data</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;peanut butter&#39;</span><span class="p">);</span>
+      <span class="nx">done</span><span class="p">();</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">done</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">fetchData</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div><p>若 <code>done()</code> 函数从未被调用，测试用例会如预期的那样执行失败（显示超时错误）。</p>
+<p>若 <code>expect</code> 执行失败，它会抛出一个错误，后面的 <code>done()</code> 不再执行。 而try被用来捕获这个错误。</p>
+<h4 id="promise">promise</h4>
+<p>使用promise的时候，需要注意返回该promise</p>
+<pre><code>test('the fetch fails with an error', () =&gt; {
+  expect.assertions(1);
+  return fetchData().catch(e =&gt; expect(e).toMatch('error'));
+});
+</code></pre><p>此处<code>expect.assertions(2)</code>用来确保异步代码里的断言被执行，从而捕获可能的错误。</p>
+<p>想更进一步的判断的话，可以使用<code>.resolves</code> / <code>.rejects</code>这两个api</p>
+<pre><code>test('the fetch fails with an error', () =&gt; {
+  return expect(fetchData()).rejects.toMatch('error');
+});
+</code></pre><p>或者，可以在测试中使用 <code>async</code> 和 <code>await</code>。</p>
+<pre><code>test('the data is peanut butter', async () =&gt; {
+  await expect(fetchData()).resolves.toBe('peanut butter');
+});
+
+test('the fetch fails with an error', async () =&gt; {
+  await expect(fetchData()).rejects.toThrow('error');
+});
+</code></pre><h3 id="describe-test和it">describe 、test和it</h3>
+<p>Jest 会在所有真正的测试开始<em><strong>之前</strong></em>执行测试文件里所有的 describe 处理程序（handlers）</p>
+<p>当 describe 块运行完后,，默认情况下，Jest 会按照 test 出现的顺序依次运行所有测试,</p>
+<h3 id="mock">Mock</h3>
+<p>但是，在某些情况下，除了指定返回值之外，完全替换模拟函数的实现是有用的</p>
+<ul>
+<li>jest.fn</li>
+</ul>
+<p>当需要定义从另一个模块创建的模拟函数的默认实现时，mockImplementation方法非常有用</p>
+<h3 id="模拟模块">模拟模块</h3>
+<p>jest.mock</p>
+<h2 id="jest模拟实践">jest模拟实践</h2>
+<p>环境：</p>
+<ul>
+<li>
+<p>enzyme</p>
+</li>
+<li>
+<p>ts</p>
+</li>
+<li>
+<p>react</p>
+</li>
+<li>
+<p>axios</p>
+</li>
+<li>
+<p>webpack</p>
+</li>
+<li>
+<p>next</p>
+</li>
+</ul>
+<h3 id="jest-与-enzyme">Jest 与 enzyme</h3>
+<h3 id="jest-与-typescript">Jest 与 TypeScript</h3>
+<h3 id="jest-与-axios">Jest 与 Axios</h3>
+<h3 id="jest-与-react">Jest 与 React</h3>
+<p>###Jest 与 Webpack</p>
+<h3 id="jest-与-nextjs">jest 与 NextJs</h3>
+<h2 id="应用">应用</h2>
+<h3 id="库">库</h3>
+<ul>
+<li>react-test-renderer</li>
+</ul>
+<h3 id="路径问题">路径问题</h3>
+<h3 id="配置">配置</h3>
+<p>jest.config.js</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">// jest.config.js
+</span><span class="c1">// Sync object
+</span><span class="c1"></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">verbose</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="c1">// Or async function
+</span><span class="c1"></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kr">async</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">verbose</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="p">};</span>
+<span class="p">};</span>
+</code></pre></div><p>jest.config.ts</p>
+<p>需要搭配 ts-node</p>
+<div class="highlight"><pre class="chroma"><code class="language-typescript" data-lang="typescript"><span class="c1">// jest.config.ts
+</span><span class="c1"></span><span class="kr">import</span> <span class="kr">type</span> <span class="p">{</span><span class="nx">Config</span><span class="p">}</span> <span class="kr">from</span> <span class="s1">&#39;@jest/types&#39;</span><span class="p">;</span>
+
+<span class="c1">// Sync object
+</span><span class="c1"></span><span class="kr">const</span> <span class="nx">config</span>: <span class="kt">Config.InitialOptions</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">verbose</span>: <span class="kt">true</span><span class="p">,</span>
+<span class="p">};</span>
+<span class="kr">export</span> <span class="k">default</span> <span class="nx">config</span><span class="p">;</span>
+
+<span class="c1">// Or async function
+</span><span class="c1"></span><span class="kr">export</span> <span class="k">default</span> <span class="kr">async</span> <span class="p">()</span><span class="o">:</span> <span class="nx">Promise</span><span class="p">&lt;</span><span class="nt">Config.InitialOptions</span><span class="p">&gt;</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">verbose</span>: <span class="kt">true</span><span class="p">,</span>
+  <span class="p">};</span>
+<span class="p">};</span>
+</code></pre></div><p>Package.json</p>
+<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;my-project&#34;</span><span class="p">,</span>
+  <span class="nt">&#34;jest&#34;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&#34;verbose&#34;</span><span class="p">:</span> <span class="kc">true</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>&ndash;config &lt;path/to/file.js|ts|cjs|mjs|json&gt;</p>
+<pre><code>{
+  &quot;bail&quot;: 1,
+  &quot;verbose&quot;: true
+}
+</code></pre><h2 id="指导思想">指导思想</h2>
+<h3 id="tdd">TDD</h3>
+<h3 id="bdd">BDD</h3>
+<p>目的：</p>
+<p>正确 toBe成立，不抛出错误</p>
+<p>错误，toBe不成立，抛出的错误被捕获</p>
+<p>而不是</p>
+<p>不知道是否正确——未捕获到结果</p>
+<p><del>知道是否正确但是输出错误</del></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">Related contents</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="/p/macrotask-and-microtask/">
+        
+        
+            <div class="article-image">
+                <img src="/p/macrotask-and-microtask/cover_hu3395bef352bdebb2bcd19cd38ef3c08c_281145_250x150_fill_box_smart1_2.png" width="250" height="150" 
+                        loading="lazy" data-key="macrotask-and-microtask" data-hash="md5-LAtJegKZfllPYTbU63sbdw==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">宏任务与微任务</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mythcwj" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">&copy; 2020 MythC</section>
+    <section class="powerby">Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="1.1.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true" style="display:none">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+            </main>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"
+    integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin="anonymous"></script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<link rel="stylesheet" href="/css/highlight/light.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="/css/highlight/dark.min.css" media="(prefers-color-scheme: dark)">
+
+    </body>
+</html>

@@ -6,7 +6,166 @@
         <description>Recent content on MythC</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Tue, 01 Dec 2020 20:00:22 +0800</lastBuildDate><atom:link href="http://mythcen.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 02 Dec 2020 20:00:22 +0800</lastBuildDate><atom:link href="http://mythcen.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Jest 原理与项目实践</title>
+        <link>http://mythcen.github.io/p/jest-unit-test/</link>
+        <pubDate>Wed, 02 Dec 2020 20:00:22 +0800</pubDate>
+        
+        <guid>http://mythcen.github.io/p/jest-unit-test/</guid>
+        <description>&lt;h1 id=&#34;jest-原理与项目实践&#34;&gt;Jest 原理与项目实践&lt;/h1&gt;
+&lt;p&gt;首先，需要明确我们的目的——单元测试&lt;/p&gt;
+&lt;h2 id=&#34;原理&#34;&gt;原理&lt;/h2&gt;
+&lt;p&gt;断言&lt;/p&gt;
+&lt;h2 id=&#34;api&#34;&gt;Api&lt;/h2&gt;
+&lt;h3 id=&#34;jest-作用域&#34;&gt;Jest 作用域&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;test.only&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;beforeEach&lt;/code&gt; 和 &lt;code&gt;afterEach&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;beforeAll&lt;/code&gt; 和 &lt;code&gt;afterAll&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;jest测试异步代码&#34;&gt;jest测试异步代码&lt;/h3&gt;
+&lt;h4 id=&#34;callback&#34;&gt;callback&lt;/h4&gt;
+&lt;p&gt;默认情况下，Jest 测试一旦执行到末尾就会完成。这意味着，像这样写不会有效果——&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;nx&#34;&gt;test&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;the data is peanut butter&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;callback&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;data&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;expect&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;data&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;toBe&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;peanut butter&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+  &lt;span class=&#34;nx&#34;&gt;fetchData&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;callback&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;一旦&lt;code&gt;fetchData&lt;/code&gt;执行结束，此测试就在没有调用回调函数前结束.&lt;/p&gt;
+&lt;p&gt;解决的方法之一，是使用jest提供的done函数，它会——【TODO】&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;nx&#34;&gt;test&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;the data is peanut butter&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;done&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;callback&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;data&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;try&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+      &lt;span class=&#34;nx&#34;&gt;expect&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;data&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;toBe&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;peanut butter&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+      &lt;span class=&#34;nx&#34;&gt;done&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;catch&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;error&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+      &lt;span class=&#34;nx&#34;&gt;done&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;error&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+  &lt;span class=&#34;nx&#34;&gt;fetchData&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;callback&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;若 &lt;code&gt;done()&lt;/code&gt; 函数从未被调用，测试用例会如预期的那样执行失败（显示超时错误）。&lt;/p&gt;
+&lt;p&gt;若 &lt;code&gt;expect&lt;/code&gt; 执行失败，它会抛出一个错误，后面的 &lt;code&gt;done()&lt;/code&gt; 不再执行。 而try被用来捕获这个错误。&lt;/p&gt;
+&lt;h4 id=&#34;promise&#34;&gt;promise&lt;/h4&gt;
+&lt;p&gt;使用promise的时候，需要注意返回该promise&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;test(&#39;the fetch fails with an error&#39;, () =&amp;gt; {
+  expect.assertions(1);
+  return fetchData().catch(e =&amp;gt; expect(e).toMatch(&#39;error&#39;));
+});
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;此处&lt;code&gt;expect.assertions(2)&lt;/code&gt;用来确保异步代码里的断言被执行，从而捕获可能的错误。&lt;/p&gt;
+&lt;p&gt;想更进一步的判断的话，可以使用&lt;code&gt;.resolves&lt;/code&gt; / &lt;code&gt;.rejects&lt;/code&gt;这两个api&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;test(&#39;the fetch fails with an error&#39;, () =&amp;gt; {
+  return expect(fetchData()).rejects.toMatch(&#39;error&#39;);
+});
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;或者，可以在测试中使用 &lt;code&gt;async&lt;/code&gt; 和 &lt;code&gt;await&lt;/code&gt;。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;test(&#39;the data is peanut butter&#39;, async () =&amp;gt; {
+  await expect(fetchData()).resolves.toBe(&#39;peanut butter&#39;);
+});
+
+test(&#39;the fetch fails with an error&#39;, async () =&amp;gt; {
+  await expect(fetchData()).rejects.toThrow(&#39;error&#39;);
+});
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;describe-test和it&#34;&gt;describe 、test和it&lt;/h3&gt;
+&lt;p&gt;Jest 会在所有真正的测试开始&lt;em&gt;&lt;strong&gt;之前&lt;/strong&gt;&lt;/em&gt;执行测试文件里所有的 describe 处理程序（handlers）&lt;/p&gt;
+&lt;p&gt;当 describe 块运行完后,，默认情况下，Jest 会按照 test 出现的顺序依次运行所有测试,&lt;/p&gt;
+&lt;h3 id=&#34;mock&#34;&gt;Mock&lt;/h3&gt;
+&lt;p&gt;但是，在某些情况下，除了指定返回值之外，完全替换模拟函数的实现是有用的&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;jest.fn&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;当需要定义从另一个模块创建的模拟函数的默认实现时，mockImplementation方法非常有用&lt;/p&gt;
+&lt;h3 id=&#34;模拟模块&#34;&gt;模拟模块&lt;/h3&gt;
+&lt;p&gt;jest.mock&lt;/p&gt;
+&lt;h2 id=&#34;jest模拟实践&#34;&gt;jest模拟实践&lt;/h2&gt;
+&lt;p&gt;环境：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;enzyme&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;ts&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;react&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;axios&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;webpack&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;next&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;jest-与-enzyme&#34;&gt;Jest 与 enzyme&lt;/h3&gt;
+&lt;h3 id=&#34;jest-与-typescript&#34;&gt;Jest 与 TypeScript&lt;/h3&gt;
+&lt;h3 id=&#34;jest-与-axios&#34;&gt;Jest 与 Axios&lt;/h3&gt;
+&lt;h3 id=&#34;jest-与-react&#34;&gt;Jest 与 React&lt;/h3&gt;
+&lt;p&gt;###Jest 与 Webpack&lt;/p&gt;
+&lt;h3 id=&#34;jest-与-nextjs&#34;&gt;jest 与 NextJs&lt;/h3&gt;
+&lt;h2 id=&#34;应用&#34;&gt;应用&lt;/h2&gt;
+&lt;h3 id=&#34;库&#34;&gt;库&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;react-test-renderer&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;路径问题&#34;&gt;路径问题&lt;/h3&gt;
+&lt;h3 id=&#34;配置&#34;&gt;配置&lt;/h3&gt;
+&lt;p&gt;jest.config.js&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// jest.config.js
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// Sync object
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;module&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;exports&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;nx&#34;&gt;verbose&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;// Or async function
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;module&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;exports&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kr&#34;&gt;async&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;verbose&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+  &lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;jest.config.ts&lt;/p&gt;
+&lt;p&gt;需要搭配 ts-node&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-typescript&#34; data-lang=&#34;typescript&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// jest.config.ts
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kr&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;kr&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Config&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;kr&#34;&gt;from&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;@jest/types&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;// Sync object
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kr&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;config&lt;/span&gt;: &lt;span class=&#34;kt&#34;&gt;Config.InitialOptions&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;nx&#34;&gt;verbose&lt;/span&gt;: &lt;span class=&#34;kt&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;span class=&#34;kr&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;default&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;config&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;// Or async function
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kr&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;default&lt;/span&gt; &lt;span class=&#34;kr&#34;&gt;async&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Promise&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;Config.InitialOptions&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;verbose&lt;/span&gt;: &lt;span class=&#34;kt&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+  &lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Package.json&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;nt&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;my-project&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+  &lt;span class=&#34;nt&#34;&gt;&amp;#34;jest&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;nt&#34;&gt;&amp;#34;verbose&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;
+  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&amp;ndash;config &amp;lt;path/to/file.js|ts|cjs|mjs|json&amp;gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+  &amp;quot;bail&amp;quot;: 1,
+  &amp;quot;verbose&amp;quot;: true
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;指导思想&#34;&gt;指导思想&lt;/h2&gt;
+&lt;h3 id=&#34;tdd&#34;&gt;TDD&lt;/h3&gt;
+&lt;h3 id=&#34;bdd&#34;&gt;BDD&lt;/h3&gt;
+&lt;p&gt;目的：&lt;/p&gt;
+&lt;p&gt;正确 toBe成立，不抛出错误&lt;/p&gt;
+&lt;p&gt;错误，toBe不成立，抛出的错误被捕获&lt;/p&gt;
+&lt;p&gt;而不是&lt;/p&gt;
+&lt;p&gt;不知道是否正确——未捕获到结果&lt;/p&gt;
+&lt;p&gt;&lt;del&gt;知道是否正确但是输出错误&lt;/del&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>宏任务与微任务</title>
         <link>http://mythcen.github.io/p/macrotask-and-microtask/</link>
         <pubDate>Tue, 01 Dec 2020 20:00:22 +0800</pubDate>
@@ -209,165 +368,6 @@ Node里，事件循环对观察者的检查是有先后顺序的,process.nextTic
 &lt;p&gt;也许它会成为一座孤岛。&lt;/p&gt;
 &lt;p&gt;但它在我心中不会因为无人观赏而失色半分。&lt;/p&gt;
 &lt;p&gt;与此同时，它欢迎所有从互联网里，跨洋而来的旅人。&lt;/p&gt;
-</description>
-        </item>
-        <item>
-        <title></title>
-        <link>http://mythcen.github.io/p/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>http://mythcen.github.io/p/</guid>
-        <description>&lt;h1 id=&#34;jest-原理与项目实践&#34;&gt;Jest 原理与项目实践&lt;/h1&gt;
-&lt;p&gt;首先，需要明确我们的目的——单元测试&lt;/p&gt;
-&lt;h2 id=&#34;原理&#34;&gt;原理&lt;/h2&gt;
-&lt;p&gt;断言&lt;/p&gt;
-&lt;h2 id=&#34;api&#34;&gt;Api&lt;/h2&gt;
-&lt;h3 id=&#34;jest-作用域&#34;&gt;Jest 作用域&lt;/h3&gt;
-&lt;p&gt;&lt;code&gt;test.only&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;beforeEach&lt;/code&gt; 和 &lt;code&gt;afterEach&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;beforeAll&lt;/code&gt; 和 &lt;code&gt;afterAll&lt;/code&gt;&lt;/p&gt;
-&lt;h3 id=&#34;jest测试异步代码&#34;&gt;jest测试异步代码&lt;/h3&gt;
-&lt;h4 id=&#34;callback&#34;&gt;callback&lt;/h4&gt;
-&lt;p&gt;默认情况下，Jest 测试一旦执行到末尾就会完成。这意味着，像这样写不会有效果——&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;nx&#34;&gt;test&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;the data is peanut butter&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-  &lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;callback&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;data&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-    &lt;span class=&#34;nx&#34;&gt;expect&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;data&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;toBe&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;peanut butter&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-
-  &lt;span class=&#34;nx&#34;&gt;fetchData&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;callback&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-&lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;一旦&lt;code&gt;fetchData&lt;/code&gt;执行结束，此测试就在没有调用回调函数前结束.&lt;/p&gt;
-&lt;p&gt;解决的方法之一，是使用jest提供的done函数，它会——【TODO】&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;nx&#34;&gt;test&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;the data is peanut butter&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;done&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-  &lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;callback&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;data&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-    &lt;span class=&#34;k&#34;&gt;try&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-      &lt;span class=&#34;nx&#34;&gt;expect&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;data&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;toBe&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;peanut butter&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-      &lt;span class=&#34;nx&#34;&gt;done&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
-    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;catch&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;error&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-      &lt;span class=&#34;nx&#34;&gt;done&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;error&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-
-  &lt;span class=&#34;nx&#34;&gt;fetchData&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;callback&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-&lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;若 &lt;code&gt;done()&lt;/code&gt; 函数从未被调用，测试用例会如预期的那样执行失败（显示超时错误）。&lt;/p&gt;
-&lt;p&gt;若 &lt;code&gt;expect&lt;/code&gt; 执行失败，它会抛出一个错误，后面的 &lt;code&gt;done()&lt;/code&gt; 不再执行。 而try被用来捕获这个错误。&lt;/p&gt;
-&lt;h4 id=&#34;promise&#34;&gt;promise&lt;/h4&gt;
-&lt;p&gt;使用promise的时候，需要注意返回该promise&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;test(&#39;the fetch fails with an error&#39;, () =&amp;gt; {
-  expect.assertions(1);
-  return fetchData().catch(e =&amp;gt; expect(e).toMatch(&#39;error&#39;));
-});
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;此处&lt;code&gt;expect.assertions(2)&lt;/code&gt;用来确保异步代码里的断言被执行，从而捕获可能的错误。&lt;/p&gt;
-&lt;p&gt;想更进一步的判断的话，可以使用&lt;code&gt;.resolves&lt;/code&gt; / &lt;code&gt;.rejects&lt;/code&gt;这两个api&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;test(&#39;the fetch fails with an error&#39;, () =&amp;gt; {
-  return expect(fetchData()).rejects.toMatch(&#39;error&#39;);
-});
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;或者，可以在测试中使用 &lt;code&gt;async&lt;/code&gt; 和 &lt;code&gt;await&lt;/code&gt;。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;test(&#39;the data is peanut butter&#39;, async () =&amp;gt; {
-  await expect(fetchData()).resolves.toBe(&#39;peanut butter&#39;);
-});
-
-test(&#39;the fetch fails with an error&#39;, async () =&amp;gt; {
-  await expect(fetchData()).rejects.toThrow(&#39;error&#39;);
-});
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;describe-test和it&#34;&gt;describe 、test和it&lt;/h3&gt;
-&lt;p&gt;Jest 会在所有真正的测试开始&lt;em&gt;&lt;strong&gt;之前&lt;/strong&gt;&lt;/em&gt;执行测试文件里所有的 describe 处理程序（handlers）&lt;/p&gt;
-&lt;p&gt;当 describe 块运行完后,，默认情况下，Jest 会按照 test 出现的顺序依次运行所有测试,&lt;/p&gt;
-&lt;h3 id=&#34;mock&#34;&gt;Mock&lt;/h3&gt;
-&lt;p&gt;但是，在某些情况下，除了指定返回值之外，完全替换模拟函数的实现是有用的&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;jest.fn&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;当需要定义从另一个模块创建的模拟函数的默认实现时，mockImplementation方法非常有用&lt;/p&gt;
-&lt;h3 id=&#34;模拟模块&#34;&gt;模拟模块&lt;/h3&gt;
-&lt;p&gt;jest.mock&lt;/p&gt;
-&lt;h2 id=&#34;jest模拟实践&#34;&gt;jest模拟实践&lt;/h2&gt;
-&lt;p&gt;环境：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;enzyme&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;ts&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;react&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;axios&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;webpack&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;next&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;jest-与-enzyme&#34;&gt;Jest 与 enzyme&lt;/h3&gt;
-&lt;h3 id=&#34;jest-与-typescript&#34;&gt;Jest 与 TypeScript&lt;/h3&gt;
-&lt;h3 id=&#34;jest-与-axios&#34;&gt;Jest 与 Axios&lt;/h3&gt;
-&lt;h3 id=&#34;jest-与-react&#34;&gt;Jest 与 React&lt;/h3&gt;
-&lt;p&gt;###Jest 与 Webpack&lt;/p&gt;
-&lt;h3 id=&#34;jest-与-nextjs&#34;&gt;jest 与 NextJs&lt;/h3&gt;
-&lt;h2 id=&#34;应用&#34;&gt;应用&lt;/h2&gt;
-&lt;h3 id=&#34;库&#34;&gt;库&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;react-test-renderer&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;路径问题&#34;&gt;路径问题&lt;/h3&gt;
-&lt;h3 id=&#34;配置&#34;&gt;配置&lt;/h3&gt;
-&lt;p&gt;jest.config.js&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// jest.config.js
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// Sync object
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;module&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;exports&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-  &lt;span class=&#34;nx&#34;&gt;verbose&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
-&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
-
-&lt;span class=&#34;c1&#34;&gt;// Or async function
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;module&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;exports&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kr&#34;&gt;async&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-  &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-    &lt;span class=&#34;nx&#34;&gt;verbose&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
-  &lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
-&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;jest.config.ts&lt;/p&gt;
-&lt;p&gt;需要搭配 ts-node&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-typescript&#34; data-lang=&#34;typescript&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// jest.config.ts
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kr&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;kr&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Config&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;kr&#34;&gt;from&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;@jest/types&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-
-&lt;span class=&#34;c1&#34;&gt;// Sync object
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kr&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;config&lt;/span&gt;: &lt;span class=&#34;kt&#34;&gt;Config.InitialOptions&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-  &lt;span class=&#34;nx&#34;&gt;verbose&lt;/span&gt;: &lt;span class=&#34;kt&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
-&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
-&lt;span class=&#34;kr&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;default&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;config&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-
-&lt;span class=&#34;c1&#34;&gt;// Or async function
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kr&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;default&lt;/span&gt; &lt;span class=&#34;kr&#34;&gt;async&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Promise&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;Config.InitialOptions&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-  &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-    &lt;span class=&#34;nx&#34;&gt;verbose&lt;/span&gt;: &lt;span class=&#34;kt&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
-  &lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
-&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Package.json&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-  &lt;span class=&#34;nt&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;my-project&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
-  &lt;span class=&#34;nt&#34;&gt;&amp;#34;jest&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-    &lt;span class=&#34;nt&#34;&gt;&amp;#34;verbose&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;
-  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&amp;ndash;config &amp;lt;path/to/file.js|ts|cjs|mjs|json&amp;gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;{
-  &amp;quot;bail&amp;quot;: 1,
-  &amp;quot;verbose&amp;quot;: true
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;指导思想&#34;&gt;指导思想&lt;/h2&gt;
-&lt;h3 id=&#34;tdd&#34;&gt;TDD&lt;/h3&gt;
-&lt;h3 id=&#34;bdd&#34;&gt;BDD&lt;/h3&gt;
-&lt;p&gt;目的：&lt;/p&gt;
-&lt;p&gt;正确 toBe成立，不抛出错误&lt;/p&gt;
-&lt;p&gt;错误，toBe不成立，抛出的错误被捕获&lt;/p&gt;
-&lt;p&gt;而不是&lt;/p&gt;
-&lt;p&gt;不知道是否正确——未捕获到结果&lt;/p&gt;
-&lt;p&gt;&lt;del&gt;知道是否正确但是输出错误&lt;/del&gt;&lt;/p&gt;
 </description>
         </item>
         

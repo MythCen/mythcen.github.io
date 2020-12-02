@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>工程化 on MythC</title>
+    <link>http://mythcen.github.io/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/</link>
+    <description>Recent content in 工程化 on MythC</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 02 Dec 2020 20:00:22 +0800</lastBuildDate><atom:link href="http://mythcen.github.io/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Jest 原理与项目实践</title>
+      <link>http://mythcen.github.io/p/jest-unit-test/</link>
+      <pubDate>Wed, 02 Dec 2020 20:00:22 +0800</pubDate>
+      
+      <guid>http://mythcen.github.io/p/jest-unit-test/</guid>
+      <description>Jest 原理与项目实践 首先，需要明确我们的目的——单元测试
+原理 断言
+Api Jest 作用域 test.only
+beforeEach 和 afterEach
+beforeAll 和 afterAll
+jest测试异步代码 callback 默认情况下，Jest 测试一旦执行到末尾就会完成。这意味着，像这样写不会有效果——
+test(&amp;#39;the data is peanut butter&amp;#39;, () =&amp;gt; { function callback(data) { expect(data).toBe(&amp;#39;peanut butter&amp;#39;); } fetchData(callback); }); 一旦fetchData执行结束，此测试就在没有调用回调函数前结束.
+解决的方法之一，是使用jest提供的done函数，它会——【TODO】
+test(&amp;#39;the data is peanut butter&amp;#39;, done =&amp;gt; { function callback(data) { try { expect(data).toBe(&amp;#39;peanut butter&amp;#39;); done(); } catch (error) { done(error); } } fetchData(callback); }); 若 done() 函数从未被调用，测试用例会如预期的那样执行失败（显示超时错误）。
+若 expect 执行失败，它会抛出一个错误，后面的 done() 不再执行。 而try被用来捕获这个错误。</description>
+    </item>
+    
+  </channel>
+</rss>
