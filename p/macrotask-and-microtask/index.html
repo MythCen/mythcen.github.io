@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-us">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='宏任务与微任务 在点击事件冒泡捕获的处理中，通过使用setTimeout 的方式，想要调整某个代码的执行顺序的话，其具体的执行顺序，由一套 机制 去实现，这套机制就是通过定义 宏任务与微任务 来安排执行顺序。
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='在点击事件冒泡捕获的处理中，通过使用setTimeout 的方式，想要调整某个代码的执行顺序的话，其具体的执行顺序，由一套 机制 去实现，这套机制就是通过定义 宏任务与微任务 来安排执行顺序。
 异步机制：javascript事件循环 概念 内存堆：这是内存分配发生的地方。当V8引擎遇到变量声明和函数声明的时候，就把它们存储在堆里面。
 调用栈：这是你的代码执行时的地方。当引擎遇到像函数调用之类的可执行单元，就会把它们推入调用栈。
 JS单线程，指的是在JS引擎中，解析执行JS代码的调用栈是唯一的，所有的JS代码都在这一个调用栈里按照调用顺序执行，不能同时执行多个函数。
@@ -17,7 +17,7 @@ let data = []; $.ajax({ url:www.javascript.com, data:data, success:() =&amp;gt; 
 <link rel='canonical' href='http://mythcen.github.io/p/macrotask-and-microtask/'>
 
 <link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='宏任务与微任务'>
-<meta property='og:description' content='宏任务与微任务 在点击事件冒泡捕获的处理中，通过使用setTimeout 的方式，想要调整某个代码的执行顺序的话，其具体的执行顺序，由一套 机制 去实现，这套机制就是通过定义 宏任务与微任务 来安排执行顺序。
+<meta property='og:description' content='在点击事件冒泡捕获的处理中，通过使用setTimeout 的方式，想要调整某个代码的执行顺序的话，其具体的执行顺序，由一套 机制 去实现，这套机制就是通过定义 宏任务与微任务 来安排执行顺序。
 异步机制：javascript事件循环 概念 内存堆：这是内存分配发生的地方。当V8引擎遇到变量声明和函数声明的时候，就把它们存储在堆里面。
 调用栈：这是你的代码执行时的地方。当引擎遇到像函数调用之类的可执行单元，就会把它们推入调用栈。
 JS单线程，指的是在JS引擎中，解析执行JS代码的调用栈是唯一的，所有的JS代码都在这一个调用栈里按照调用顺序执行，不能同时执行多个函数。
@@ -33,7 +33,7 @@ let data = []; $.ajax({ url:www.javascript.com, data:data, success:() =&amp;gt; 
 <meta property='og:site_name' content='MythC'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='JavaScript' /><meta property='article:published_time' content='2020-12-01T20:00:22&#43;08:00'/><meta property='article:modified_time' content='2020-12-01T20:00:22&#43;08:00'/><meta property='og:image' content='http://mythcen.github.io/p/macrotask-and-microtask/cover.png' />
 <meta name="twitter:title" content="宏任务与微任务">
-<meta name="twitter:description" content="宏任务与微任务 在点击事件冒泡捕获的处理中，通过使用setTimeout 的方式，想要调整某个代码的执行顺序的话，其具体的执行顺序，由一套 机制 去实现，这套机制就是通过定义 宏任务与微任务 来安排执行顺序。
+<meta name="twitter:description" content="在点击事件冒泡捕获的处理中，通过使用setTimeout 的方式，想要调整某个代码的执行顺序的话，其具体的执行顺序，由一套 机制 去实现，这套机制就是通过定义 宏任务与微任务 来安排执行顺序。
 异步机制：javascript事件循环 概念 内存堆：这是内存分配发生的地方。当V8引擎遇到变量声明和函数声明的时候，就把它们存储在堆里面。
 调用栈：这是你的代码执行时的地方。当引擎遇到像函数调用之类的可执行单元，就会把它们推入调用栈。
 JS单线程，指的是在JS引擎中，解析执行JS代码的调用栈是唯一的，所有的JS代码都在这一个调用栈里按照调用顺序执行，不能同时执行多个函数。
@@ -214,8 +214,7 @@ let data = []; $.ajax({ url:www.javascript.com, data:data, success:() =&amp;gt; 
 </header>
 
     <section class="article-content">
-    <h1 id="宏任务与微任务">宏任务与微任务</h1>
-<p>在点击事件冒泡捕获的处理中，通过使用setTimeout 的方式，想要调整某个代码的执行顺序的话，其具体的执行顺序，由一套  <strong>机制</strong>  去实现，这套机制就是通过定义 <strong>宏任务与微任务</strong> 来安排执行顺序。</p>
+    <p>在点击事件冒泡捕获的处理中，通过使用setTimeout 的方式，想要调整某个代码的执行顺序的话，其具体的执行顺序，由一套  <strong>机制</strong>  去实现，这套机制就是通过定义 <strong>宏任务与微任务</strong> 来安排执行顺序。</p>
 <h2 id="异步机制javascript事件循环">异步机制：javascript事件循环</h2>
 <h3 id="概念">概念</h3>
 <p><!-- raw HTML omitted --></p>
