@@ -38,23 +38,7 @@ jest测试异步代码 callback 默认情况下，Jest 测试一旦执行到末�
 test(&amp;#39;the data is peanut butter&amp;#39;, () =&amp;gt; { function callback(data) { expect(data).toBe(&amp;#39;peanut butter&amp;#39;); } fetchData(callback); }); 一旦fetchData执行结束，此测试就在没有调用回调函数前结束.
 解决的方法之一，是使用jest提供的done函数，它会——【TODO】
 test(&amp;#39;the data is peanut butter&amp;#39;, done =&amp;gt; { function callback(data) { try { expect(data).toBe(&amp;#39;peanut butter&amp;#39;); done(); } catch (error) { done(error); } } fetchData(callback); }); 若 done() 函数从未被调用，测试用例会如预期的那样执行失败（显示超时错误）。
-若 expect 执行失败，它会抛出一个错误，后面的 done() 不再执行。 而try被用来捕获这个错误。"><style>
-    :root {
-        --article-font-family: "Noto Serif SC", var(--base-font-family);
-    }
-</style>
-
-<script>
-		(function () {
-		    const customFont = document.createElement('link');
-		    customFont.href = "https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap";
-		
-		    customFont.type = "text/css";
-		    customFont.rel = "stylesheet";
-		
-		    document.head.appendChild(customFont);
-		}());
-</script>
+若 expect 执行失败，它会抛出一个错误，后面的 done() 不再执行。 而try被用来捕获这个错误。">
     </head>
     <body class="">
         <div class="container flex on-phone--column align-items--flex-start extended article-page with-toolbar">
