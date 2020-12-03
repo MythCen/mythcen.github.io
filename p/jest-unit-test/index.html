@@ -1,44 +1,35 @@
 <!DOCTYPE html>
 <html lang="en-us">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Jest 原理与项目实践 首先，需要明确我们的目的——单元测试
-原理 断言
-Api Jest 作用域 test.only
-beforeEach 和 afterEach
-beforeAll 和 afterAll
-jest测试异步代码 callback 默认情况下，Jest 测试一旦执行到末尾就会完成。这意味着，像这样写不会有效果——
-test(&amp;#39;the data is peanut butter&amp;#39;, () =&amp;gt; { function callback(data) { expect(data).toBe(&amp;#39;peanut butter&amp;#39;); } fetchData(callback); }); 一旦fetchData执行结束，此测试就在没有调用回调函数前结束.
-解决的方法之一，是使用jest提供的done函数，它会——【TODO】
-test(&amp;#39;the data is peanut butter&amp;#39;, done =&amp;gt; { function callback(data) { try { expect(data).toBe(&amp;#39;peanut butter&amp;#39;); done(); } catch (error) { done(error); } } fetchData(callback); }); 若 done() 函数从未被调用，测试用例会如预期的那样执行失败（显示超时错误）。
-若 expect 执行失败，它会抛出一个错误，后面的 done() 不再执行。 而try被用来捕获这个错误。'><title>Jest 原理与项目实践</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='首先，需要明确我们的目的——单元测试
+单元测试（Unit Tesing）是针对程序的最小部件，检查代码是否会按照预期工作的一种测试手段。在过程式编程中最小就是一个函数，在面向对象编程中最小部件就是对象方法。
+为什么选择 jest 单元测试的执行通常需要测试规范、断言、mock、覆盖率工具等支持，上述工具在繁荣的 Node.js 生态中有很多优秀实现，但组合起来使用会带来两个问题
+ 多种工具的选择和学习有一定的成本 把多个工具组合成特定测试解决方案的配置复杂  而 Jest 是用来创建、执行和构建测试用例的 JavaScript 测试库，自身包含了 驱动、断言库、mock 、代码覆盖率等多种功能，配置使用相当简单
+Api 断言 jest提供了比较丰富的断言，此处介绍一些常用的。
+相等  toBe toEqual not  真值  toBeNull 只匹配 null toBeUndefined 只匹配 undefined toBeDefined 与 toBeUndefined 相反 toBeTruthy 匹配任何 if 语句为真 toBeFalsy 匹配任何 if 语句为假  数字  toBeCloseTo  包含  toContain  异步 callback 默认情况下，Jest 测试一旦执行到末尾就会完成。这意味着，像这样写不会有效果——
+test(&amp;#39;the data is peanut butter&amp;#39;, () =&amp;gt; { function callback(data) { expect(data).'><title>使用Jest 单元测试</title>
 
 <link rel='canonical' href='http://mythcen.github.io/p/jest-unit-test/'>
 
-<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='Jest 原理与项目实践'>
-<meta property='og:description' content='Jest 原理与项目实践 首先，需要明确我们的目的——单元测试
-原理 断言
-Api Jest 作用域 test.only
-beforeEach 和 afterEach
-beforeAll 和 afterAll
-jest测试异步代码 callback 默认情况下，Jest 测试一旦执行到末尾就会完成。这意味着，像这样写不会有效果——
-test(&amp;#39;the data is peanut butter&amp;#39;, () =&amp;gt; { function callback(data) { expect(data).toBe(&amp;#39;peanut butter&amp;#39;); } fetchData(callback); }); 一旦fetchData执行结束，此测试就在没有调用回调函数前结束.
-解决的方法之一，是使用jest提供的done函数，它会——【TODO】
-test(&amp;#39;the data is peanut butter&amp;#39;, done =&amp;gt; { function callback(data) { try { expect(data).toBe(&amp;#39;peanut butter&amp;#39;); done(); } catch (error) { done(error); } } fetchData(callback); }); 若 done() 函数从未被调用，测试用例会如预期的那样执行失败（显示超时错误）。
-若 expect 执行失败，它会抛出一个错误，后面的 done() 不再执行。 而try被用来捕获这个错误。'>
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='使用Jest 单元测试'>
+<meta property='og:description' content='首先，需要明确我们的目的——单元测试
+单元测试（Unit Tesing）是针对程序的最小部件，检查代码是否会按照预期工作的一种测试手段。在过程式编程中最小就是一个函数，在面向对象编程中最小部件就是对象方法。
+为什么选择 jest 单元测试的执行通常需要测试规范、断言、mock、覆盖率工具等支持，上述工具在繁荣的 Node.js 生态中有很多优秀实现，但组合起来使用会带来两个问题
+ 多种工具的选择和学习有一定的成本 把多个工具组合成特定测试解决方案的配置复杂  而 Jest 是用来创建、执行和构建测试用例的 JavaScript 测试库，自身包含了 驱动、断言库、mock 、代码覆盖率等多种功能，配置使用相当简单
+Api 断言 jest提供了比较丰富的断言，此处介绍一些常用的。
+相等  toBe toEqual not  真值  toBeNull 只匹配 null toBeUndefined 只匹配 undefined toBeDefined 与 toBeUndefined 相反 toBeTruthy 匹配任何 if 语句为真 toBeFalsy 匹配任何 if 语句为假  数字  toBeCloseTo  包含  toContain  异步 callback 默认情况下，Jest 测试一旦执行到末尾就会完成。这意味着，像这样写不会有效果——
+test(&amp;#39;the data is peanut butter&amp;#39;, () =&amp;gt; { function callback(data) { expect(data).'>
 <meta property='og:url' content='http://mythcen.github.io/p/jest-unit-test/'>
 <meta property='og:site_name' content='MythC'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='工程化' /><meta property='article:published_time' content='2020-12-02T20:00:22&#43;08:00'/><meta property='article:modified_time' content='2020-12-02T20:00:22&#43;08:00'/>
-<meta name="twitter:title" content="Jest 原理与项目实践">
-<meta name="twitter:description" content="Jest 原理与项目实践 首先，需要明确我们的目的——单元测试
-原理 断言
-Api Jest 作用域 test.only
-beforeEach 和 afterEach
-beforeAll 和 afterAll
-jest测试异步代码 callback 默认情况下，Jest 测试一旦执行到末尾就会完成。这意味着，像这样写不会有效果——
-test(&amp;#39;the data is peanut butter&amp;#39;, () =&amp;gt; { function callback(data) { expect(data).toBe(&amp;#39;peanut butter&amp;#39;); } fetchData(callback); }); 一旦fetchData执行结束，此测试就在没有调用回调函数前结束.
-解决的方法之一，是使用jest提供的done函数，它会——【TODO】
-test(&amp;#39;the data is peanut butter&amp;#39;, done =&amp;gt; { function callback(data) { try { expect(data).toBe(&amp;#39;peanut butter&amp;#39;); done(); } catch (error) { done(error); } } fetchData(callback); }); 若 done() 函数从未被调用，测试用例会如预期的那样执行失败（显示超时错误）。
-若 expect 执行失败，它会抛出一个错误，后面的 done() 不再执行。 而try被用来捕获这个错误。">
+<meta name="twitter:title" content="使用Jest 单元测试">
+<meta name="twitter:description" content="首先，需要明确我们的目的——单元测试
+单元测试（Unit Tesing）是针对程序的最小部件，检查代码是否会按照预期工作的一种测试手段。在过程式编程中最小就是一个函数，在面向对象编程中最小部件就是对象方法。
+为什么选择 jest 单元测试的执行通常需要测试规范、断言、mock、覆盖率工具等支持，上述工具在繁荣的 Node.js 生态中有很多优秀实现，但组合起来使用会带来两个问题
+ 多种工具的选择和学习有一定的成本 把多个工具组合成特定测试解决方案的配置复杂  而 Jest 是用来创建、执行和构建测试用例的 JavaScript 测试库，自身包含了 驱动、断言库、mock 、代码覆盖率等多种功能，配置使用相当简单
+Api 断言 jest提供了比较丰富的断言，此处介绍一些常用的。
+相等  toBe toEqual not  真值  toBeNull 只匹配 null toBeUndefined 只匹配 undefined toBeDefined 与 toBeUndefined 相反 toBeTruthy 匹配任何 if 语句为真 toBeFalsy 匹配任何 if 语句为假  数字  toBeCloseTo  包含  toContain  异步 callback 默认情况下，Jest 测试一旦执行到末尾就会完成。这意味着，像这样写不会有效果——
+test(&amp;#39;the data is peanut butter&amp;#39;, () =&amp;gt; { function callback(data) { expect(data).">
     </head>
     <body class="">
         <div class="container flex on-phone--column align-items--flex-start extended article-page with-toolbar">
@@ -178,7 +169,7 @@ test(&amp;#39;the data is peanut butter&amp;#39;, done =&amp;gt; { function call
     
 
     <h2 class="article-title">
-        <a href="/p/jest-unit-test/">Jest 原理与项目实践</a>
+        <a href="/p/jest-unit-test/">使用Jest 单元测试</a>
     </h2>
 
     <footer class="article-time">
@@ -195,16 +186,41 @@ test(&amp;#39;the data is peanut butter&amp;#39;, done =&amp;gt; { function call
 </header>
 
     <section class="article-content">
-    <h1 id="jest-原理与项目实践">Jest 原理与项目实践</h1>
-<p>首先，需要明确我们的目的——单元测试</p>
-<h2 id="原理">原理</h2>
-<p>断言</p>
+    <p>首先，需要明确我们的目的——单元测试</p>
+<p>单元测试（Unit Tesing）是针对程序的最小部件，检查代码是否会按照预期工作的一种测试手段。在过程式编程中最小就是一个函数，在面向对象编程中最小部件就是对象方法。</p>
+<h2 id="为什么选择-jest">为什么选择 jest</h2>
+<p>单元测试的执行通常需要测试规范、断言、mock、覆盖率工具等支持，上述工具在繁荣的 Node.js 生态中有很多优秀实现，但组合起来使用会带来两个问题</p>
+<ol>
+<li>多种工具的选择和学习有一定的成本</li>
+<li>把多个工具组合成特定测试解决方案的配置复杂</li>
+</ol>
+<p>而 Jest 是用来创建、执行和构建测试用例的 JavaScript 测试库，自身包含了 驱动、断言库、mock 、代码覆盖率等多种功能，配置使用相当简单</p>
 <h2 id="api">Api</h2>
-<h3 id="jest-作用域">Jest 作用域</h3>
-<p><code>test.only</code></p>
-<p><code>beforeEach</code> 和 <code>afterEach</code></p>
-<p><code>beforeAll</code> 和 <code>afterAll</code></p>
-<h3 id="jest测试异步代码">jest测试异步代码</h3>
+<h3 id="断言">断言</h3>
+<p>jest提供了比较丰富的断言，此处介绍一些常用的。</p>
+<h4 id="相等">相等</h4>
+<ul>
+<li><code>toBe</code></li>
+<li><code>toEqual</code></li>
+<li><code>not</code></li>
+</ul>
+<h4 id="真值">真值</h4>
+<ul>
+<li><code>toBeNull</code> 只匹配 null</li>
+<li><code>toBeUndefined</code> 只匹配 undefined</li>
+<li><code>toBeDefined</code> 与 <code>toBeUndefined</code> 相反</li>
+<li><code>toBeTruthy</code> 匹配任何 <code>if</code> 语句为真</li>
+<li><code>toBeFalsy</code> 匹配任何 <code>if</code> 语句为假</li>
+</ul>
+<h4 id="数字">数字</h4>
+<ul>
+<li><code>toBeCloseTo</code></li>
+</ul>
+<h4 id="包含">包含</h4>
+<ul>
+<li><code>toContain</code></li>
+</ul>
+<h3 id="异步">异步</h3>
 <h4 id="callback">callback</h4>
 <p>默认情况下，Jest 测试一旦执行到末尾就会完成。这意味着，像这样写不会有效果——</p>
 <div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;the data is peanut butter&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
@@ -249,45 +265,223 @@ test(&amp;#39;the data is peanut butter&amp;#39;, done =&amp;gt; { function call
 test('the fetch fails with an error', async () =&gt; {
   await expect(fetchData()).rejects.toThrow('error');
 });
-</code></pre><h3 id="describe-test和it">describe 、test和it</h3>
-<p>Jest 会在所有真正的测试开始<em><strong>之前</strong></em>执行测试文件里所有的 describe 处理程序（handlers）</p>
+</code></pre><h3 id="作用域">作用域</h3>
+<ul>
+<li><code>test.only</code></li>
+<li>``beforeEach<code>和</code>afterEach`</li>
+<li><code>beforeAll</code> 和 <code>afterAll</code></li>
+<li><code>describe</code></li>
+</ul>
+<p>jest通过 <code>describe</code> 块来将测试分组，在不同的组里可以指定不同的重复性工作，例如数据初始化、结束后执行的数据清理。</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">// Applies to all tests in this file
+</span><span class="c1"></span><span class="nx">beforeEach</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">initializeCityDatabase</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="nx">test</span><span class="p">(</span><span class="s1">&#39;city database has Vienna&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">expect</span><span class="p">(</span><span class="nx">isCity</span><span class="p">(</span><span class="s1">&#39;Vienna&#39;</span><span class="p">)).</span><span class="nx">toBeTruthy</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="nx">test</span><span class="p">(</span><span class="s1">&#39;city database has San Juan&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">expect</span><span class="p">(</span><span class="nx">isCity</span><span class="p">(</span><span class="s1">&#39;San Juan&#39;</span><span class="p">)).</span><span class="nx">toBeTruthy</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;matching cities to foods&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// Applies only to tests in this describe block
+</span><span class="c1"></span>  <span class="nx">beforeEach</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">initializeFoodDatabase</span><span class="p">();</span>
+  <span class="p">});</span>
+
+  <span class="nx">test</span><span class="p">(</span><span class="s1">&#39;Vienna &lt;3 sausage&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">isValidCityFoodPair</span><span class="p">(</span><span class="s1">&#39;Vienna&#39;</span><span class="p">,</span> <span class="s1">&#39;Wiener Schnitzel&#39;</span><span class="p">)).</span><span class="nx">toBe</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="nx">test</span><span class="p">(</span><span class="s1">&#39;San Juan &lt;3 plantains&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">isValidCityFoodPair</span><span class="p">(</span><span class="s1">&#39;San Juan&#39;</span><span class="p">,</span> <span class="s1">&#39;Mofongo&#39;</span><span class="p">)).</span><span class="nx">toBe</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div><p>Jest 会在所有真正的测试开始<em><strong>之前</strong></em>执行测试文件里所有的 describe 处理程序（handlers）</p>
 <p>当 describe 块运行完后,，默认情况下，Jest 会按照 test 出现的顺序依次运行所有测试,</p>
 <h3 id="mock">Mock</h3>
-<p>但是，在某些情况下，除了指定返回值之外，完全替换模拟函数的实现是有用的</p>
+<h4 id="mock函数">Mock函数</h4>
 <ul>
-<li>jest.fn</li>
+<li><code>fn</code></li>
+</ul>
+<p>使用 jest.fn() 就可以 mock 一个函数，mock 函数有 <code>.mock</code> 属性，标识函数被调用及返回值信息</p>
+<p>在某些情况下，除了指定返回值之外，完全替换模拟函数的实现是有用的</p>
+<ul>
+<li><code>.mock</code></li>
+</ul>
+<p>所有的 mock 函数都有个特殊的 <code>.mock</code>属性，它保存了关于此函数如何被调用、调用时的返回值的信息。 <code>.mock</code> 属性还追踪每次调用时 <code>this</code>的值，</p>
+<p>这些 mock 成员变量在测试中非常有用，用于说明这些 function 是如何被调用、实例化或返回的：</p>
+<pre><code>// The function was called exactly once
+expect(someMockFunction.mock.calls.length).toBe(1);
+
+// The first arg of the first call to the function was 'first arg'
+expect(someMockFunction.mock.calls[0][0]).toBe('first arg');
+
+// The second arg of the first call to the function was 'second arg'
+expect(someMockFunction.mock.calls[0][1]).toBe('second arg');
+
+// The return value of the first call to the function was 'return value'
+expect(someMockFunction.mock.results[0].value).toBe('return value');
+
+// This function was instantiated exactly twice
+expect(someMockFunction.mock.instances.length).toBe(2);
+
+// The object returned by the first instantiation of this function
+// had a `name` property whose value was set to 'test'
+expect(someMockFunction.mock.instances[0].name).toEqual('test');
+</code></pre><ul>
+<li><code>mockReturnValueOnce</code></li>
+<li><code>mockReturnValue</code></li>
+</ul>
+<p>mock函数的返回值也是可以模拟的</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kr">const</span> <span class="nx">filterTestFn</span> <span class="o">=</span> <span class="nx">jest</span><span class="p">.</span><span class="nx">fn</span><span class="p">();</span>
+
+<span class="c1">// Make the mock return `true` for the first call,
+</span><span class="c1">// and `false` for the second call
+</span><span class="c1"></span><span class="nx">filterTestFn</span><span class="p">.</span><span class="nx">mockReturnValueOnce</span><span class="p">(</span><span class="kc">true</span><span class="p">).</span><span class="nx">mockReturnValueOnce</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+
+<span class="kr">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">].</span><span class="nx">filter</span><span class="p">(</span><span class="nx">num</span> <span class="p">=&gt;</span> <span class="nx">filterTestFn</span><span class="p">(</span><span class="nx">num</span><span class="p">));</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+<span class="c1">// &gt; [11]
+</span><span class="c1"></span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">filterTestFn</span><span class="p">.</span><span class="nx">mock</span><span class="p">.</span><span class="nx">calls</span><span class="p">);</span>
+<span class="c1">// &gt; [ [11], [12] ]
+</span></code></pre></div><p>大多数现实世界例子中，实际是在依赖的组件上配一个模拟函数并配置它，但手法是相同的。 在这些情况下，尽量避免在非真正想要进行测试的任何函数内实现逻辑。</p>
+<h4 id="mock模块">Mock模块</h4>
+<ul>
+<li><code>mock</code></li>
+</ul>
+<p>使用 jest.mock(模块名) 可以 mock 一个模块，比如某些功能依赖了 axios 发异步请求，在实际测试的时候我们希望直接返回既定结果，不用发请求，就可以 mock axios</p>
+<h4 id="mock实现">Mock实现</h4>
+<ul>
+<li><code>mockImplementation</code></li>
 </ul>
 <p>当需要定义从另一个模块创建的模拟函数的默认实现时，mockImplementation方法非常有用</p>
-<h3 id="模拟模块">模拟模块</h3>
-<p>jest.mock</p>
-<h2 id="jest模拟实践">jest模拟实践</h2>
-<p>环境：</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kr">const</span> <span class="nx">myMockFn</span> <span class="o">=</span> <span class="nx">jest</span>
+  <span class="p">.</span><span class="nx">fn</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">mockImplementationOnce</span><span class="p">(</span><span class="nx">cb</span> <span class="p">=&gt;</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kc">true</span><span class="p">))</span>
+  <span class="p">.</span><span class="nx">mockImplementationOnce</span><span class="p">(</span><span class="nx">cb</span> <span class="p">=&gt;</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kc">false</span><span class="p">));</span>
+
+<span class="nx">myMockFn</span><span class="p">((</span><span class="nx">err</span><span class="p">,</span> <span class="nx">val</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">val</span><span class="p">));</span>
+<span class="c1">// &gt; true
+</span><span class="c1"></span>
+<span class="nx">myMockFn</span><span class="p">((</span><span class="nx">err</span><span class="p">,</span> <span class="nx">val</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">val</span><span class="p">));</span>
+<span class="c1">// &gt; false
+</span></code></pre></div><h2 id="jest模拟实践">Jest模拟实践</h2>
+<p>实际上，我们的单元测试环境并不会那么单纯，不同的环境需要加上不同的配置，甚至需要测试因为环境关联的特有功能。</p>
+<h3 id="jest-与-typescript--babel">Jest 与 TypeScript &amp; Babel</h3>
+<p>要支持typescript &amp; babel的环境，需要以下几个步骤</p>
+<h4 id="安装依赖">安装依赖</h4>
+<pre><code>$ npm i -D @babel/core @babel/preset-env @babel/preset-typescript @types/jest
+</code></pre><p>添加babel配置</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">// babel.config.js
+</span><span class="c1"></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">presets</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">[</span><span class="s1">&#39;@babel/preset-env&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">targets</span><span class="o">:</span> <span class="p">{</span> <span class="nx">node</span><span class="o">:</span> <span class="s1">&#39;current&#39;</span> <span class="p">}</span> <span class="p">}],</span>
+      <span class="s1">&#39;@babel/preset-typescript&#39;</span><span class="p">,</span>
+    <span class="p">],</span>
+  <span class="p">};</span>
+</code></pre></div><h3 id="jest-与-react--enzyme">Jest 与 React &amp; enzyme</h3>
+<p>Enzyme是用于React的JavaScript测试实用程序，可以更轻松地测试React组件的输出。还可以根据给定的输出进行操作，遍历并以某种方式模拟运行时。</p>
+<p>通过模仿jQuery的DOM操作和遍历的API，Enzyme的API意味着直观且灵活。</p>
+<h4 id="安装依赖-1">安装依赖</h4>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ npm i -S react react-dom
+$ npm i -D @babel/preset-env @babel/preset-react enzyme enzyme-adapter-react-16
+</code></pre></div><p>其中，enzyme-adapter-react-16是与react对应的enzyme依赖（依赖详见官方文档）</p>
+<p>最后，需要手动配置一下对应的适配器</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kr">import</span> <span class="nx">Enzyme</span> <span class="nx">from</span> <span class="s1">&#39;enzyme&#39;</span><span class="p">;</span>
+<span class="kr">import</span> <span class="nx">Adapter</span> <span class="nx">from</span> <span class="s1">&#39;enzyme-adapter-react-16&#39;</span><span class="p">;</span>
+
+<span class="nx">Enzyme</span><span class="p">.</span><span class="nx">configure</span><span class="p">({</span> <span class="nx">adapter</span><span class="o">:</span> <span class="k">new</span> <span class="nx">Adapter</span><span class="p">()</span> <span class="p">});</span>
+</code></pre></div><p>enzyme本身是适配不同的测试框架的，如果想要使用带有自定义断言和更方便函数的enzyme，可以安装<code>jest-enzyme</code></p>
+<h4 id="配置-babel">配置 babel</h4>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">// babel.config.js
+</span><span class="c1"></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">presets</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s1">&#39;@babel/preset-env&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">targets</span><span class="o">:</span> <span class="p">{</span> <span class="nx">node</span><span class="o">:</span> <span class="s1">&#39;current&#39;</span> <span class="p">}</span> <span class="p">}],</span>
+    <span class="s1">&#39;@babel/preset-react&#39;</span><span class="p">,</span>
+  <span class="p">],</span>
+<span class="p">};</span>
+</code></pre></div><p>使用class的写法还需——</p>
+<pre><code>$ npm i -D @babel/plugin-proposal-class-properties
+</code></pre><p>只用React Hook则不用</p>
+<h4 id="使用">使用</h4>
+<p>shallow</p>
+<p><a class="link" href="https://github.com/airbnb/enzyme/blob/master/docs/api/shallow.md"  target="_blank" rel="noopener"
+    >Shallow Rendering</a>（浅渲染）指的是，将一个组件渲染成虚拟DOM对象，但是只渲染第一层，不渲染所有子组件，所以处理速度非常快。它不需要DOM环境，因为根本没有加载进DOM。</p>
+<p>mount</p>
+<h4 id="测试用例">测试用例</h4>
+<p>组件</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">useState</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;react&#39;</span><span class="p">;</span>
+
+<span class="kr">export</span> <span class="k">default</span> <span class="kd">function</span> <span class="nx">CheckboxWithLabel</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="p">[</span><span class="nx">checkStatus</span><span class="p">,</span> <span class="nx">setCheckStatus</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+  <span class="kr">const</span> <span class="p">{</span> <span class="nx">labelOn</span><span class="p">,</span> <span class="nx">labelOff</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">props</span><span class="p">;</span>
+  <span class="kd">function</span> <span class="nx">onChange</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">setCheckStatus</span><span class="p">(</span><span class="o">!</span><span class="nx">checkStatus</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="p">(</span>
+    <span class="o">&lt;</span><span class="nx">label</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nx">input</span>
+        <span class="nx">type</span><span class="o">=</span><span class="s2">&#34;checkbox&#34;</span>
+        <span class="nx">checked</span><span class="o">=</span><span class="p">{</span><span class="nx">checkStatus</span><span class="p">}</span>
+        <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">onChange</span><span class="p">}</span>
+      <span class="o">/&gt;</span>
+      <span class="p">{</span><span class="nx">checkStatus</span> <span class="o">?</span> <span class="nx">labelOn</span> <span class="o">:</span> <span class="nx">labelOff</span><span class="p">}</span>
+    <span class="o">&lt;</span><span class="err">/label&gt;</span>
+  <span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><p>测试代码</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kr">import</span> <span class="nx">React</span> <span class="nx">from</span> <span class="s1">&#39;react&#39;</span><span class="p">;</span>
+<span class="kr">import</span> <span class="nx">Enzyme</span><span class="p">,</span> <span class="p">{</span> <span class="nx">shallow</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;enzyme&#39;</span><span class="p">;</span>
+<span class="kr">import</span> <span class="nx">Adapter</span> <span class="nx">from</span> <span class="s1">&#39;enzyme-adapter-react-16&#39;</span><span class="p">;</span>
+<span class="kr">import</span> <span class="nx">CheckboxWithLabel</span> <span class="nx">from</span> <span class="s1">&#39;../src/checkbox-with-label&#39;</span><span class="p">;</span>
+<span class="nx">beforeAll</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// enzyme 初始化
+</span><span class="c1"></span>  <span class="nx">Enzyme</span><span class="p">.</span><span class="nx">configure</span><span class="p">({</span> <span class="nx">adapter</span><span class="o">:</span> <span class="k">new</span> <span class="nx">Adapter</span><span class="p">()</span> <span class="p">});</span>
+<span class="p">})</span>
+<span class="nx">test</span><span class="p">(</span><span class="s1">&#39;CheckboxWithLabel changes the text after click&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// 渲染组件
+</span><span class="c1"></span>  <span class="kr">const</span> <span class="nx">checkbox</span> <span class="o">=</span> <span class="nx">shallow</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">CheckboxWithLabel</span> <span class="nx">labelOn</span><span class="o">=</span><span class="s2">&#34;On&#34;</span> <span class="nx">labelOff</span><span class="o">=</span><span class="s2">&#34;Off&#34;</span> <span class="o">/&gt;</span><span class="p">);</span>
+  <span class="nx">expect</span><span class="p">(</span><span class="nx">checkbox</span><span class="p">.</span><span class="nx">text</span><span class="p">()).</span><span class="nx">toEqual</span><span class="p">(</span><span class="s1">&#39;Off&#39;</span><span class="p">);</span>
+  <span class="c1">// 触发事件
+</span><span class="c1"></span>  <span class="nx">checkbox</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">).</span><span class="nx">simulate</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">);</span>
+  <span class="nx">expect</span><span class="p">(</span><span class="nx">checkbox</span><span class="p">.</span><span class="nx">text</span><span class="p">()).</span><span class="nx">toEqual</span><span class="p">(</span><span class="s1">&#39;On&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div><h4 id="注意">注意</h4>
+<p>enzyme在React Hook 中有一些使用限制</p>
 <ul>
-<li>
-<p>enzyme</p>
-</li>
-<li>
-<p>ts</p>
-</li>
-<li>
-<p>react</p>
-</li>
-<li>
-<p>axios</p>
-</li>
-<li>
-<p>webpack</p>
-</li>
-<li>
-<p>next</p>
-</li>
+<li>useEffect()和useLayoutEffect()不会在React浅渲染器中被调用</li>
+<li>在React浅渲染器中，useCallback()不记忆回调</li>
 </ul>
-<h3 id="jest-与-enzyme">Jest 与 enzyme</h3>
-<h3 id="jest-与-typescript">Jest 与 TypeScript</h3>
-<h3 id="jest-与-axios">Jest 与 Axios</h3>
-<h3 id="jest-与-react">Jest 与 React</h3>
+<p>当然，也可以不使用</p>
 <p>###Jest 与 Webpack</p>
-<h3 id="jest-与-nextjs">jest 与 NextJs</h3>
+<p>Jest 可以使用 <a class="link" href="https://webpack.js.org/"  target="_blank" rel="noopener"
+    >webpack</a> 来管理资源、 样式和编译的项目。例如图像和字体。</p>
+<h4 id="样式css--css-module">样式（CSS &amp; CSS Module)</h4>
+<p>可以使用<a class="link" href="https://github.com/keyanzhang/identity-obj-proxy"  target="_blank" rel="noopener"
+    >ES6 Proxy</a>来模拟一个<a class="link" href="https://github.com/css-modules/css-modules"  target="_blank" rel="noopener"
+    >CSS Module</a>：</p>
+<h5 id="安装依赖-2">安装依赖</h5>
+<pre><code>yarn add --dev identity-obj-proxy
+</code></pre><p>然后在样式对象上，你的所有类别名称查找都会原样返回,例如<code>styles.foobar === 'foobar'</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="err">//</span> <span class="err">package.json</span> <span class="err">(for</span> <span class="err">CSS</span> <span class="err">Modules)</span>
+<span class="p">{</span>
+  <span class="nt">&#34;jest&#34;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&#34;moduleNameMapper&#34;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&#34;\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$&#34;</span><span class="p">:</span> <span class="s2">&#34;&lt;rootDir&gt;/__mocks__/fileMock.js&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;\\.(css|less)$&#34;</span><span class="p">:</span> <span class="s2">&#34;identity-obj-proxy&#34;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><h4 id="文件">文件</h4>
+<p>详见<a class="link" href="https://jestjs.io/docs/zh-Hans/webpack"  target="_blank" rel="noopener"
+    >Using with webpack · Jest</a></p>
+<h3 id="jest-与-nextjs">Jest 与 NextJs</h3>
+<p>【TODO】</p>
 <h2 id="应用">应用</h2>
 <h3 id="库">库</h3>
 <ul>
@@ -295,20 +489,7 @@ test('the fetch fails with an error', async () =&gt; {
 </ul>
 <h3 id="路径问题">路径问题</h3>
 <h3 id="配置">配置</h3>
-<p>jest.config.js</p>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">// jest.config.js
-</span><span class="c1">// Sync object
-</span><span class="c1"></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">verbose</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-<span class="p">};</span>
-
-<span class="c1">// Or async function
-</span><span class="c1"></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kr">async</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="p">{</span>
-    <span class="nx">verbose</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-  <span class="p">};</span>
-<span class="p">};</span>
-</code></pre></div><p>jest.config.ts</p>
+<p>jest.config.ts</p>
 <p>需要搭配 ts-node</p>
 <div class="highlight"><pre class="chroma"><code class="language-typescript" data-lang="typescript"><span class="c1">// jest.config.ts
 </span><span class="c1"></span><span class="kr">import</span> <span class="kr">type</span> <span class="p">{</span><span class="nx">Config</span><span class="p">}</span> <span class="kr">from</span> <span class="s1">&#39;@jest/types&#39;</span><span class="p">;</span>
@@ -337,15 +518,61 @@ test('the fetch fails with an error', async () =&gt; {
   &quot;bail&quot;: 1,
   &quot;verbose&quot;: true
 }
-</code></pre><h2 id="指导思想">指导思想</h2>
+</code></pre><p>Jest 会自动运行 <em>sum.test.js</em> 文件，其默认匹配规则</p>
+<ol>
+<li>匹配 <code>__test__</code> 文件夹下的 .js 文件（.jsx .ts .tsx  也可以）</li>
+<li>匹配所有后缀为 <code>.test.js</code> 或 <code>.spec.js</code> 的文件（.jsx .ts .tsx 也可以）</li>
+</ol>
+<p>可以通过根目录下的 <code>jest.config.js</code> 文件自定义测试文件匹配规则</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">// jest.config.js
+</span><span class="c1"></span>
+<span class="c1">// 基本配置
+</span><span class="c1">// Sync object
+</span><span class="c1"></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">verbose</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="c1">// Or async function
+</span><span class="c1"></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kr">async</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">verbose</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="p">};</span>
+<span class="p">};</span>
+
+<span class="c1">//自定义匹配规则
+</span><span class="c1"></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">testMatch</span><span class="o">:</span> <span class="p">[</span> <span class="c1">// glob 格式
+</span><span class="c1"></span>    <span class="s2">&#34;**/__tests__/**/*.[jt]s?(x)&#34;</span><span class="p">,</span>
+    <span class="s2">&#34;**/?(*.)+(spec|test).[jt]s?(x)&#34;</span>
+  <span class="p">],</span>
+  <span class="c1">// 正则表达式格式，与 testMatch 互斥，不能同时声明
+</span><span class="c1"></span>  <span class="c1">// testRegex: &#39;(/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$&#39;,
+</span><span class="c1"></span><span class="p">};</span>
+</code></pre></div><h2 id="指导思想">指导思想</h2>
 <h3 id="tdd">TDD</h3>
 <h3 id="bdd">BDD</h3>
-<p>目的：</p>
-<p>正确 toBe成立，不抛出错误</p>
-<p>错误，toBe不成立，抛出的错误被捕获</p>
-<p>而不是</p>
-<p>不知道是否正确——未捕获到结果</p>
-<p><del>知道是否正确但是输出错误</del></p>
+<h3 id="测试原理">测试原理</h3>
+<blockquote>
+<p>The more your tests resemble the way your software is used, the more confidence they can give you.</p>
+</blockquote>
+<p>React本身除了可以使用enzyme，也可以使用官方维护的<a class="link" href="https://testing-library.com/react"  target="_blank" rel="noopener"
+    >React Testing Library</a>，原因便是上面这一句。</p>
+<p>React Testing Library 的测试将与实际的DOM节点一起使用，而不是处理呈现的React组件的实例，可能可以更加精确的贴近真实的使用状况。</p>
+<p>“Most of the damaging features have to do with encouraging testing implementation details. ”，而Enzyme提供了过于齐全的功能，在测试代码里可以访问到真实情况里不可能访问到的实例，可能会让使用者不慎写出错误的测试案例。</p>
+<h1 id="参考">参考</h1>
+<ul>
+<li>
+<p>方凳雅集 <img src="http://static.mythcwj.com/20201203114931" alt="img"  />使用 jest 单元测试</p>
+</li>
+<li>
+<p><a class="link" href="https://zh-hans.reactjs.org/docs/test-utils.html"  target="_blank" rel="noopener"
+    >Test Utilities – React</a></p>
+</li>
+<li>
+<p><a class="link" href="https://my.oschina.net/u/4352420/blog/4042258"  target="_blank" rel="noopener"
+    >【前端单元测试入门02】react的单元测试之Enzyme - osc_0i8c6s1z的个人空间 - OSCHINA - 中文开源技术交流社区</a></p>
+</li>
+</ul>
 
 </section>
 

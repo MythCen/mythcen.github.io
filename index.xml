@@ -7,21 +7,46 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <lastBuildDate>Wed, 02 Dec 2020 20:00:22 +0800</lastBuildDate><atom:link href="http://mythcen.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>Jest 原理与项目实践</title>
+        <title>使用Jest 单元测试</title>
         <link>http://mythcen.github.io/p/jest-unit-test/</link>
         <pubDate>Wed, 02 Dec 2020 20:00:22 +0800</pubDate>
         
         <guid>http://mythcen.github.io/p/jest-unit-test/</guid>
-        <description>&lt;h1 id=&#34;jest-原理与项目实践&#34;&gt;Jest 原理与项目实践&lt;/h1&gt;
-&lt;p&gt;首先，需要明确我们的目的——单元测试&lt;/p&gt;
-&lt;h2 id=&#34;原理&#34;&gt;原理&lt;/h2&gt;
-&lt;p&gt;断言&lt;/p&gt;
+        <description>&lt;p&gt;首先，需要明确我们的目的——单元测试&lt;/p&gt;
+&lt;p&gt;单元测试（Unit Tesing）是针对程序的最小部件，检查代码是否会按照预期工作的一种测试手段。在过程式编程中最小就是一个函数，在面向对象编程中最小部件就是对象方法。&lt;/p&gt;
+&lt;h2 id=&#34;为什么选择-jest&#34;&gt;为什么选择 jest&lt;/h2&gt;
+&lt;p&gt;单元测试的执行通常需要测试规范、断言、mock、覆盖率工具等支持，上述工具在繁荣的 Node.js 生态中有很多优秀实现，但组合起来使用会带来两个问题&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;多种工具的选择和学习有一定的成本&lt;/li&gt;
+&lt;li&gt;把多个工具组合成特定测试解决方案的配置复杂&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;而 Jest 是用来创建、执行和构建测试用例的 JavaScript 测试库，自身包含了 驱动、断言库、mock 、代码覆盖率等多种功能，配置使用相当简单&lt;/p&gt;
 &lt;h2 id=&#34;api&#34;&gt;Api&lt;/h2&gt;
-&lt;h3 id=&#34;jest-作用域&#34;&gt;Jest 作用域&lt;/h3&gt;
-&lt;p&gt;&lt;code&gt;test.only&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;beforeEach&lt;/code&gt; 和 &lt;code&gt;afterEach&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;beforeAll&lt;/code&gt; 和 &lt;code&gt;afterAll&lt;/code&gt;&lt;/p&gt;
-&lt;h3 id=&#34;jest测试异步代码&#34;&gt;jest测试异步代码&lt;/h3&gt;
+&lt;h3 id=&#34;断言&#34;&gt;断言&lt;/h3&gt;
+&lt;p&gt;jest提供了比较丰富的断言，此处介绍一些常用的。&lt;/p&gt;
+&lt;h4 id=&#34;相等&#34;&gt;相等&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;toBe&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;toEqual&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;not&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;真值&#34;&gt;真值&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;toBeNull&lt;/code&gt; 只匹配 null&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;toBeUndefined&lt;/code&gt; 只匹配 undefined&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;toBeDefined&lt;/code&gt; 与 &lt;code&gt;toBeUndefined&lt;/code&gt; 相反&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;toBeTruthy&lt;/code&gt; 匹配任何 &lt;code&gt;if&lt;/code&gt; 语句为真&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;toBeFalsy&lt;/code&gt; 匹配任何 &lt;code&gt;if&lt;/code&gt; 语句为假&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;数字&#34;&gt;数字&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;toBeCloseTo&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;包含&#34;&gt;包含&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;toContain&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;异步&#34;&gt;异步&lt;/h3&gt;
 &lt;h4 id=&#34;callback&#34;&gt;callback&lt;/h4&gt;
 &lt;p&gt;默认情况下，Jest 测试一旦执行到末尾就会完成。这意味着，像这样写不会有效果——&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;nx&#34;&gt;test&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;the data is peanut butter&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
@@ -66,45 +91,223 @@
 test(&#39;the fetch fails with an error&#39;, async () =&amp;gt; {
   await expect(fetchData()).rejects.toThrow(&#39;error&#39;);
 });
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;describe-test和it&#34;&gt;describe 、test和it&lt;/h3&gt;
-&lt;p&gt;Jest 会在所有真正的测试开始&lt;em&gt;&lt;strong&gt;之前&lt;/strong&gt;&lt;/em&gt;执行测试文件里所有的 describe 处理程序（handlers）&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;作用域&#34;&gt;作用域&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;test.only&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;``beforeEach&lt;code&gt;和&lt;/code&gt;afterEach`&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;beforeAll&lt;/code&gt; 和 &lt;code&gt;afterAll&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;describe&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;jest通过 &lt;code&gt;describe&lt;/code&gt; 块来将测试分组，在不同的组里可以指定不同的重复性工作，例如数据初始化、结束后执行的数据清理。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// Applies to all tests in this file
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;beforeEach&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;initializeCityDatabase&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
+
+&lt;span class=&#34;nx&#34;&gt;test&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;city database has Vienna&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;nx&#34;&gt;expect&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;isCity&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;Vienna&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;toBeTruthy&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
+
+&lt;span class=&#34;nx&#34;&gt;test&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;city database has San Juan&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;nx&#34;&gt;expect&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;isCity&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;San Juan&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;toBeTruthy&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
+
+&lt;span class=&#34;nx&#34;&gt;describe&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;matching cities to foods&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;c1&#34;&gt;// Applies only to tests in this describe block
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;nx&#34;&gt;beforeEach&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;initializeFoodDatabase&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+  &lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
+
+  &lt;span class=&#34;nx&#34;&gt;test&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;Vienna &amp;lt;3 sausage&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;expect&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;isValidCityFoodPair&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;Vienna&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;Wiener Schnitzel&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;toBe&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+  &lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
+
+  &lt;span class=&#34;nx&#34;&gt;test&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;San Juan &amp;lt;3 plantains&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;expect&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;isValidCityFoodPair&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;San Juan&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;Mofongo&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;toBe&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+  &lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Jest 会在所有真正的测试开始&lt;em&gt;&lt;strong&gt;之前&lt;/strong&gt;&lt;/em&gt;执行测试文件里所有的 describe 处理程序（handlers）&lt;/p&gt;
 &lt;p&gt;当 describe 块运行完后,，默认情况下，Jest 会按照 test 出现的顺序依次运行所有测试,&lt;/p&gt;
 &lt;h3 id=&#34;mock&#34;&gt;Mock&lt;/h3&gt;
-&lt;p&gt;但是，在某些情况下，除了指定返回值之外，完全替换模拟函数的实现是有用的&lt;/p&gt;
+&lt;h4 id=&#34;mock函数&#34;&gt;Mock函数&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;jest.fn&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;fn&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;使用 jest.fn() 就可以 mock 一个函数，mock 函数有 &lt;code&gt;.mock&lt;/code&gt; 属性，标识函数被调用及返回值信息&lt;/p&gt;
+&lt;p&gt;在某些情况下，除了指定返回值之外，完全替换模拟函数的实现是有用的&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;.mock&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所有的 mock 函数都有个特殊的 &lt;code&gt;.mock&lt;/code&gt;属性，它保存了关于此函数如何被调用、调用时的返回值的信息。 &lt;code&gt;.mock&lt;/code&gt; 属性还追踪每次调用时 &lt;code&gt;this&lt;/code&gt;的值，&lt;/p&gt;
+&lt;p&gt;这些 mock 成员变量在测试中非常有用，用于说明这些 function 是如何被调用、实例化或返回的：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// The function was called exactly once
+expect(someMockFunction.mock.calls.length).toBe(1);
+
+// The first arg of the first call to the function was &#39;first arg&#39;
+expect(someMockFunction.mock.calls[0][0]).toBe(&#39;first arg&#39;);
+
+// The second arg of the first call to the function was &#39;second arg&#39;
+expect(someMockFunction.mock.calls[0][1]).toBe(&#39;second arg&#39;);
+
+// The return value of the first call to the function was &#39;return value&#39;
+expect(someMockFunction.mock.results[0].value).toBe(&#39;return value&#39;);
+
+// This function was instantiated exactly twice
+expect(someMockFunction.mock.instances.length).toBe(2);
+
+// The object returned by the first instantiation of this function
+// had a `name` property whose value was set to &#39;test&#39;
+expect(someMockFunction.mock.instances[0].name).toEqual(&#39;test&#39;);
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;mockReturnValueOnce&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;mockReturnValue&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;mock函数的返回值也是可以模拟的&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;kr&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;filterTestFn&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;jest&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;fn&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;// Make the mock return `true` for the first call,
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// and `false` for the second call
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;filterTestFn&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;mockReturnValueOnce&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;mockReturnValueOnce&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+
+&lt;span class=&#34;kr&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;result&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;11&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;12&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;].&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;filter&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;num&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;filterTestFn&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;num&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
+
+&lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;result&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;// &amp;gt; [11]
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;filterTestFn&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;mock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;calls&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;// &amp;gt; [ [11], [12] ]
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;大多数现实世界例子中，实际是在依赖的组件上配一个模拟函数并配置它，但手法是相同的。 在这些情况下，尽量避免在非真正想要进行测试的任何函数内实现逻辑。&lt;/p&gt;
+&lt;h4 id=&#34;mock模块&#34;&gt;Mock模块&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;mock&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;使用 jest.mock(模块名) 可以 mock 一个模块，比如某些功能依赖了 axios 发异步请求，在实际测试的时候我们希望直接返回既定结果，不用发请求，就可以 mock axios&lt;/p&gt;
+&lt;h4 id=&#34;mock实现&#34;&gt;Mock实现&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;mockImplementation&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;当需要定义从另一个模块创建的模拟函数的默认实现时，mockImplementation方法非常有用&lt;/p&gt;
-&lt;h3 id=&#34;模拟模块&#34;&gt;模拟模块&lt;/h3&gt;
-&lt;p&gt;jest.mock&lt;/p&gt;
-&lt;h2 id=&#34;jest模拟实践&#34;&gt;jest模拟实践&lt;/h2&gt;
-&lt;p&gt;环境：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;kr&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;myMockFn&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;jest&lt;/span&gt;
+  &lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;fn&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+  &lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;mockImplementationOnce&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;cb&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;cb&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+  &lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;mockImplementationOnce&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;cb&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;cb&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
+
+&lt;span class=&#34;nx&#34;&gt;myMockFn&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;err&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;val&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;val&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;// &amp;gt; true
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;
+&lt;span class=&#34;nx&#34;&gt;myMockFn&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;err&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;val&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;console&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;val&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;// &amp;gt; false
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;jest模拟实践&#34;&gt;Jest模拟实践&lt;/h2&gt;
+&lt;p&gt;实际上，我们的单元测试环境并不会那么单纯，不同的环境需要加上不同的配置，甚至需要测试因为环境关联的特有功能。&lt;/p&gt;
+&lt;h3 id=&#34;jest-与-typescript--babel&#34;&gt;Jest 与 TypeScript &amp;amp; Babel&lt;/h3&gt;
+&lt;p&gt;要支持typescript &amp;amp; babel的环境，需要以下几个步骤&lt;/p&gt;
+&lt;h4 id=&#34;安装依赖&#34;&gt;安装依赖&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;$ npm i -D @babel/core @babel/preset-env @babel/preset-typescript @types/jest
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;添加babel配置&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// babel.config.js
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;module&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;exports&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;presets&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;
+      &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;@babel/preset-env&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;targets&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;node&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;current&amp;#39;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;}],&lt;/span&gt;
+      &lt;span class=&#34;s1&#34;&gt;&amp;#39;@babel/preset-typescript&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;],&lt;/span&gt;
+  &lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;jest-与-react--enzyme&#34;&gt;Jest 与 React &amp;amp; enzyme&lt;/h3&gt;
+&lt;p&gt;Enzyme是用于React的JavaScript测试实用程序，可以更轻松地测试React组件的输出。还可以根据给定的输出进行操作，遍历并以某种方式模拟运行时。&lt;/p&gt;
+&lt;p&gt;通过模仿jQuery的DOM操作和遍历的API，Enzyme的API意味着直观且灵活。&lt;/p&gt;
+&lt;h4 id=&#34;安装依赖-1&#34;&gt;安装依赖&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ npm i -S react react-dom
+$ npm i -D @babel/preset-env @babel/preset-react enzyme enzyme-adapter-react-16
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其中，enzyme-adapter-react-16是与react对应的enzyme依赖（依赖详见官方文档）&lt;/p&gt;
+&lt;p&gt;最后，需要手动配置一下对应的适配器&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;kr&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Enzyme&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;from&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;enzyme&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;span class=&#34;kr&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Adapter&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;from&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;enzyme-adapter-react-16&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+
+&lt;span class=&#34;nx&#34;&gt;Enzyme&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;configure&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;({&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;adapter&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Adapter&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;enzyme本身是适配不同的测试框架的，如果想要使用带有自定义断言和更方便函数的enzyme，可以安装&lt;code&gt;jest-enzyme&lt;/code&gt;&lt;/p&gt;
+&lt;h4 id=&#34;配置-babel&#34;&gt;配置 babel&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// babel.config.js
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;module&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;exports&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;nx&#34;&gt;presets&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;@babel/preset-env&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;targets&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;node&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;current&amp;#39;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;}],&lt;/span&gt;
+    &lt;span class=&#34;s1&#34;&gt;&amp;#39;@babel/preset-react&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+  &lt;span class=&#34;p&#34;&gt;],&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;使用class的写法还需——&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ npm i -D @babel/plugin-proposal-class-properties
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;只用React Hook则不用&lt;/p&gt;
+&lt;h4 id=&#34;使用&#34;&gt;使用&lt;/h4&gt;
+&lt;p&gt;shallow&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/airbnb/enzyme/blob/master/docs/api/shallow.md&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Shallow Rendering&lt;/a&gt;（浅渲染）指的是，将一个组件渲染成虚拟DOM对象，但是只渲染第一层，不渲染所有子组件，所以处理速度非常快。它不需要DOM环境，因为根本没有加载进DOM。&lt;/p&gt;
+&lt;p&gt;mount&lt;/p&gt;
+&lt;h4 id=&#34;测试用例&#34;&gt;测试用例&lt;/h4&gt;
+&lt;p&gt;组件&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;kr&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;React&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;useState&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;from&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;react&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+
+&lt;span class=&#34;kr&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;default&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;CheckboxWithLabel&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;props&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;kr&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;checkStatus&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;setCheckStatus&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;useState&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+  &lt;span class=&#34;kr&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;labelOn&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;labelOff&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;props&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+  &lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;onChange&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;setCheckStatus&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;!&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;checkStatus&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+  &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;
+    &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;label&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;input&lt;/span&gt;
+        &lt;span class=&#34;nx&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;checkbox&amp;#34;&lt;/span&gt;
+        &lt;span class=&#34;nx&#34;&gt;checked&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;checkStatus&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+        &lt;span class=&#34;nx&#34;&gt;onChange&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;onChange&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+      &lt;span class=&#34;o&#34;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;checkStatus&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;?&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;labelOn&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;labelOff&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+    &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;/label&amp;gt;&lt;/span&gt;
+  &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;测试代码&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;kr&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;React&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;from&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;react&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;span class=&#34;kr&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Enzyme&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;shallow&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;from&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;enzyme&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;span class=&#34;kr&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Adapter&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;from&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;enzyme-adapter-react-16&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;span class=&#34;kr&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;CheckboxWithLabel&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;from&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;../src/checkbox-with-label&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;span class=&#34;nx&#34;&gt;beforeAll&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;c1&#34;&gt;// enzyme 初始化
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;nx&#34;&gt;Enzyme&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;configure&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;({&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;adapter&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Adapter&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;})&lt;/span&gt;
+&lt;span class=&#34;nx&#34;&gt;test&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;CheckboxWithLabel changes the text after click&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;c1&#34;&gt;// 渲染组件
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;kr&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;checkbox&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;shallow&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;CheckboxWithLabel&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;labelOn&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;On&amp;#34;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;labelOff&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;Off&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&amp;gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+  &lt;span class=&#34;nx&#34;&gt;expect&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;checkbox&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;toEqual&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;Off&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+  &lt;span class=&#34;c1&#34;&gt;// 触发事件
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;nx&#34;&gt;checkbox&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;find&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;input&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;simulate&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;change&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+  &lt;span class=&#34;nx&#34;&gt;expect&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;checkbox&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;toEqual&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;On&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;注意&#34;&gt;注意&lt;/h4&gt;
+&lt;p&gt;enzyme在React Hook 中有一些使用限制&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;enzyme&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;ts&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;react&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;axios&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;webpack&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;next&lt;/p&gt;
-&lt;/li&gt;
+&lt;li&gt;useEffect()和useLayoutEffect()不会在React浅渲染器中被调用&lt;/li&gt;
+&lt;li&gt;在React浅渲染器中，useCallback()不记忆回调&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;jest-与-enzyme&#34;&gt;Jest 与 enzyme&lt;/h3&gt;
-&lt;h3 id=&#34;jest-与-typescript&#34;&gt;Jest 与 TypeScript&lt;/h3&gt;
-&lt;h3 id=&#34;jest-与-axios&#34;&gt;Jest 与 Axios&lt;/h3&gt;
-&lt;h3 id=&#34;jest-与-react&#34;&gt;Jest 与 React&lt;/h3&gt;
+&lt;p&gt;当然，也可以不使用&lt;/p&gt;
 &lt;p&gt;###Jest 与 Webpack&lt;/p&gt;
-&lt;h3 id=&#34;jest-与-nextjs&#34;&gt;jest 与 NextJs&lt;/h3&gt;
+&lt;p&gt;Jest 可以使用 &lt;a class=&#34;link&#34; href=&#34;https://webpack.js.org/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;webpack&lt;/a&gt; 来管理资源、 样式和编译的项目。例如图像和字体。&lt;/p&gt;
+&lt;h4 id=&#34;样式css--css-module&#34;&gt;样式（CSS &amp;amp; CSS Module)&lt;/h4&gt;
+&lt;p&gt;可以使用&lt;a class=&#34;link&#34; href=&#34;https://github.com/keyanzhang/identity-obj-proxy&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;ES6 Proxy&lt;/a&gt;来模拟一个&lt;a class=&#34;link&#34; href=&#34;https://github.com/css-modules/css-modules&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;CSS Module&lt;/a&gt;：&lt;/p&gt;
+&lt;h5 id=&#34;安装依赖-2&#34;&gt;安装依赖&lt;/h5&gt;
+&lt;pre&gt;&lt;code&gt;yarn add --dev identity-obj-proxy
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;然后在样式对象上，你的所有类别名称查找都会原样返回,例如&lt;code&gt;styles.foobar === &#39;foobar&#39;&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span class=&#34;err&#34;&gt;//&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;package.json&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;(for&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;CSS&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;Modules)&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;nt&#34;&gt;&amp;#34;jest&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;nt&#34;&gt;&amp;#34;moduleNameMapper&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+      &lt;span class=&#34;nt&#34;&gt;&amp;#34;\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&amp;lt;rootDir&amp;gt;/__mocks__/fileMock.js&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+      &lt;span class=&#34;nt&#34;&gt;&amp;#34;\\.(css|less)$&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;identity-obj-proxy&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;文件&#34;&gt;文件&lt;/h4&gt;
+&lt;p&gt;详见&lt;a class=&#34;link&#34; href=&#34;https://jestjs.io/docs/zh-Hans/webpack&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Using with webpack · Jest&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;jest-与-nextjs&#34;&gt;Jest 与 NextJs&lt;/h3&gt;
+&lt;p&gt;【TODO】&lt;/p&gt;
 &lt;h2 id=&#34;应用&#34;&gt;应用&lt;/h2&gt;
 &lt;h3 id=&#34;库&#34;&gt;库&lt;/h3&gt;
 &lt;ul&gt;
@@ -112,20 +315,7 @@ test(&#39;the fetch fails with an error&#39;, async () =&amp;gt; {
 &lt;/ul&gt;
 &lt;h3 id=&#34;路径问题&#34;&gt;路径问题&lt;/h3&gt;
 &lt;h3 id=&#34;配置&#34;&gt;配置&lt;/h3&gt;
-&lt;p&gt;jest.config.js&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// jest.config.js
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// Sync object
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;module&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;exports&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-  &lt;span class=&#34;nx&#34;&gt;verbose&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
-&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
-
-&lt;span class=&#34;c1&#34;&gt;// Or async function
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;module&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;exports&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kr&#34;&gt;async&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-  &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-    &lt;span class=&#34;nx&#34;&gt;verbose&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
-  &lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
-&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;jest.config.ts&lt;/p&gt;
+&lt;p&gt;jest.config.ts&lt;/p&gt;
 &lt;p&gt;需要搭配 ts-node&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-typescript&#34; data-lang=&#34;typescript&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// jest.config.ts
 &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kr&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;kr&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Config&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;kr&#34;&gt;from&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;@jest/types&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
@@ -154,15 +344,61 @@ test(&#39;the fetch fails with an error&#39;, async () =&amp;gt; {
   &amp;quot;bail&amp;quot;: 1,
   &amp;quot;verbose&amp;quot;: true
 }
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;指导思想&#34;&gt;指导思想&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Jest 会自动运行 &lt;em&gt;sum.test.js&lt;/em&gt; 文件，其默认匹配规则&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;匹配 &lt;code&gt;__test__&lt;/code&gt; 文件夹下的 .js 文件（.jsx .ts .tsx  也可以）&lt;/li&gt;
+&lt;li&gt;匹配所有后缀为 &lt;code&gt;.test.js&lt;/code&gt; 或 &lt;code&gt;.spec.js&lt;/code&gt; 的文件（.jsx .ts .tsx 也可以）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;可以通过根目录下的 &lt;code&gt;jest.config.js&lt;/code&gt; 文件自定义测试文件匹配规则&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// jest.config.js
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;// 基本配置
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// Sync object
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;module&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;exports&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;nx&#34;&gt;verbose&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;// Or async function
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;module&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;exports&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kr&#34;&gt;async&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;verbose&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+  &lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;//自定义匹配规则
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;module&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;exports&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;nx&#34;&gt;testMatch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// glob 格式
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;s2&#34;&gt;&amp;#34;**/__tests__/**/*.[jt]s?(x)&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+    &lt;span class=&#34;s2&#34;&gt;&amp;#34;**/?(*.)+(spec|test).[jt]s?(x)&amp;#34;&lt;/span&gt;
+  &lt;span class=&#34;p&#34;&gt;],&lt;/span&gt;
+  &lt;span class=&#34;c1&#34;&gt;// 正则表达式格式，与 testMatch 互斥，不能同时声明
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;// testRegex: &amp;#39;(/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$&amp;#39;,
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;指导思想&#34;&gt;指导思想&lt;/h2&gt;
 &lt;h3 id=&#34;tdd&#34;&gt;TDD&lt;/h3&gt;
 &lt;h3 id=&#34;bdd&#34;&gt;BDD&lt;/h3&gt;
-&lt;p&gt;目的：&lt;/p&gt;
-&lt;p&gt;正确 toBe成立，不抛出错误&lt;/p&gt;
-&lt;p&gt;错误，toBe不成立，抛出的错误被捕获&lt;/p&gt;
-&lt;p&gt;而不是&lt;/p&gt;
-&lt;p&gt;不知道是否正确——未捕获到结果&lt;/p&gt;
-&lt;p&gt;&lt;del&gt;知道是否正确但是输出错误&lt;/del&gt;&lt;/p&gt;
+&lt;h3 id=&#34;测试原理&#34;&gt;测试原理&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The more your tests resemble the way your software is used, the more confidence they can give you.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;React本身除了可以使用enzyme，也可以使用官方维护的&lt;a class=&#34;link&#34; href=&#34;https://testing-library.com/react&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;React Testing Library&lt;/a&gt;，原因便是上面这一句。&lt;/p&gt;
+&lt;p&gt;React Testing Library 的测试将与实际的DOM节点一起使用，而不是处理呈现的React组件的实例，可能可以更加精确的贴近真实的使用状况。&lt;/p&gt;
+&lt;p&gt;“Most of the damaging features have to do with encouraging testing implementation details. ”，而Enzyme提供了过于齐全的功能，在测试代码里可以访问到真实情况里不可能访问到的实例，可能会让使用者不慎写出错误的测试案例。&lt;/p&gt;
+&lt;h1 id=&#34;参考&#34;&gt;参考&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;方凳雅集 &lt;img src=&#34;http://static.mythcwj.com/20201203114931&#34; alt=&#34;img&#34;  /&gt;使用 jest 单元测试&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://zh-hans.reactjs.org/docs/test-utils.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Test Utilities – React&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://my.oschina.net/u/4352420/blog/4042258&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;【前端单元测试入门02】react的单元测试之Enzyme - osc_0i8c6s1z的个人空间 - OSCHINA - 中文开源技术交流社区&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 </description>
         </item>
         <item>

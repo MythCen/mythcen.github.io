@@ -8,21 +8,18 @@
     <language>en-us</language>
     <lastBuildDate>Wed, 02 Dec 2020 20:00:22 +0800</lastBuildDate><atom:link href="http://mythcen.github.io/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Jest 原理与项目实践</title>
+      <title>使用Jest 单元测试</title>
       <link>http://mythcen.github.io/p/jest-unit-test/</link>
       <pubDate>Wed, 02 Dec 2020 20:00:22 +0800</pubDate>
       
       <guid>http://mythcen.github.io/p/jest-unit-test/</guid>
-      <description>Jest 原理与项目实践 首先，需要明确我们的目的——单元测试
-原理 断言
-Api Jest 作用域 test.only
-beforeEach 和 afterEach
-beforeAll 和 afterAll
-jest测试异步代码 callback 默认情况下，Jest 测试一旦执行到末尾就会完成。这意味着，像这样写不会有效果——
-test(&amp;#39;the data is peanut butter&amp;#39;, () =&amp;gt; { function callback(data) { expect(data).toBe(&amp;#39;peanut butter&amp;#39;); } fetchData(callback); }); 一旦fetchData执行结束，此测试就在没有调用回调函数前结束.
-解决的方法之一，是使用jest提供的done函数，它会——【TODO】
-test(&amp;#39;the data is peanut butter&amp;#39;, done =&amp;gt; { function callback(data) { try { expect(data).toBe(&amp;#39;peanut butter&amp;#39;); done(); } catch (error) { done(error); } } fetchData(callback); }); 若 done() 函数从未被调用，测试用例会如预期的那样执行失败（显示超时错误）。
-若 expect 执行失败，它会抛出一个错误，后面的 done() 不再执行。 而try被用来捕获这个错误。</description>
+      <description>首先，需要明确我们的目的——单元测试
+单元测试（Unit Tesing）是针对程序的最小部件，检查代码是否会按照预期工作的一种测试手段。在过程式编程中最小就是一个函数，在面向对象编程中最小部件就是对象方法。
+为什么选择 jest 单元测试的执行通常需要测试规范、断言、mock、覆盖率工具等支持，上述工具在繁荣的 Node.js 生态中有很多优秀实现，但组合起来使用会带来两个问题
+ 多种工具的选择和学习有一定的成本 把多个工具组合成特定测试解决方案的配置复杂  而 Jest 是用来创建、执行和构建测试用例的 JavaScript 测试库，自身包含了 驱动、断言库、mock 、代码覆盖率等多种功能，配置使用相当简单
+Api 断言 jest提供了比较丰富的断言，此处介绍一些常用的。
+相等  toBe toEqual not  真值  toBeNull 只匹配 null toBeUndefined 只匹配 undefined toBeDefined 与 toBeUndefined 相反 toBeTruthy 匹配任何 if 语句为真 toBeFalsy 匹配任何 if 语句为假  数字  toBeCloseTo  包含  toContain  异步 callback 默认情况下，Jest 测试一旦执行到末尾就会完成。这意味着，像这样写不会有效果——
+test(&amp;#39;the data is peanut butter&amp;#39;, () =&amp;gt; { function callback(data) { expect(data).</description>
     </item>
     
   </channel>
