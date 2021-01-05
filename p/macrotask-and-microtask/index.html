@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='在点击事件冒泡捕获的处理中，通过使用setTimeout 的方式，想要调整某个代码的执行顺序的话，其具体的执行顺序，由一套 机制 去实现，这套机制就是通过定义 宏任务与微任务 来安排执行顺序。
+异步机制：javascript事件循环 概念 内存堆：这是内存分配发生的地方。当V8引擎遇到变量声明和函数声明的时候，就把它们存储在堆里面。
+调用栈：这是你的代码执行时的地方。当引擎遇到像函数调用之类的可执行单元，就会把它们推入调用栈。
+JS单线程，指的是在JS引擎中，解析执行JS代码的调用栈是唯一的，所有的JS代码都在这一个调用栈里按照调用顺序执行，不能同时执行多个函数。
+Web APIs：还有很多引擎之外的 API，我们把这些称为浏览器提供的 Web API，比如说 事件监听函数、DOM、HTTP／AJAX请求、setTimeout等等。
+回调队列（Event Queue)：按照先进先出的顺序存储所有的回调函数。在任意时间，只要Web API容器中的事件达到触发条件，就可以把回调函数添加到回调队列中去。
+**事件循环 ** (Event Loop)：持续的检测调用栈和回调队列，如果检测到调用栈为空，它就会通知回调队列把队列中的第一个回调函数推入执行栈。
+机制 JS运行时环境的工作机制：
+ JS引擎：（唯一主线程）按顺序解析代码，遇到函数声明，入堆，遇到函数调用，入栈； 如果是同步函数调用，直接执行得到结果，同步函数弹出栈，继续下一个函数调用； 如果是异步函数调用，分发给Web API（多个辅助线程），进入Event Table并注册函数，异步函数弹出栈，继续下一个函数调用； Web API中，异步函数在相应辅助线程中处理完成后，即异步函数达到触发条件了，Event Table就将回调函数推入回调队列中。 Event Loop：不停地检查主线程的调用栈与回调队列，当调用栈空时，就把回调队列中的第一个任务推入栈中执行，不断循环。  例子 下面是一段简易的 ajax 请求代码：
+let data = []; $.ajax({ url:www.javascript.com, data:data, success:() =&amp;gt; { console.log(&#39;发送成功!&#39;); } }) console.log(&#39;代码执行结束&#39;);   ajax进入Event Table，注册回调函数 success 。
+  执行 console.log(&#39;代码执行结束&#39;) 。
+  ajax事件完成，回调函数 success 进入Event Queue。'><title>宏任务与微任务</title>
+
+<link rel='canonical' href='http://mythcen.github.io/p/macrotask-and-microtask/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='宏任务与微任务'>
+<meta property='og:description' content='在点击事件冒泡捕获的处理中，通过使用setTimeout 的方式，想要调整某个代码的执行顺序的话，其具体的执行顺序，由一套 机制 去实现，这套机制就是通过定义 宏任务与微任务 来安排执行顺序。
+异步机制：javascript事件循环 概念 内存堆：这是内存分配发生的地方。当V8引擎遇到变量声明和函数声明的时候，就把它们存储在堆里面。
+调用栈：这是你的代码执行时的地方。当引擎遇到像函数调用之类的可执行单元，就会把它们推入调用栈。
+JS单线程，指的是在JS引擎中，解析执行JS代码的调用栈是唯一的，所有的JS代码都在这一个调用栈里按照调用顺序执行，不能同时执行多个函数。
+Web APIs：还有很多引擎之外的 API，我们把这些称为浏览器提供的 Web API，比如说 事件监听函数、DOM、HTTP／AJAX请求、setTimeout等等。
+回调队列（Event Queue)：按照先进先出的顺序存储所有的回调函数。在任意时间，只要Web API容器中的事件达到触发条件，就可以把回调函数添加到回调队列中去。
+**事件循环 ** (Event Loop)：持续的检测调用栈和回调队列，如果检测到调用栈为空，它就会通知回调队列把队列中的第一个回调函数推入执行栈。
+机制 JS运行时环境的工作机制：
+ JS引擎：（唯一主线程）按顺序解析代码，遇到函数声明，入堆，遇到函数调用，入栈； 如果是同步函数调用，直接执行得到结果，同步函数弹出栈，继续下一个函数调用； 如果是异步函数调用，分发给Web API（多个辅助线程），进入Event Table并注册函数，异步函数弹出栈，继续下一个函数调用； Web API中，异步函数在相应辅助线程中处理完成后，即异步函数达到触发条件了，Event Table就将回调函数推入回调队列中。 Event Loop：不停地检查主线程的调用栈与回调队列，当调用栈空时，就把回调队列中的第一个任务推入栈中执行，不断循环。  例子 下面是一段简易的 ajax 请求代码：
+let data = []; $.ajax({ url:www.javascript.com, data:data, success:() =&amp;gt; { console.log(&#39;发送成功!&#39;); } }) console.log(&#39;代码执行结束&#39;);   ajax进入Event Table，注册回调函数 success 。
+  执行 console.log(&#39;代码执行结束&#39;) 。
+  ajax事件完成，回调函数 success 进入Event Queue。'>
+<meta property='og:url' content='http://mythcen.github.io/p/macrotask-and-microtask/'>
+<meta property='og:site_name' content='MythC'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='JavaScript' /><meta property='article:published_time' content='2020-12-01T20:00:22&#43;08:00'/><meta property='article:modified_time' content='2020-12-01T20:00:22&#43;08:00'/><meta property='og:image' content='http://mythcen.github.io/p/macrotask-and-microtask/cover.png' />
+<meta name="twitter:title" content="宏任务与微任务">
+<meta name="twitter:description" content="在点击事件冒泡捕获的处理中，通过使用setTimeout 的方式，想要调整某个代码的执行顺序的话，其具体的执行顺序，由一套 机制 去实现，这套机制就是通过定义 宏任务与微任务 来安排执行顺序。
+异步机制：javascript事件循环 概念 内存堆：这是内存分配发生的地方。当V8引擎遇到变量声明和函数声明的时候，就把它们存储在堆里面。
+调用栈：这是你的代码执行时的地方。当引擎遇到像函数调用之类的可执行单元，就会把它们推入调用栈。
+JS单线程，指的是在JS引擎中，解析执行JS代码的调用栈是唯一的，所有的JS代码都在这一个调用栈里按照调用顺序执行，不能同时执行多个函数。
+Web APIs：还有很多引擎之外的 API，我们把这些称为浏览器提供的 Web API，比如说 事件监听函数、DOM、HTTP／AJAX请求、setTimeout等等。
+回调队列（Event Queue)：按照先进先出的顺序存储所有的回调函数。在任意时间，只要Web API容器中的事件达到触发条件，就可以把回调函数添加到回调队列中去。
+**事件循环 ** (Event Loop)：持续的检测调用栈和回调队列，如果检测到调用栈为空，它就会通知回调队列把队列中的第一个回调函数推入执行栈。
+机制 JS运行时环境的工作机制：
+ JS引擎：（唯一主线程）按顺序解析代码，遇到函数声明，入堆，遇到函数调用，入栈； 如果是同步函数调用，直接执行得到结果，同步函数弹出栈，继续下一个函数调用； 如果是异步函数调用，分发给Web API（多个辅助线程），进入Event Table并注册函数，异步函数弹出栈，继续下一个函数调用； Web API中，异步函数在相应辅助线程中处理完成后，即异步函数达到触发条件了，Event Table就将回调函数推入回调队列中。 Event Loop：不停地检查主线程的调用栈与回调队列，当调用栈空时，就把回调队列中的第一个任务推入栈中执行，不断循环。  例子 下面是一段简易的 ajax 请求代码：
+let data = []; $.ajax({ url:www.javascript.com, data:data, success:() =&amp;gt; { console.log(&#39;发送成功!&#39;); } }) console.log(&#39;代码执行结束&#39;);   ajax进入Event Table，注册回调函数 success 。
+  执行 console.log(&#39;代码执行结束&#39;) 。
+  ajax事件完成，回调函数 success 进入Event Queue。"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='http://mythcen.github.io/p/macrotask-and-microtask/cover.png' />
+    </head>
+    <body class="">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.body.dataset.scheme = 'dark';
+        } else {
+            document.body.dataset.scheme = 'light';
+        }
+    })();
+</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu2c09e6aabb14b66209d5ed2fe464c329_484573_300x0_resize_q75_box.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        <h1 class="site-name"><a href="http://mythcen.github.io/">MythC</a></h1>
+        <h2 class="site-description"></h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/about'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+
+        
+            <li id="dark-mode-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <span>Dark Mode</span>
+            </li>
+        
+    </ol>
+</aside>
+
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a href="http://mythcen.github.io/" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/macrotask-and-microtask/">
+                <img src="/p/macrotask-and-microtask/cover_hu3395bef352bdebb2bcd19cd38ef3c08c_281145_800x0_resize_box_2.png"
+                        srcset="/p/macrotask-and-microtask/cover_hu3395bef352bdebb2bcd19cd38ef3c08c_281145_800x0_resize_box_2.png 800w, /p/macrotask-and-microtask/cover_hu3395bef352bdebb2bcd19cd38ef3c08c_281145_1600x0_resize_box_2.png 1600w"
+                        width="800" 
+                        height="597" 
+                        loading="lazy"
+                        alt="Featured image of post 宏任务与微任务" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E6%8A%80%E6%9C%AF/" >
+                技术
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/macrotask-and-microtask/">宏任务与微任务</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Dec 01, 2020</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <p>在点击事件冒泡捕获的处理中，通过使用setTimeout 的方式，想要调整某个代码的执行顺序的话，其具体的执行顺序，由一套  <strong>机制</strong>  去实现，这套机制就是通过定义 <strong>宏任务与微任务</strong> 来安排执行顺序。</p>
+<h2 id="异步机制javascript事件循环">异步机制：javascript事件循环</h2>
+<h3 id="概念">概念</h3>
+<p><!-- raw HTML omitted --></p>
+<p><strong>内存堆</strong>：这是内存分配发生的地方。当V8引擎遇到变量声明和函数声明的时候，就把它们存储在堆里面。</p>
+<p><strong>调用栈</strong>：这是你的代码执行时的地方。当引擎遇到像函数调用之类的可执行单元，就会把它们推入调用栈。</p>
+<p>JS单线程，指的是在JS引擎中，解析执行JS代码的调用栈是唯一的，所有的JS代码都在这一个调用栈里按照调用顺序执行，不能同时执行多个函数。</p>
+<p><!-- raw HTML omitted --></p>
+<p><strong>Web APIs</strong>：还有很多引擎之外的 API，我们把这些称为浏览器提供的 Web API，比如说 事件监听函数、DOM、HTTP／AJAX请求、setTimeout等等。</p>
+<p><strong>回调队列</strong>（Event Queue)：按照<strong>先进先出</strong>的顺序存储所有的回调函数。在任意时间，只要Web API容器中的事件达到触发条件，就可以把回调函数添加到回调队列中去。</p>
+<p>**事件循环 ** (Event Loop)：持续的检测调用栈和回调队列，如果检测到调用栈为空，它就会通知回调队列把队列中的第一个回调函数推入执行栈。</p>
+<h3 id="机制">机制</h3>
+<p><img src="https://bucket-1256530863.cos.ap-shanghai.myqcloud.com/tapd_55367591_base64_1587813146_16-20200507162034229.png" alt="tapd_55367591_base64_1587813146_16"  /></p>
+<p>JS运行时环境的工作机制：</p>
+<ol>
+<li><strong>JS引擎</strong>：（唯一主线程）按顺序解析代码，遇到函数声明，入堆，遇到函数调用，入栈；</li>
+<li>如果是同步函数调用，直接执行得到结果，同步函数弹出栈，继续下一个函数调用；</li>
+<li>如果是异步函数调用，分发给<strong>Web API</strong>（多个辅助线程），进入Event Table并注册函数，异步函数弹出栈，继续下一个函数调用；</li>
+<li>Web API中，异步函数在相应辅助线程中处理完成后，即异步函数达到触发条件了，Event Table就将回调函数推入<strong>回调队列</strong>中。</li>
+<li><strong>Event Loop</strong>：不停地检查主线程的调用栈与回调队列，当调用栈空时，就把回调队列中的第一个任务推入栈中执行，不断循环。</li>
+</ol>
+<h3 id="例子">例子</h3>
+<p>下面是一段简易的 <code>ajax</code> 请求代码：</p>
+<pre><code>let data = [];
+$.ajax({
+    url:www.javascript.com,
+    data:data,
+    success:() =&gt; {
+        console.log('发送成功!');
+    }
+})
+console.log('代码执行结束');
+</code></pre><ul>
+<li>
+<p>ajax进入Event Table，注册回调函数 <code>success</code> 。</p>
+</li>
+<li>
+<p>执行 <code>console.log('代码执行结束')</code> 。</p>
+</li>
+<li>
+<p>ajax事件完成，回调函数 <code>success</code> 进入Event Queue。</p>
+</li>
+<li>
+<p>主线程从Event Queue读取回调函数 <code>success</code> 并执行。</p>
+</li>
+</ul>
+<p>下面是一段更详细的例子：</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Hey, Why am I last?&#39;</span><span class="p">)</span>
+<span class="p">},</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="kd">function</span> <span class="nx">sayHi</span><span class="p">(){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Hello&#39;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">sayBye</span><span class="p">(){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Goodbye&#39;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nx">sayHi</span><span class="p">()</span>
+<span class="nx">sayBye</span><span class="p">()</span>
+
+</code></pre></div><p>执行过程是这样的：</p>
+<ol>
+<li>JS引擎会检查整段代码的语法错误，如果没有错误，就从头开始深度解析</li>
+<li>首先遇到setTimeout函数调用，把它推入执行栈顶</li>
+<li>解析函数体，发现setTimeout函数是Web API的一种，因此就把它分发到Web API模块然后推出栈</li>
+<li>因为定时器设置了0ms延迟，因此Web API模块立即把它的匿名回调函数推入到回调函数函数队列。事件循环检测执行栈是否是空闲，但是当前栈并不空闲，因为&hellip;</li>
+<li>当setTimeout函数一被分发到Web API模块，JS引擎发现了两个函数声明，把它们存储在堆内存里，然后遇到了sayHi函数的调用，就把它推入了栈顶</li>
+<li>sayHi函数调用了console.log函数，因此console.log就被推入了栈顶</li>
+<li>JS引擎开始解析console.log的函数体，它接收了一个消息去打印‘Hello’，然后被弹出栈</li>
+<li>JS引擎返回到函数sayHi的执行，遇到函数的结束符号}之后，把sayHi弹出栈</li>
+<li>sayHi函数一出栈，紧接着sayBye函数被调用，它就被推入栈顶，被解析，调用console.log，把console.log推入栈顶，打印一条消息，弹出栈。然后sayBye函数弹出栈</li>
+<li>事件循环检测到执行栈终于空闲了，通知回调队列，然后回调队列把其中的匿名函数推入执行栈</li>
+<li>匿名函数（就是setTimeout的回调函数）被解析，调用console.log，console.log推入栈顶</li>
+<li>console.log执行完毕、再出栈</li>
+<li>匿名函数再被推出栈，程序结束</li>
+</ol>
+<h2 id="另一个异步机制宏任务与微任务">另一个异步机制：宏任务与微任务</h2>
+<p>但是，JS异步还有一个机制，就是遇到宏任务，先处理宏任务——将宏任务放入Event Queue，然后再处理微任务——将微任务放入Event Queue。
+注意，这里两个Event Queue不是同一个queue。
+当js引擎的主线程执行栈为空时，它会优先从微任务queue里遍历注册的回调函数并一一执行，然后再从宏任务的queue里遍历执行注册的回调函数，如下图：</p>
+<p><!-- raw HTML omitted --></p>
+<ul>
+<li>
+<p><strong>Web API</strong>中，异步函数在相应辅助线程中处理完成后，即异步函数达到触发条件了（比如setTimeout设置的10s后），如果异步函数是宏任务，则入<strong>宏任务消息队列</strong>，如果是微任务，则入<strong>微任务消息队列</strong>；</p>
+</li>
+<li>
+<p><strong>Event Loop</strong>不停地检查主线程的调用栈与回调队列，当调用栈空时，就把<strong>微任务</strong>消息队列中的第一个任务推入栈中执行，执行完成后，再取第二个微任务，直到微任务消息队列为空；然后 去宏任务消息队列中取第一个宏任务推入栈中执行，当该宏任务执行完成后，在下一个宏任务执行前，再依次取出微任务消息队列中的所有微任务入栈执行。</p>
+</li>
+</ul>
+<p>上述过程不断循环，每当微任务队列清空，可作为本轮事件循环的结束。</p>
+<p><strong>宏任务</strong> (macrotask/task)</p>
+<p>包括：</p>
+<ul>
+<li>I/O（例如点击一次<code>button</code>，上传一个文件，与程序产生交互的这些都可以称之为<code>I/O</code>）</li>
+<li>setTimeout</li>
+<li>setInterval</li>
+<li>setImmediate（仅Node）</li>
+<li>requestAnimationFrame（仅浏览器）</li>
+<li>xhr</li>
+<li>postMessage</li>
+<li>MessageChannel</li>
+</ul>
+<p>对于 <code>setInterval(fn,ms)</code> 来说，不是每过 <code>ms</code> 秒会执行一次 <code>fn</code> ，而是每过 <code>ms</code> 秒，会有 <code>fn</code> 进入Event Queue。
+一旦 <code>setInterval</code> 的回调函数 <code>fn</code> 执行时间超过了延迟时间 <code>ms</code> ，那么就完全看不出来有时间间隔了。</p>
+<p><em>P.S. 有些地方会列出来<code>UI Rendering</code>，说这个也是宏任务，可是在读了<a class="link" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model"  target="_blank" rel="noopener"
+    >HTML规范文档</a>以后，发现这很显然是和微任务平行的一个操作步骤</em></p>
+<p><em>P.S. <code>requestAnimationFrame</code>在<a class="link" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame"  target="_blank" rel="noopener"
+    >MDN的定义</a>为，下次页面重绘前所执行的操作，而重绘也是作为宏任务的一个步骤来存在的，且该步骤晚于微任务的执行</em></p>
+<p><strong>微任务</strong> (microtask/job)</p>
+<p>包括：</p>
+<ul>
+<li>Promise.then catch finally</li>
+<li>process.nextTick（仅Node）</li>
+<li>MutationObserver（仅浏览器）</li>
+</ul>
+<p><strong>P.S.</strong> new Promise在实例化的过程中所执行的代码都是同步进行的，而then中注册的回调才是异步执行的。 async/await底层是基于Promise封装的，所以await前面的代码相当于new Promise，是同步进行的，await后面的代码相当于then，才是异步进行的。</p>
+<p><strong>P.S</strong>.  在<a class="link" href="https://promisesaplus.com/#notes"  target="_blank" rel="noopener"
+    >Promise/A+的规范</a>中，<code>Promise</code>的实现可以是微任务，也可以是宏任务，但是普遍的共识表示(至少<code>Chrome</code>是这么做的)，<code>Promise</code>应该是属于微任务阵营的*</p>
+<h3 id="例子-1">例子</h3>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">_</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+
+<span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span><span class="nx">resolve</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">resolve</span><span class="p">()</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="nx">_</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="p">})</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+</code></pre></div><p>最终输出结果为：1 &gt; 2 &gt; 3 &gt; 4</p>
+<p>再来看一个嵌套的示例：</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nb">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">().</span><span class="nx">then</span><span class="p">(()=&gt;{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Promise1&#39;</span><span class="p">)</span> 
+  <span class="nb">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">().</span><span class="nx">then</span><span class="p">(()=&gt;{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Promise2&#39;</span><span class="p">)</span>    
+  <span class="p">})</span>
+
+<span class="p">})</span>
+
+<span class="nx">setTimeout</span><span class="p">(()=&gt;{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;setTimeout1&#39;</span><span class="p">)</span>
+    <span class="nx">setTimeout</span><span class="p">(()=&gt;{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;setTimeout2&#39;</span><span class="p">)</span>
+  <span class="p">},</span><span class="mi">0</span><span class="p">)</span>
+<span class="p">},</span><span class="mi">0</span><span class="p">)</span>
+
+</code></pre></div><p>最后输出结果是Promise1 &gt; setTimeout1 &gt; Promise2 &gt; setTimeout2</p>
+<p>Promise1</p>
+<h2 id="node-环境">Node 环境</h2>
+<h3 id="node中事件循环">Node中事件循环</h3>
+<p>Node用V8作为js的解析引擎，而I/O处理方面使用了自己设计的libuv，libuv是一个基于事件驱动的跨平台抽象层，封装了不同操作系统一些底层特性，对外提供统一的API，事件循环机制也是它里面的实现。 Node也是单线程，但是在处理Event Loop上与浏览器稍微有些不同。</p>
+<p>在node里，有一些常用的异步API，这里简单介绍下他们：</p>
+<h4 id="setimmediate"><strong>setImmediate()</strong></h4>
+<p><code>setImmediate()</code>在一次Event Loop执行完毕后立刻调用。</p>
+<p><code>setTimeout</code>则是通过计算一个延迟时间后进行执行。</p>
+<p>所以如下示例，不能保证输出顺序。</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">_</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;setTimeout&#39;</span><span class="p">))</span>
+<span class="nx">setImmediate</span><span class="p">(</span><span class="nx">_</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;setImmediate&#39;</span><span class="p">))</span>
+</code></pre></div><p>而如果是下面这样，则一定是setImmediate先输出。</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">_</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;setTimeout&#39;</span><span class="p">),</span> <span class="mi">20</span><span class="p">)</span>
+<span class="nx">setImmediate</span><span class="p">(</span><span class="nx">_</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;setImmediate&#39;</span><span class="p">))</span>
+</code></pre></div><h4 id="processnexttick"><strong>process.nextTick()</strong></h4>
+<p><code>process.nextTick()</code>会将回调函数放入队列中,在下一轮Tick时取出执行</p>
+<p>这是因为 ，process.nextTick()中的回调函数执行的优先级要高于setImmediate()。
+Node里，事件循环对观察者的检查是有先后顺序的,process.nextTick()属于idle观察者, setImmediate()属于check观察者。</p>
+<p>process.nextTick和setImmediate的一个重要区别：多个process.nextTick语句总是在当前&quot;执行栈&quot;一次执行完，多个setImmediate可能则需要多次loop才能执行完。 事实上，这正是Node.js 10.0版添加setImmediate方法的原因，否则像下面这样的递归调用process.nextTick，将会没完没了，主线程根本不会去读取&quot;事件队列&quot;！</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">process</span><span class="p">.</span><span class="nx">nextTick</span><span class="p">(</span><span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">process</span><span class="p">.</span><span class="nx">nextTick</span><span class="p">(</span><span class="nx">foo</span><span class="p">);</span>
+<span class="p">});</span>
+
+</code></pre></div><h2 id="参考">参考</h2>
+<p><a href="https://juejin.im/post/5e972f3c518825739d40874a">https://juejin.im/post/5e972f3c518825739d40874a</a></p>
+<p><a class="link" href="https://juejin.im/post/5e9d0b48f265da47ff7cd9e6"  target="_blank" rel="noopener"
+    >JS核心理论之《运行机制与宏任务、微任务》</a></p>
+<p><a class="link" href="https://github.com/benyasin/js-core-theory/blob/master/JS%e5%bc%95%e6%93%8e%e3%80%81%e8%bf%90%e8%a1%8c%e6%97%b6%e4%b8%8e%e8%b0%83%e7%94%a8%e6%a4%8e%e6%a0%88.md"  target="_blank" rel="noopener"
+    >JS核心理论之《JS引擎、运行时与调用椎栈》</a></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/javascript/">JavaScript</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">Related contents</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/jest-unit-test/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">使用Jest 单元测试</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mythcwj" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2021 MythC
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.0.1">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css">
+            </main>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"
+    integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin="anonymous"></script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

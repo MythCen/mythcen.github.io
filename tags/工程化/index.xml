@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>工程化 on MythC的博客</title>
+    <title>工程化 on MythC</title>
     <link>http://mythcen.github.io/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/</link>
-    <description>Recent content in 工程化 on MythC的博客</description>
+    <description>Recent content in 工程化 on MythC</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-CN</language>
+    <language>en-us</language>
     <lastBuildDate>Wed, 02 Dec 2020 20:00:22 +0800</lastBuildDate><atom:link href="http://mythcen.github.io/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>使用Jest 单元测试</title>
-      <link>http://mythcen.github.io/post/jest-unit-test/</link>
+      <link>http://mythcen.github.io/p/jest-unit-test/</link>
       <pubDate>Wed, 02 Dec 2020 20:00:22 +0800</pubDate>
       
-      <guid>http://mythcen.github.io/post/jest-unit-test/</guid>
-      <description>首先，需要明确我们的目的——单元测试 单元测试（Unit Tesing）是针对程序的最小部件，检查代码是否会按照预期工作的一种测试手段。在过程式编程中最小就是一个函数，在面向对象编程中最小部件就是对象方法。 从单元测试开始 相关概念 黑盒测试 黑盒测试，它是通过测试来检测每个功能是否都能正常</description>
+      <guid>http://mythcen.github.io/p/jest-unit-test/</guid>
+      <description>首先，需要明确我们的目的——单元测试
+单元测试（Unit Tesing）是针对程序的最小部件，检查代码是否会按照预期工作的一种测试手段。在过程式编程中最小就是一个函数，在面向对象编程中最小部件就是对象方法。
+从单元测试开始 相关概念 黑盒测试 黑盒测试，它是通过测试来检测每个功能是否都能正常使用。在测试中，把程序看作一个不能打开的黑盒子，在完全不考虑程序内部结构和内部特性的情况下，在程序接口进行测试，它只检查程序功能是否按照需求规格说明书的规定正常使用，程序是否能适当地接收输入数据而产生正确的输出信息
+白盒测试 白盒测试，又称结构测试、透明盒测试、逻辑驱动测试或基于代码的测试。白盒指的是盒子是可视的，即清楚盒子内部的东西以及里面是如何运作的。
+动机  验证 设计 文档 回归  单元测试的基本概念 单元测试一般包含以下几个部分：
+ 被测试的对象是什么 要测试该对象的什么功能 实际得到的结果 期望的结果 mock / spy  具体到某个单元测试，往往包含以下几个步骤：
+ 准备阶段：构造参数，创建 spy 等 执行阶段：用构造好的参数执行被测试代码 断言阶段：用实际得到的结果与期望的结果比较，以判断该测试是否正常 清理阶段：清理准备阶段对外部环境的影响，移除在准备阶段创建的 spy 等  Jest 为什么选择 jest 单元测试的执行通常需要测试规范、断言、mock、覆盖率工具等支持，上述工具在繁荣的 Node.js 生态中有很多优秀实现，但组合起来使用会带来两个问题
+ 多种工具的选择和学习有一定的成本 把多个工具组合成特定测试解决方案的配置复杂  而 Jest 是用来创建、执行和构建测试用例的 JavaScript 测试库，自身包含了 驱动、断言库、mock 、代码覆盖率等多种功能，配置使用相当简单
+安装 配置 基本配置 jest.config.js
+// jest.config.js  // Sync object module.exports = { verbose: true, }; // Or async function module.</description>
     </item>
     
   </channel>
