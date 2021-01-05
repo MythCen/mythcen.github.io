@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+
+    <title>宏任务与微任务 | MythC的博客</title>
+    <meta property="og:title" content="宏任务与微任务 - MythC的博客">
+    <meta property="og:type" content="article">
+        
+    <meta property="article:published_time" content='2020-12-01T20:00:22&#43;08:00'>
+        
+        
+    <meta property="article:modified_time" content='2020-12-01T20:00:22&#43;08:00'>
+        
+    <meta name="Keywords" content="">
+    <meta name="description" content="宏任务与微任务">
+        
+    <meta name="author" content="MythC">
+    <meta property="og:url" content="http://mythcen.github.io/post/macrotask-and-microtask/">
+    <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
+
+    <link rel="stylesheet" href='/css/normalize.css'>
+    <link rel="stylesheet" href='/css/style.css'>
+    <script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+    
+    
+    
+    
+    
+        <link rel="stylesheet" href='/css/douban.css'>
+    
+        <link rel="stylesheet" href='/css/other.css'>
+    
+</head>
+
+
+<body>
+    <header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="http://mythcen.github.io/">
+                        MythC的博客
+                    </a>
+                
+                
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="current" href="http://mythcen.github.io/">首页</a>
+                    
+                    <a  href="http://mythcen.github.io/archives/" title="归档">归档</a>
+                    
+                    <a  href="http://mythcen.github.io/about/" title="关于">关于</a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
+
+                <div class="col-8" id="main">
+                    
+<div class="res-cons">
+    <style type="text/css">
+    .post-toc {
+        position: fixed;
+        width: 200px;
+        margin-left: -210px;
+        padding: 5px 10px;
+        font-family: Athelas, STHeiti, Microsoft Yahei, serif;
+        font-size: 12px;
+        border: 1px solid rgba(0, 0, 0, .07);
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.98);
+        background-clip: padding-box;
+        -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        word-wrap: break-word;
+        white-space: nowrap;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        z-index: 999;
+        cursor: pointer;
+        max-height: 70%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .post-toc .post-toc-title {
+        width: 100%;
+        margin: 0 auto;
+        font-size: 20px;
+        font-weight: 400;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .post-toc .post-toc-content {
+        font-size: 15px;
+    }
+
+    .post-toc .post-toc-content>nav>ul {
+        margin: 10px 0;
+    }
+
+    .post-toc .post-toc-content ul {
+        padding-left: 20px;
+        list-style: square;
+        margin: 0.5em;
+        line-height: 1.8em;
+    }
+
+    .post-toc .post-toc-content ul ul {
+        padding-left: 15px;
+        display: none;
+    }
+
+    @media print,
+    screen and (max-width:1057px) {
+        .post-toc {
+            display: none;
+        }
+    }
+</style>
+<div class="post-toc" style="position: absolute; top: 188px;">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#异步机制javascript事件循环">异步机制：javascript事件循环</a>
+      <ul>
+        <li><a href="#概念">概念</a></li>
+        <li><a href="#机制">机制</a></li>
+        <li><a href="#例子">例子</a></li>
+      </ul>
+    </li>
+    <li><a href="#另一个异步机制宏任务与微任务">另一个异步机制：宏任务与微任务</a>
+      <ul>
+        <li><a href="#例子-1">例子</a></li>
+      </ul>
+    </li>
+    <li><a href="#node-环境">Node 环境</a>
+      <ul>
+        <li><a href="#node中事件循环">Node中事件循环</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var postToc = $(".post-toc");
+        if (postToc.length) {
+            var leftPos = $("#main").offset().left;
+            if(leftPos<220){
+                postToc.css({"width":leftPos-10,"margin-left":(0-leftPos)})
+            }
+
+            var t = postToc.offset().top - 20,
+                a = {
+                    start: {
+                        position: "absolute",
+                        top: t
+                    },
+                    process: {
+                        position: "fixed",
+                        top: 20
+                    },
+                };
+            $(window).scroll(function () {
+                var e = $(window).scrollTop();
+                e < t ? postToc.css(a.start) : postToc.css(a.process)
+            })
+        }
+    })
+</script>
+    <article class="post">
+        <header>
+            <h1 class="post-title">宏任务与微任务</h1>
+        </header>
+        <date class="post-meta meta-date">
+            2020年12月1日
+        </date>
+        
+        <div class="post-meta">
+            <span>|</span>
+            
+            <span class="meta-category"><a href='/categories/%E6%8A%80%E6%9C%AF'>技术</a></span>
+            
+        </div>
+        
+        
+        <div class="post-meta">
+            <span id="busuanzi_container_page_pv">|<span id="busuanzi_value_page_pv"></span><span>
+                    阅读</span></span>
+        </div>
+        
+        
+        <div class="post-content">
+            <p>在点击事件冒泡捕获的处理中，通过使用setTimeout 的方式，想要调整某个代码的执行顺序的话，其具体的执行顺序，由一套  <strong>机制</strong>  去实现，这套机制就是通过定义 <strong>宏任务与微任务</strong> 来安排执行顺序。</p>
+<h2 id="异步机制javascript事件循环">异步机制：javascript事件循环</h2>
+<h3 id="概念">概念</h3>
+<p><!-- raw HTML omitted --></p>
+<p><strong>内存堆</strong>：这是内存分配发生的地方。当V8引擎遇到变量声明和函数声明的时候，就把它们存储在堆里面。</p>
+<p><strong>调用栈</strong>：这是你的代码执行时的地方。当引擎遇到像函数调用之类的可执行单元，就会把它们推入调用栈。</p>
+<p>JS单线程，指的是在JS引擎中，解析执行JS代码的调用栈是唯一的，所有的JS代码都在这一个调用栈里按照调用顺序执行，不能同时执行多个函数。</p>
+<p><!-- raw HTML omitted --></p>
+<p><strong>Web APIs</strong>：还有很多引擎之外的 API，我们把这些称为浏览器提供的 Web API，比如说 事件监听函数、DOM、HTTP／AJAX请求、setTimeout等等。</p>
+<p><strong>回调队列</strong>（Event Queue)：按照<strong>先进先出</strong>的顺序存储所有的回调函数。在任意时间，只要Web API容器中的事件达到触发条件，就可以把回调函数添加到回调队列中去。</p>
+<p>**事件循环 ** (Event Loop)：持续的检测调用栈和回调队列，如果检测到调用栈为空，它就会通知回调队列把队列中的第一个回调函数推入执行栈。</p>
+<h3 id="机制">机制</h3>
+<p>
+        <img class="mx-auto" alt="tapd_55367591_base64_1587813146_16" src="https://bucket-1256530863.cos.ap-shanghai.myqcloud.com/tapd_55367591_base64_1587813146_16-20200507162034229.png" />   
+    </p>
+<p>JS运行时环境的工作机制：</p>
+<ol>
+<li><strong>JS引擎</strong>：（唯一主线程）按顺序解析代码，遇到函数声明，入堆，遇到函数调用，入栈；</li>
+<li>如果是同步函数调用，直接执行得到结果，同步函数弹出栈，继续下一个函数调用；</li>
+<li>如果是异步函数调用，分发给<strong>Web API</strong>（多个辅助线程），进入Event Table并注册函数，异步函数弹出栈，继续下一个函数调用；</li>
+<li>Web API中，异步函数在相应辅助线程中处理完成后，即异步函数达到触发条件了，Event Table就将回调函数推入<strong>回调队列</strong>中。</li>
+<li><strong>Event Loop</strong>：不停地检查主线程的调用栈与回调队列，当调用栈空时，就把回调队列中的第一个任务推入栈中执行，不断循环。</li>
+</ol>
+<h3 id="例子">例子</h3>
+<p>下面是一段简易的 <code>ajax</code> 请求代码：</p>
+<pre><code>let data = [];
+$.ajax({
+    url:www.javascript.com,
+    data:data,
+    success:() =&gt; {
+        console.log('发送成功!');
+    }
+})
+console.log('代码执行结束');
+</code></pre><ul>
+<li>
+<p>ajax进入Event Table，注册回调函数 <code>success</code> 。</p>
+</li>
+<li>
+<p>执行 <code>console.log('代码执行结束')</code> 。</p>
+</li>
+<li>
+<p>ajax事件完成，回调函数 <code>success</code> 进入Event Queue。</p>
+</li>
+<li>
+<p>主线程从Event Queue读取回调函数 <code>success</code> 并执行。</p>
+</li>
+</ul>
+<p>下面是一段更详细的例子：</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">setTimeout(<span style="color:#000;font-weight:bold">function</span>(){
+    console.log(<span style="color:#d14">&#39;Hey, Why am I last?&#39;</span>)
+}, <span style="color:#099">0</span>)
+
+<span style="color:#000;font-weight:bold">function</span> sayHi(){
+    console.log(<span style="color:#d14">&#39;Hello&#39;</span>)
+}
+
+<span style="color:#000;font-weight:bold">function</span> sayBye(){
+    console.log(<span style="color:#d14">&#39;Goodbye&#39;</span>)
+}
+
+sayHi()
+sayBye()
+
+</code></pre></td></tr></table>
+</div>
+</div><p>执行过程是这样的：</p>
+<ol>
+<li>JS引擎会检查整段代码的语法错误，如果没有错误，就从头开始深度解析</li>
+<li>首先遇到setTimeout函数调用，把它推入执行栈顶</li>
+<li>解析函数体，发现setTimeout函数是Web API的一种，因此就把它分发到Web API模块然后推出栈</li>
+<li>因为定时器设置了0ms延迟，因此Web API模块立即把它的匿名回调函数推入到回调函数函数队列。事件循环检测执行栈是否是空闲，但是当前栈并不空闲，因为&hellip;</li>
+<li>当setTimeout函数一被分发到Web API模块，JS引擎发现了两个函数声明，把它们存储在堆内存里，然后遇到了sayHi函数的调用，就把它推入了栈顶</li>
+<li>sayHi函数调用了console.log函数，因此console.log就被推入了栈顶</li>
+<li>JS引擎开始解析console.log的函数体，它接收了一个消息去打印‘Hello’，然后被弹出栈</li>
+<li>JS引擎返回到函数sayHi的执行，遇到函数的结束符号}之后，把sayHi弹出栈</li>
+<li>sayHi函数一出栈，紧接着sayBye函数被调用，它就被推入栈顶，被解析，调用console.log，把console.log推入栈顶，打印一条消息，弹出栈。然后sayBye函数弹出栈</li>
+<li>事件循环检测到执行栈终于空闲了，通知回调队列，然后回调队列把其中的匿名函数推入执行栈</li>
+<li>匿名函数（就是setTimeout的回调函数）被解析，调用console.log，console.log推入栈顶</li>
+<li>console.log执行完毕、再出栈</li>
+<li>匿名函数再被推出栈，程序结束</li>
+</ol>
+<h2 id="另一个异步机制宏任务与微任务">另一个异步机制：宏任务与微任务</h2>
+<p>但是，JS异步还有一个机制，就是遇到宏任务，先处理宏任务——将宏任务放入Event Queue，然后再处理微任务——将微任务放入Event Queue。
+注意，这里两个Event Queue不是同一个queue。
+当js引擎的主线程执行栈为空时，它会优先从微任务queue里遍历注册的回调函数并一一执行，然后再从宏任务的queue里遍历执行注册的回调函数，如下图：</p>
+<p><!-- raw HTML omitted --></p>
+<ul>
+<li>
+<p><strong>Web API</strong>中，异步函数在相应辅助线程中处理完成后，即异步函数达到触发条件了（比如setTimeout设置的10s后），如果异步函数是宏任务，则入<strong>宏任务消息队列</strong>，如果是微任务，则入<strong>微任务消息队列</strong>；</p>
+</li>
+<li>
+<p><strong>Event Loop</strong>不停地检查主线程的调用栈与回调队列，当调用栈空时，就把<strong>微任务</strong>消息队列中的第一个任务推入栈中执行，执行完成后，再取第二个微任务，直到微任务消息队列为空；然后 去宏任务消息队列中取第一个宏任务推入栈中执行，当该宏任务执行完成后，在下一个宏任务执行前，再依次取出微任务消息队列中的所有微任务入栈执行。</p>
+</li>
+</ul>
+<p>上述过程不断循环，每当微任务队列清空，可作为本轮事件循环的结束。</p>
+<p><strong>宏任务</strong> (macrotask/task)</p>
+<p>包括：</p>
+<ul>
+<li>I/O（例如点击一次<code>button</code>，上传一个文件，与程序产生交互的这些都可以称之为<code>I/O</code>）</li>
+<li>setTimeout</li>
+<li>setInterval</li>
+<li>setImmediate（仅Node）</li>
+<li>requestAnimationFrame（仅浏览器）</li>
+<li>xhr</li>
+<li>postMessage</li>
+<li>MessageChannel</li>
+</ul>
+<p>对于 <code>setInterval(fn,ms)</code> 来说，不是每过 <code>ms</code> 秒会执行一次 <code>fn</code> ，而是每过 <code>ms</code> 秒，会有 <code>fn</code> 进入Event Queue。
+一旦 <code>setInterval</code> 的回调函数 <code>fn</code> 执行时间超过了延迟时间 <code>ms</code> ，那么就完全看不出来有时间间隔了。</p>
+<p><em>P.S. 有些地方会列出来<code>UI Rendering</code>，说这个也是宏任务，可是在读了<a href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model">HTML规范文档</a>以后，发现这很显然是和微任务平行的一个操作步骤</em></p>
+<p><em>P.S. <code>requestAnimationFrame</code>在<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame">MDN的定义</a>为，下次页面重绘前所执行的操作，而重绘也是作为宏任务的一个步骤来存在的，且该步骤晚于微任务的执行</em></p>
+<p><strong>微任务</strong> (microtask/job)</p>
+<p>包括：</p>
+<ul>
+<li>Promise.then catch finally</li>
+<li>process.nextTick（仅Node）</li>
+<li>MutationObserver（仅浏览器）</li>
+</ul>
+<p><strong>P.S.</strong> new Promise在实例化的过程中所执行的代码都是同步进行的，而then中注册的回调才是异步执行的。 async/await底层是基于Promise封装的，所以await前面的代码相当于new Promise，是同步进行的，await后面的代码相当于then，才是异步进行的。</p>
+<p><strong>P.S</strong>.  在<a href="https://promisesaplus.com/#notes">Promise/A+的规范</a>中，<code>Promise</code>的实现可以是微任务，也可以是宏任务，但是普遍的共识表示(至少<code>Chrome</code>是这么做的)，<code>Promise</code>应该是属于微任务阵营的*</p>
+<h3 id="例子-1">例子</h3>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">setTimeout(_ =&gt; console.log(<span style="color:#099">4</span>))
+
+<span style="color:#000;font-weight:bold">new</span> <span style="color:#0086b3">Promise</span>(resolve =&gt; {
+  resolve()
+  console.log(<span style="color:#099">1</span>)
+}).then(_ =&gt; {
+  console.log(<span style="color:#099">3</span>)
+})
+
+console.log(<span style="color:#099">2</span>)
+
+</code></pre></td></tr></table>
+</div>
+</div><p>最终输出结果为：1 &gt; 2 &gt; 3 &gt; 4</p>
+<p>再来看一个嵌套的示例：</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#0086b3">Promise</span>.resolve().then(()=&gt;{
+  console.log(<span style="color:#d14">&#39;Promise1&#39;</span>) 
+  <span style="color:#0086b3">Promise</span>.resolve().then(()=&gt;{
+    console.log(<span style="color:#d14">&#39;Promise2&#39;</span>)    
+  })
+
+})
+
+setTimeout(()=&gt;{
+  console.log(<span style="color:#d14">&#39;setTimeout1&#39;</span>)
+    setTimeout(()=&gt;{
+    console.log(<span style="color:#d14">&#39;setTimeout2&#39;</span>)
+  },<span style="color:#099">0</span>)
+},<span style="color:#099">0</span>)
+
+</code></pre></td></tr></table>
+</div>
+</div><p>最后输出结果是Promise1 &gt; setTimeout1 &gt; Promise2 &gt; setTimeout2</p>
+<p>Promise1</p>
+<h2 id="node-环境">Node 环境</h2>
+<h3 id="node中事件循环">Node中事件循环</h3>
+<p>Node用V8作为js的解析引擎，而I/O处理方面使用了自己设计的libuv，libuv是一个基于事件驱动的跨平台抽象层，封装了不同操作系统一些底层特性，对外提供统一的API，事件循环机制也是它里面的实现。 Node也是单线程，但是在处理Event Loop上与浏览器稍微有些不同。</p>
+<p>在node里，有一些常用的异步API，这里简单介绍下他们：</p>
+<h4 id="setimmediate"><strong>setImmediate()</strong></h4>
+<p><code>setImmediate()</code>在一次Event Loop执行完毕后立刻调用。</p>
+<p><code>setTimeout</code>则是通过计算一个延迟时间后进行执行。</p>
+<p>所以如下示例，不能保证输出顺序。</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">setTimeout(_ =&gt; console.log(<span style="color:#d14">&#39;setTimeout&#39;</span>))
+setImmediate(_ =&gt; console.log(<span style="color:#d14">&#39;setImmediate&#39;</span>))
+</code></pre></td></tr></table>
+</div>
+</div><p>而如果是下面这样，则一定是setImmediate先输出。</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">setTimeout(_ =&gt; console.log(<span style="color:#d14">&#39;setTimeout&#39;</span>), <span style="color:#099">20</span>)
+setImmediate(_ =&gt; console.log(<span style="color:#d14">&#39;setImmediate&#39;</span>))
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="processnexttick"><strong>process.nextTick()</strong></h4>
+<p><code>process.nextTick()</code>会将回调函数放入队列中,在下一轮Tick时取出执行</p>
+<p>这是因为 ，process.nextTick()中的回调函数执行的优先级要高于setImmediate()。
+Node里，事件循环对观察者的检查是有先后顺序的,process.nextTick()属于idle观察者, setImmediate()属于check观察者。</p>
+<p>process.nextTick和setImmediate的一个重要区别：多个process.nextTick语句总是在当前&quot;执行栈&quot;一次执行完，多个setImmediate可能则需要多次loop才能执行完。 事实上，这正是Node.js 10.0版添加setImmediate方法的原因，否则像下面这样的递归调用process.nextTick，将会没完没了，主线程根本不会去读取&quot;事件队列&quot;！</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">process.nextTick(<span style="color:#000;font-weight:bold">function</span> foo() {
+  process.nextTick(foo);
+});
+
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="参考">参考</h2>
+<p><a href="https://juejin.im/post/5e972f3c518825739d40874a">https://juejin.im/post/5e972f3c518825739d40874a</a></p>
+<p><a href="https://juejin.im/post/5e9d0b48f265da47ff7cd9e6">JS核心理论之《运行机制与宏任务、微任务》</a></p>
+<p><a href="https://github.com/benyasin/js-core-theory/blob/master/JS%E5%BC%95%E6%93%8E%E3%80%81%E8%BF%90%E8%A1%8C%E6%97%B6%E4%B8%8E%E8%B0%83%E7%94%A8%E6%A4%8E%E6%A0%88.md">JS核心理论之《JS引擎、运行时与调用椎栈》</a></p>
+
+        </div>
+
+        
+<div class="post-archive">
+    <ul class="post-copyright">
+        <li><strong>原文作者：</strong><a rel="author" href="http://mythcen.github.io/">MythC</a></li>
+        <li style="word-break:break-all"><strong>原文链接：</strong><a href="http://mythcen.github.io/post/macrotask-and-microtask/">http://mythcen.github.io/post/macrotask-and-microtask/</a></li>
+        <li><strong>版权声明：</strong>本作品采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li>
+    </ul>
+</div>
+<br/>
+
+
+
+        
+
+<div class="post-archive">
+    <h2>See Also</h2>
+    <ul class="listing">
+        
+        <li><a href="/post/start-record/">建站记</a></li>
+        
+        <li><a href="/about/">关于我</a></li>
+        
+        <li><a href="/archives/">归档</a></li>
+        
+    </ul>
+</div>
+
+
+        <div class="post-meta meta-tags">
+            
+            <ul class="clearfix">
+                
+                <li><a href='/tags/JavaScript'>JavaScript</a></li>
+                
+            </ul>
+            
+        </div>
+    </article>
+    
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mythcwj" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    
+    
+</div>
+
+                    <footer id="footer">
+    <div>
+        &copy; 2021 <a href="http://mythcen.github.io/">MythC的博客 By MythC</a>
+        
+    </div>
+    <br />
+    <div>
+        <div class="github-badge">
+            <a href="https://gohugo.io/" target="_black" rel="nofollow"><span class="badge-subject">Powered by</span><span class="badge-value bg-blue">Hugo</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://www.flysnow.org/" target="_black"><span class="badge-subject">Design by</span><span class="badge-value bg-brightgreen">飞雪无情</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://github.com/flysnow-org/maupassant-hugo" target="_black"><span class="badge-subject">Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a>
+        </div>
+    </div>
+</footer>
+
+
+    
+    <script type="text/javascript">
+        window.MathJax = {
+            tex2jax: {
+                inlineMath: [['$', '$']],
+                processEscapes: true
+                }
+            };
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+<a id="rocket" href="#top"></a>
+<script type="text/javascript" src='/js/totop.js?v=0.0.0' async=""></script>
+
+
+
+    <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+
+
+    <script src='/js/douban.js'></script>
+
+                </div>
+
+                <div id="secondary">
+    <section class="widget">
+        <form id="search" action='http://mythcen.github.io/search/' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+      
+      <input type="text" name="q" maxlength="20" placeholder="Search">
+      <input type="hidden" name="sitesearch" value="http://mythcen.github.io/">
+      <button type="submit" class="submit icon-search"></button>
+</form>
+    </section>
+    
+    <section class="widget">
+        <h3 class="widget-title">最近文章</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="http://mythcen.github.io/post/jest-unit-test/" title="使用Jest 单元测试">使用Jest 单元测试</a>
+    </li>
+    
+    <li>
+        <a href="http://mythcen.github.io/post/macrotask-and-microtask/" title="宏任务与微任务">宏任务与微任务</a>
+    </li>
+    
+    <li>
+        <a href="http://mythcen.github.io/post/start-record/" title="建站记">建站记</a>
+    </li>
+    
+</ul>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/categories/'>分类</a></h3>
+<ul class="widget-list">
+    
+    <li><a href="http://mythcen.github.io/categories/%E5%8D%9A%E5%AE%A2/">博客 (1)</a></li>
+    
+    <li><a href="http://mythcen.github.io/categories/%E6%8A%80%E6%9C%AF/">技术 (2)</a></li>
+    
+</ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/tags/'>标签</a></h3>
+<div class="tagcloud">
+    
+    <a href="http://mythcen.github.io/tags/JavaScript/">JavaScript</a>
+    
+    <a href="http://mythcen.github.io/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a>
+    
+</div>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title">其它</h3>
+        <ul class="widget-list">
+            <li><a href="http://mythcen.github.io/index.xml">文章 RSS</a></li>
+        </ul>
+    </section>
+</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

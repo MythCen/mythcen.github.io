@@ -23,7 +23,7 @@
   </url>
   
   <url>
-    <loc>http://mythcen.github.io/p/jest-unit-test/</loc>
+    <loc>http://mythcen.github.io/post/jest-unit-test/</loc>
     <lastmod>2020-12-02T20:00:22+08:00</lastmod>
   </url>
   
@@ -38,12 +38,12 @@
   </url>
   
   <url>
-    <loc>http://mythcen.github.io/tags/javascript/</loc>
+    <loc>http://mythcen.github.io/tags/JavaScript/</loc>
     <lastmod>2020-12-01T20:00:22+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://mythcen.github.io/p/macrotask-and-microtask/</loc>
+    <loc>http://mythcen.github.io/post/macrotask-and-microtask/</loc>
     <lastmod>2020-12-01T20:00:22+08:00</lastmod>
   </url>
   
@@ -53,7 +53,7 @@
   </url>
   
   <url>
-    <loc>http://mythcen.github.io/p/start-record/</loc>
+    <loc>http://mythcen.github.io/post/start-record/</loc>
     <lastmod>2020-11-29T11:05:49+08:00</lastmod>
   </url>
   
@@ -63,17 +63,7 @@
   </url>
   
   <url>
-    <loc>http://mythcen.github.io/page/</loc>
-    <lastmod>2020-11-29T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>http://mythcen.github.io/archives/</loc>
-    <lastmod>2019-05-28T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://mythcen.github.io/search/</loc>
   </url>
   
 </urlset>

@@ -1,63 +1,37 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on MythC</title>
+    <title>Posts on MythC的博客</title>
     <link>http://mythcen.github.io/post/</link>
-    <description>Recent content in Posts on MythC</description>
+    <description>Recent content in Posts on MythC的博客</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
+    <language>zh-CN</language>
     <lastBuildDate>Wed, 02 Dec 2020 20:00:22 +0800</lastBuildDate><atom:link href="http://mythcen.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>使用Jest 单元测试</title>
-      <link>http://mythcen.github.io/p/jest-unit-test/</link>
+      <link>http://mythcen.github.io/post/jest-unit-test/</link>
       <pubDate>Wed, 02 Dec 2020 20:00:22 +0800</pubDate>
       
-      <guid>http://mythcen.github.io/p/jest-unit-test/</guid>
-      <description>首先，需要明确我们的目的——单元测试
-单元测试（Unit Tesing）是针对程序的最小部件，检查代码是否会按照预期工作的一种测试手段。在过程式编程中最小就是一个函数，在面向对象编程中最小部件就是对象方法。
-为什么选择 jest 单元测试的执行通常需要测试规范、断言、mock、覆盖率工具等支持，上述工具在繁荣的 Node.js 生态中有很多优秀实现，但组合起来使用会带来两个问题
- 多种工具的选择和学习有一定的成本 把多个工具组合成特定测试解决方案的配置复杂  而 Jest 是用来创建、执行和构建测试用例的 JavaScript 测试库，自身包含了 驱动、断言库、mock 、代码覆盖率等多种功能，配置使用相当简单
-Api 断言 jest提供了比较丰富的断言，此处介绍一些常用的。
-相等  toBe toEqual not  真值  toBeNull 只匹配 null toBeUndefined 只匹配 undefined toBeDefined 与 toBeUndefined 相反 toBeTruthy 匹配任何 if 语句为真 toBeFalsy 匹配任何 if 语句为假  数字  toBeCloseTo  包含  toContain  异步 callback 默认情况下，Jest 测试一旦执行到末尾就会完成。这意味着，像这样写不会有效果——
-test(&amp;#39;the data is peanut butter&amp;#39;, () =&amp;gt; { function callback(data) { expect(data).</description>
+      <guid>http://mythcen.github.io/post/jest-unit-test/</guid>
+      <description>首先，需要明确我们的目的——单元测试 单元测试（Unit Tesing）是针对程序的最小部件，检查代码是否会按照预期工作的一种测试手段。在过程式编程中最小就是一个函数，在面向对象编程中最小部件就是对象方法。 从单元测试开始 相关概念 黑盒测试 黑盒测试，它是通过测试来检测每个功能是否都能正常</description>
     </item>
     
     <item>
       <title>宏任务与微任务</title>
-      <link>http://mythcen.github.io/p/macrotask-and-microtask/</link>
+      <link>http://mythcen.github.io/post/macrotask-and-microtask/</link>
       <pubDate>Tue, 01 Dec 2020 20:00:22 +0800</pubDate>
       
-      <guid>http://mythcen.github.io/p/macrotask-and-microtask/</guid>
-      <description>在点击事件冒泡捕获的处理中，通过使用setTimeout 的方式，想要调整某个代码的执行顺序的话，其具体的执行顺序，由一套 机制 去实现，这套机制就是通过定义 宏任务与微任务 来安排执行顺序。
-异步机制：javascript事件循环 概念 内存堆：这是内存分配发生的地方。当V8引擎遇到变量声明和函数声明的时候，就把它们存储在堆里面。
-调用栈：这是你的代码执行时的地方。当引擎遇到像函数调用之类的可执行单元，就会把它们推入调用栈。
-JS单线程，指的是在JS引擎中，解析执行JS代码的调用栈是唯一的，所有的JS代码都在这一个调用栈里按照调用顺序执行，不能同时执行多个函数。
-Web APIs：还有很多引擎之外的 API，我们把这些称为浏览器提供的 Web API，比如说 事件监听函数、DOM、HTTP／AJAX请求、setTimeout等等。
-回调队列（Event Queue)：按照先进先出的顺序存储所有的回调函数。在任意时间，只要Web API容器中的事件达到触发条件，就可以把回调函数添加到回调队列中去。
-**事件循环 ** (Event Loop)：持续的检测调用栈和回调队列，如果检测到调用栈为空，它就会通知回调队列把队列中的第一个回调函数推入执行栈。
-机制 JS运行时环境的工作机制：
- JS引擎：（唯一主线程）按顺序解析代码，遇到函数声明，入堆，遇到函数调用，入栈； 如果是同步函数调用，直接执行得到结果，同步函数弹出栈，继续下一个函数调用； 如果是异步函数调用，分发给Web API（多个辅助线程），进入Event Table并注册函数，异步函数弹出栈，继续下一个函数调用； Web API中，异步函数在相应辅助线程中处理完成后，即异步函数达到触发条件了，Event Table就将回调函数推入回调队列中。 Event Loop：不停地检查主线程的调用栈与回调队列，当调用栈空时，就把回调队列中的第一个任务推入栈中执行，不断循环。  例子 下面是一段简易的 ajax 请求代码：
-let data = []; $.ajax({ url:www.javascript.com, data:data, success:() =&amp;gt; { console.log(&#39;发送成功!&#39;); } }) console.log(&#39;代码执行结束&#39;);   ajax进入Event Table，注册回调函数 success 。
-  执行 console.log(&#39;代码执行结束&#39;) 。
-  ajax事件完成，回调函数 success 进入Event Queue。</description>
+      <guid>http://mythcen.github.io/post/macrotask-and-microtask/</guid>
+      <description>在点击事件冒泡捕获的处理中，通过使用setTimeout 的方式，想要调整某个代码的执行顺序的话，其具体的执行顺序，由一套 机制 去实现，这套机制就是通过定义 宏任务与微任务 来安排执行顺序。 异步机制：javascript事件循环 概念 内存堆：这是内存分配发生的地方。当V8引擎遇到变量声明和</description>
     </item>
     
     <item>
       <title>建站记</title>
-      <link>http://mythcen.github.io/p/start-record/</link>
+      <link>http://mythcen.github.io/post/start-record/</link>
       <pubDate>Sun, 29 Nov 2020 11:05:49 +0800</pubDate>
       
-      <guid>http://mythcen.github.io/p/start-record/</guid>
-      <description>一个小小的个人空间在互联网上被开辟了。
-最开始是想要有一个总结技术经验，分享自己的编程思考的一个技术博客。
-由于使用过一段时间的Go，本着多了解下后端等其他开发链条的缘故，自己折腾了一个ghost系统，买了腾讯的服务器，最简化搭载nginx和nodeJs，在购买了域名以及备案之后，一个小破站出现了。
-中间折腾了不少，但是最终弄好后，遇到了一个问题——该版本的ghost编辑器会吞掉中文拼音。
-了解到这可能是ghost编辑器对中文的一个bug，虽然发现修改html 的lang属性为cn即可，但是想要修改源码，一是在自己不熟悉的服务器上，二是没有git管理，三是不熟悉ghost系统。再加上工作以及懒，博客的事情就被耽搁下来了，知道服务器一年期到，也没有更新什么文章。
-最后念着初心~~(折腾精神不够)~~，博文本身才是目标，因此选择了方便的静态博客+hugo，重新开始这段旅程。
-本站系技术分享 + 个人博客。
-也许它会成为一座孤岛。
-但它在我心中不会因为无人观赏而失色半分。
-与此同时，它欢迎所有从互联网里，跨洋而来的旅人。</description>
+      <guid>http://mythcen.github.io/post/start-record/</guid>
+      <description>一个小小的个人空间在互联网上被开辟了。 最开始是想要有一个总结技术经验，分享自己的编程思考的一个技术博客。 由于使用过一段时间的Go，本着多了解下后端等其他开发链条的缘故，自己折腾了一个ghost系统，买了腾讯的服务器，最简化搭载nginx和nodeJs，在购买了域名以及备案之后，一</description>
     </item>
     
   </channel>
