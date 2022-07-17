@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Categories on MythC</title>
-    <link>http://mythcen.github.io/categories/</link>
-    <description>Recent content in Categories on MythC</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Wed, 02 Dec 2020 20:00:22 +0800</lastBuildDate><atom:link href="http://mythcen.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>技术</title>
-      <link>http://mythcen.github.io/categories/%E6%8A%80%E6%9C%AF/</link>
-      <pubDate>Wed, 02 Dec 2020 20:00:22 +0800</pubDate>
-      
-      <guid>http://mythcen.github.io/categories/%E6%8A%80%E6%9C%AF/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>博客</title>
-      <link>http://mythcen.github.io/categories/%E5%8D%9A%E5%AE%A2/</link>
-      <pubDate>Sun, 29 Nov 2020 11:05:49 +0800</pubDate>
-      
-      <guid>http://mythcen.github.io/categories/%E5%8D%9A%E5%AE%A2/</guid>
-      <description></description>
-    </item>
-    
-  </channel>
+    <channel>
+        <title>Categories on 神话C看世界</title>
+        <link>http://mythcen.github.io/categories/</link>
+        <description>Recent content in Categories on 神话C看世界</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Wed, 02 Dec 2020 20:00:22 +0800</lastBuildDate><atom:link href="http://mythcen.github.io/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>技术</title>
+        <link>http://mythcen.github.io/categories/%E6%8A%80%E6%9C%AF/</link>
+        <pubDate>Wed, 02 Dec 2020 20:00:22 +0800</pubDate>
+        
+        <guid>http://mythcen.github.io/categories/%E6%8A%80%E6%9C%AF/</guid>
+        <description>&lt;img src="http://mythcen.github.io/categories/%E6%8A%80%E6%9C%AF/code.jpg" alt="Featured image of post 技术" /&gt;</description>
+        </item>
+        <item>
+        <title>博客</title>
+        <link>http://mythcen.github.io/categories/%E5%8D%9A%E5%AE%A2/</link>
+        <pubDate>Sun, 29 Nov 2020 11:05:49 +0800</pubDate>
+        
+        <guid>http://mythcen.github.io/categories/%E5%8D%9A%E5%AE%A2/</guid>
+        <description>&lt;img src="http://mythcen.github.io/categories/%E5%8D%9A%E5%AE%A2/island.jpg" alt="Featured image of post 博客" /&gt;</description>
+        </item>
+        
+    </channel>
 </rss>

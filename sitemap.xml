@@ -1,79 +1,49 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  
   <url>
     <loc>http://mythcen.github.io/categories/</loc>
     <lastmod>2020-12-02T20:00:22+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://mythcen.github.io/</loc>
-    <lastmod>2020-12-02T20:00:22+08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://mythcen.github.io/post/</loc>
     <lastmod>2020-12-02T20:00:22+08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://mythcen.github.io/tags/</loc>
     <lastmod>2020-12-02T20:00:22+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://mythcen.github.io/p/jest-unit-test/</loc>
-    <lastmod>2020-12-02T20:00:22+08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://mythcen.github.io/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/</loc>
     <lastmod>2020-12-02T20:00:22+08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://mythcen.github.io/categories/%E6%8A%80%E6%9C%AF/</loc>
     <lastmod>2020-12-02T20:00:22+08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
+    <loc>http://mythcen.github.io/</loc>
+    <lastmod>2020-12-02T20:00:22+08:00</lastmod>
+  </url><url>
+    <loc>http://mythcen.github.io/p/jest-unit-test/</loc>
+    <lastmod>2020-12-02T20:00:22+08:00</lastmod>
+  </url><url>
     <loc>http://mythcen.github.io/tags/javascript/</loc>
     <lastmod>2020-12-01T20:00:22+08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://mythcen.github.io/p/macrotask-and-microtask/</loc>
     <lastmod>2020-12-01T20:00:22+08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://mythcen.github.io/categories/%E5%8D%9A%E5%AE%A2/</loc>
     <lastmod>2020-11-29T11:05:49+08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://mythcen.github.io/p/start-record/</loc>
     <lastmod>2020-11-29T11:05:49+08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://mythcen.github.io/about/</loc>
     <lastmod>2020-11-29T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://mythcen.github.io/page/</loc>
     <lastmod>2019-05-28T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://mythcen.github.io/archives/</loc>
     <lastmod>2019-05-28T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://mythcen.github.io/search/</loc>
   </url>
-  
 </urlset>

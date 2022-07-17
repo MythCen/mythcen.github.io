@@ -1,46 +1,48 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="en-us" dir="ltr">
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='首先，需要明确我们的目的——单元测试
 单元测试（Unit Tesing）是针对程序的最小部件，检查代码是否会按照预期工作的一种测试手段。在过程式编程中最小就是一个函数，在面向对象编程中最小部件就是对象方法。
 从单元测试开始 相关概念 黑盒测试 黑盒测试，它是通过测试来检测每个功能是否都能正常使用。在测试中，把程序看作一个不能打开的黑盒子，在完全不考虑程序内部结构和内部特性的情况下，在程序接口进行测试，它只检查程序功能是否按照需求规格说明书的规定正常使用，程序是否能适当地接收输入数据而产生正确的输出信息
 白盒测试 白盒测试，又称结构测试、透明盒测试、逻辑驱动测试或基于代码的测试。白盒指的是盒子是可视的，即清楚盒子内部的东西以及里面是如何运作的。
-动机  验证 设计 文档 回归  单元测试的基本概念 单元测试一般包含以下几个部分：
- 被测试的对象是什么 要测试该对象的什么功能 实际得到的结果 期望的结果 mock / spy  具体到某个单元测试，往往包含以下几个步骤：
- 准备阶段：构造参数，创建 spy 等 执行阶段：用构造好的参数执行被测试代码 断言阶段：用实际得到的结果与期望的结果比较，以判断该测试是否正常 清理阶段：清理准备阶段对外部环境的影响，移除在准备阶段创建的 spy 等  Jest 为什么选择 jest 单元测试的执行通常需要测试规范、断言、mock、覆盖率工具等支持，上述工具在繁荣的 Node.js 生态中有很多优秀实现，但组合起来使用会带来两个问题
- 多种工具的选择和学习有一定的成本 把多个工具组合成特定测试解决方案的配置复杂  而 Jest 是用来创建、执行和构建测试用例的 JavaScript 测试库，自身包含了 驱动、断言库、mock 、代码覆盖率等多种功能，配置使用相当简单
+动机 验证 设计 文档 回归 单元测试的基本概念 单元测试一般包含以下几个部分：
+被测试的对象是什么 要测试该对象的什么功能 实际得到的结果 期望的结果 mock / spy 具体到某个单元测试，往往包含以下几个步骤：
+准备阶段：构造参数，创建 spy 等 执行阶段：用构造好的参数执行被测试代码 断言阶段：用实际得到的结果与期望的结果比较，以判断该测试是否正常 清理阶段：清理准备阶段对外部环境的影响，移除在准备阶段创建的 spy 等 Jest 为什么选择 jest 单元测试的执行通常需要测试规范、断言、mock、覆盖率工具等支持，上述工具在繁荣的 Node.js 生态中有很多优秀实现，但组合起来使用会带来两个问题
+多种工具的选择和学习有一定的成本 把多个工具组合成特定测试解决方案的配置复杂 而 Jest 是用来创建、执行和构建测试用例的 JavaScript 测试库，自身包含了 驱动、断言库、mock 、代码覆盖率等多种功能，配置使用相当简单
 安装 配置 基本配置 jest.config.js
-// jest.config.js  // Sync object module.exports = { verbose: true, }; // Or async function module.'><title>使用Jest 单元测试</title>
+1 2 3 4 5 6 7 8 9 10 11 12 13 // jest.config.js // Sync object module.exports = { verbose: true, }; // Or async function module.'><title>使用Jest 单元测试</title>
 
 <link rel='canonical' href='http://mythcen.github.io/p/jest-unit-test/'>
 
-<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='使用Jest 单元测试'>
+<link rel="stylesheet" href="/scss/style.min.ac77dcf8b111b51da39a92990f431923f210f3876d85798a2125667f96dc33a4.css"><meta property='og:title' content='使用Jest 单元测试'>
 <meta property='og:description' content='首先，需要明确我们的目的——单元测试
 单元测试（Unit Tesing）是针对程序的最小部件，检查代码是否会按照预期工作的一种测试手段。在过程式编程中最小就是一个函数，在面向对象编程中最小部件就是对象方法。
 从单元测试开始 相关概念 黑盒测试 黑盒测试，它是通过测试来检测每个功能是否都能正常使用。在测试中，把程序看作一个不能打开的黑盒子，在完全不考虑程序内部结构和内部特性的情况下，在程序接口进行测试，它只检查程序功能是否按照需求规格说明书的规定正常使用，程序是否能适当地接收输入数据而产生正确的输出信息
 白盒测试 白盒测试，又称结构测试、透明盒测试、逻辑驱动测试或基于代码的测试。白盒指的是盒子是可视的，即清楚盒子内部的东西以及里面是如何运作的。
-动机  验证 设计 文档 回归  单元测试的基本概念 单元测试一般包含以下几个部分：
- 被测试的对象是什么 要测试该对象的什么功能 实际得到的结果 期望的结果 mock / spy  具体到某个单元测试，往往包含以下几个步骤：
- 准备阶段：构造参数，创建 spy 等 执行阶段：用构造好的参数执行被测试代码 断言阶段：用实际得到的结果与期望的结果比较，以判断该测试是否正常 清理阶段：清理准备阶段对外部环境的影响，移除在准备阶段创建的 spy 等  Jest 为什么选择 jest 单元测试的执行通常需要测试规范、断言、mock、覆盖率工具等支持，上述工具在繁荣的 Node.js 生态中有很多优秀实现，但组合起来使用会带来两个问题
- 多种工具的选择和学习有一定的成本 把多个工具组合成特定测试解决方案的配置复杂  而 Jest 是用来创建、执行和构建测试用例的 JavaScript 测试库，自身包含了 驱动、断言库、mock 、代码覆盖率等多种功能，配置使用相当简单
+动机 验证 设计 文档 回归 单元测试的基本概念 单元测试一般包含以下几个部分：
+被测试的对象是什么 要测试该对象的什么功能 实际得到的结果 期望的结果 mock / spy 具体到某个单元测试，往往包含以下几个步骤：
+准备阶段：构造参数，创建 spy 等 执行阶段：用构造好的参数执行被测试代码 断言阶段：用实际得到的结果与期望的结果比较，以判断该测试是否正常 清理阶段：清理准备阶段对外部环境的影响，移除在准备阶段创建的 spy 等 Jest 为什么选择 jest 单元测试的执行通常需要测试规范、断言、mock、覆盖率工具等支持，上述工具在繁荣的 Node.js 生态中有很多优秀实现，但组合起来使用会带来两个问题
+多种工具的选择和学习有一定的成本 把多个工具组合成特定测试解决方案的配置复杂 而 Jest 是用来创建、执行和构建测试用例的 JavaScript 测试库，自身包含了 驱动、断言库、mock 、代码覆盖率等多种功能，配置使用相当简单
 安装 配置 基本配置 jest.config.js
-// jest.config.js  // Sync object module.exports = { verbose: true, }; // Or async function module.'>
+1 2 3 4 5 6 7 8 9 10 11 12 13 // jest.config.js // Sync object module.exports = { verbose: true, }; // Or async function module.'>
 <meta property='og:url' content='http://mythcen.github.io/p/jest-unit-test/'>
-<meta property='og:site_name' content='MythC'>
+<meta property='og:site_name' content='神话C看世界'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='工程化' /><meta property='article:published_time' content='2020-12-02T20:00:22&#43;08:00'/><meta property='article:modified_time' content='2020-12-02T20:00:22&#43;08:00'/>
 <meta name="twitter:title" content="使用Jest 单元测试">
 <meta name="twitter:description" content="首先，需要明确我们的目的——单元测试
 单元测试（Unit Tesing）是针对程序的最小部件，检查代码是否会按照预期工作的一种测试手段。在过程式编程中最小就是一个函数，在面向对象编程中最小部件就是对象方法。
 从单元测试开始 相关概念 黑盒测试 黑盒测试，它是通过测试来检测每个功能是否都能正常使用。在测试中，把程序看作一个不能打开的黑盒子，在完全不考虑程序内部结构和内部特性的情况下，在程序接口进行测试，它只检查程序功能是否按照需求规格说明书的规定正常使用，程序是否能适当地接收输入数据而产生正确的输出信息
 白盒测试 白盒测试，又称结构测试、透明盒测试、逻辑驱动测试或基于代码的测试。白盒指的是盒子是可视的，即清楚盒子内部的东西以及里面是如何运作的。
-动机  验证 设计 文档 回归  单元测试的基本概念 单元测试一般包含以下几个部分：
- 被测试的对象是什么 要测试该对象的什么功能 实际得到的结果 期望的结果 mock / spy  具体到某个单元测试，往往包含以下几个步骤：
- 准备阶段：构造参数，创建 spy 等 执行阶段：用构造好的参数执行被测试代码 断言阶段：用实际得到的结果与期望的结果比较，以判断该测试是否正常 清理阶段：清理准备阶段对外部环境的影响，移除在准备阶段创建的 spy 等  Jest 为什么选择 jest 单元测试的执行通常需要测试规范、断言、mock、覆盖率工具等支持，上述工具在繁荣的 Node.js 生态中有很多优秀实现，但组合起来使用会带来两个问题
- 多种工具的选择和学习有一定的成本 把多个工具组合成特定测试解决方案的配置复杂  而 Jest 是用来创建、执行和构建测试用例的 JavaScript 测试库，自身包含了 驱动、断言库、mock 、代码覆盖率等多种功能，配置使用相当简单
+动机 验证 设计 文档 回归 单元测试的基本概念 单元测试一般包含以下几个部分：
+被测试的对象是什么 要测试该对象的什么功能 实际得到的结果 期望的结果 mock / spy 具体到某个单元测试，往往包含以下几个步骤：
+准备阶段：构造参数，创建 spy 等 执行阶段：用构造好的参数执行被测试代码 断言阶段：用实际得到的结果与期望的结果比较，以判断该测试是否正常 清理阶段：清理准备阶段对外部环境的影响，移除在准备阶段创建的 spy 等 Jest 为什么选择 jest 单元测试的执行通常需要测试规范、断言、mock、覆盖率工具等支持，上述工具在繁荣的 Node.js 生态中有很多优秀实现，但组合起来使用会带来两个问题
+多种工具的选择和学习有一定的成本 把多个工具组合成特定测试解决方案的配置复杂 而 Jest 是用来创建、执行和构建测试用例的 JavaScript 测试库，自身包含了 驱动、断言库、mock 、代码覆盖率等多种功能，配置使用相当简单
 安装 配置 基本配置 jest.config.js
-// jest.config.js  // Sync object module.exports = { verbose: true, }; // Or async function module.">
+1 2 3 4 5 6 7 8 9 10 11 12 13 // jest.config.js // Sync object module.exports = { verbose: true, }; // Or async function module.">
     </head>
-    <body class="">
+    <body class="
+    article-page
+    ">
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
@@ -57,48 +59,60 @@
         if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
             
 
-            document.body.dataset.scheme = 'dark';
+            document.documentElement.dataset.scheme = 'dark';
         } else {
-            document.body.dataset.scheme = 'light';
+            document.documentElement.dataset.scheme = 'light';
         }
     })();
-</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
-            <aside class="sidebar left-sidebar sticky">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
         <span class="hamburger-box">
             <span class="hamburger-inner"></span>
         </span>
     </button>
 
-    <header class="site-info">
+    <header>
         
-            <figure class="site-avatar">
-                
-                    
-                    
-                    
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">神话C看世界</a></h1>
+            <h2 class="site-description"></h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/MythCen'
+                        target="_blank"
+                        title="GitHub"
+                    >
                         
-                        <img src="/img/avatar_hu2c09e6aabb14b66209d5ed2fe464c329_484573_300x0_resize_q75_box.jpg" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
 
-                
-                    <span class="emoji">🍥</span>
-                
-            </figure>
-        
-        <h1 class="site-name"><a href="http://mythcen.github.io/">MythC</a></h1>
-        <h2 class="site-description"></h2>
-    </header>
 
-    <ol class="menu" id="main-menu">
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
         
         
         
 
         <li >
-            <a href='/'>
+            <a href='/' >
+                
+                
+                    
+                
                 
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
@@ -117,7 +131,11 @@
         
 
         <li >
-            <a href='/about'>
+            <a href='/about' >
+                
+                
+                    
+                
                 
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
@@ -135,7 +153,11 @@
         
 
         <li >
-            <a href='/archives'>
+            <a href='/archives' >
+                
+                
+                    
+                
                 
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
@@ -152,9 +174,11 @@
         </li>
         
 
-        
-            <li id="dark-mode-toggle">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <div class="menu-bottom-section">
+            
+            
+                <li id="dark-mode-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="8" cy="12" r="2" />
   <rect x="2" y="6" width="20" height="12" rx="6" />
@@ -162,7 +186,7 @@
 
 
 
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="16" cy="12" r="2" />
   <rect x="2" y="6" width="20" height="12" rx="6" />
@@ -170,26 +194,13 @@
 
 
 
-                <span>Dark Mode</span>
-            </li>
-        
+                    <span>暗色模式</span>
+                </li>
+            
+        </div>
     </ol>
 </aside>
-
-            <main class="main full-width">
-    <div id="article-toolbar">
-        <a href="http://mythcen.github.io/" class="back-home">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="15 6 9 12 15 18" />
-</svg>
-
-
-
-            <span>Back</span>
-        </a>
-    </div>
-
+<main class="main full-width">
     <article class="main-article">
     <header class="article-header">
 
@@ -204,12 +215,34 @@
     </header>
     
 
-    <h2 class="article-title">
-        <a href="/p/jest-unit-test/">使用Jest 单元测试</a>
-    </h2>
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/jest-unit-test/">使用Jest 单元测试</a>
+        </h2>
+    
+        
+    </div>
 
+    
     <footer class="article-time">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Dec 02, 2020</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="12" r="9" />
   <polyline points="12 7 12 12 15 15" />
@@ -217,11 +250,21 @@
 
 
 
-        <time class="article-time--published">Dec 02, 2020</time>
-    </footer></div>
+                <time class="article-time--reading">
+                    阅读时长: 9 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
 </header>
 
     <section class="article-content">
+    
+    
     <p>首先，需要明确我们的目的——单元测试</p>
 <p>单元测试（Unit Tesing）是针对程序的最小部件，检查代码是否会按照预期工作的一种测试手段。在过程式编程中最小就是一个函数，在面向对象编程中最小部件就是对象方法。</p>
 <h1 id="从单元测试开始">从单元测试开始</h1>
@@ -270,68 +313,146 @@
 <h3 id="配置">配置</h3>
 <h4 id="基本配置">基本配置</h4>
 <p>jest.config.js</p>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">// jest.config.js
-</span><span class="c1"></span>
-<span class="c1">// Sync object
-</span><span class="c1"></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">verbose</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-<span class="p">};</span>
-
-<span class="c1">// Or async function
-</span><span class="c1"></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kr">async</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="p">{</span>
-    <span class="nx">verbose</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-  <span class="p">};</span>
-<span class="p">};</span>
-
-</code></pre></div><p>jest.config.ts</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="c1">// jest.config.js
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">// Sync object
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">verbose</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// Or async function
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kr">async</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">verbose</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>jest.config.ts</p>
 <p>需要搭配 ts-node</p>
-<div class="highlight"><pre class="chroma"><code class="language-typescript" data-lang="typescript"><span class="c1">// jest.config.ts
-</span><span class="c1"></span><span class="kr">import</span> <span class="kr">type</span> <span class="p">{</span><span class="nx">Config</span><span class="p">}</span> <span class="kr">from</span> <span class="s1">&#39;@jest/types&#39;</span><span class="p">;</span>
-
-<span class="c1">// Sync object
-</span><span class="c1"></span><span class="kr">const</span> <span class="nx">config</span>: <span class="kt">Config.InitialOptions</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">verbose</span>: <span class="kt">true</span><span class="p">,</span>
-<span class="p">};</span>
-<span class="kr">export</span> <span class="k">default</span> <span class="nx">config</span><span class="p">;</span>
-
-<span class="c1">// Or async function
-</span><span class="c1"></span><span class="kr">export</span> <span class="k">default</span> <span class="kr">async</span> <span class="p">()</span><span class="o">:</span> <span class="nx">Promise</span><span class="p">&lt;</span><span class="nt">Config.InitialOptions</span><span class="p">&gt;</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="p">{</span>
-    <span class="nx">verbose</span>: <span class="kt">true</span><span class="p">,</span>
-  <span class="p">};</span>
-<span class="p">};</span>
-</code></pre></div><p>Package.json</p>
-<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
-  <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;my-project&#34;</span><span class="p">,</span>
-  <span class="nt">&#34;jest&#34;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">&#34;verbose&#34;</span><span class="p">:</span> <span class="kc">true</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div><p>&ndash;config &lt;path/to/file.js|ts|cjs|mjs|json&gt;</p>
-<pre><code>{
-  &quot;bail&quot;: 1,
-  &quot;verbose&quot;: true
-}
-</code></pre><h4 id="路径配置">路径配置</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="c1">// jest.config.ts
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kr">import</span> <span class="kr">type</span> <span class="p">{</span><span class="nx">Config</span><span class="p">}</span> <span class="kr">from</span> <span class="s1">&#39;@jest/types&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// Sync object
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kr">const</span> <span class="nx">config</span>: <span class="kt">Config.InitialOptions</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">verbose</span>: <span class="kt">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class="k">default</span> <span class="nx">config</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// Or async function
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kr">export</span> <span class="k">default</span> <span class="kr">async</span> <span class="p">()</span><span class="o">:</span> <span class="nx">Promise</span><span class="p">&lt;</span><span class="nt">Config.InitialOptions</span><span class="p">&gt;</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">verbose</span>: <span class="kt">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Package.json</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;my-project&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;jest&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;verbose&#34;</span><span class="p">:</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>&ndash;config &lt;path/to/file.js|ts|cjs|mjs|json&gt;</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  &#34;bail&#34;: 1,
+</span></span><span class="line"><span class="cl">  &#34;verbose&#34;: true
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="路径配置">路径配置</h4>
 <p>Jest 会自动运行 <em>sum.test.js</em> 文件，其默认匹配规则</p>
 <ol>
 <li>匹配 <code>__test__</code> 文件夹下的 .js 文件（.jsx .ts .tsx  也可以）</li>
 <li>匹配所有后缀为 <code>.test.js</code> 或 <code>.spec.js</code> 的文件（.jsx .ts .tsx 也可以）</li>
 </ol>
 <p>可以通过根目录下的 <code>jest.config.js</code> 文件自定义测试文件匹配规则</p>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">// jest.config.js
-</span><span class="c1"></span>
-<span class="c1">//自定义匹配规则
-</span><span class="c1"></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">testMatch</span><span class="o">:</span> <span class="p">[</span> <span class="c1">// glob 格式
-</span><span class="c1"></span>    <span class="s2">&#34;**/__tests__/**/*.[jt]s?(x)&#34;</span><span class="p">,</span>
-    <span class="s2">&#34;**/?(*.)+(spec|test).[jt]s?(x)&#34;</span>
-  <span class="p">],</span>
-  <span class="c1">// 正则表达式格式，与 testMatch 互斥，不能同时声明
-</span><span class="c1"></span>  <span class="c1">// testRegex: &#39;(/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$&#39;,
-</span><span class="c1"></span><span class="p">};</span>
-</code></pre></div><h4 id="转换配置">转换配置</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="c1">// jest.config.js
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">//自定义匹配规则
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">testMatch</span><span class="o">:</span> <span class="p">[</span> <span class="c1">// glob 格式
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="s2">&#34;**/__tests__/**/*.[jt]s?(x)&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;**/?(*.)+(spec|test).[jt]s?(x)&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">],</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 正则表达式格式，与 testMatch 互斥，不能同时声明
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// testRegex: &#39;(/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$&#39;,
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="转换配置">转换配置</h4>
 <p><code>transform</code></p>
 <p>转换器是提供同步功能以转换源文件的模块。例如，如果希望能够在node尚不支持的模块或测试中使用新的语言功能，则可以插入许多将JavaScript的未来版本编译为当前版本的编译器之一</p>
 <h4 id="匹配配置">匹配配置</h4>
@@ -365,49 +486,112 @@
 <h3 id="异步">异步</h3>
 <h4 id="callback">callback</h4>
 <p>默认情况下，Jest 测试一旦执行到末尾就会完成。这意味着，像这样写不会有效果——</p>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;the data is peanut butter&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="kd">function</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">expect</span><span class="p">(</span><span class="nx">data</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;peanut butter&#39;</span><span class="p">);</span>
-  <span class="p">}</span>
-
-  <span class="nx">fetchData</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>
-<span class="p">});</span>
-</code></pre></div><p>一旦<code>fetchData</code>执行结束，此测试就在没有调用回调函数前结束.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;the data is peanut butter&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">function</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">expect</span><span class="p">(</span><span class="nx">data</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;peanut butter&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">fetchData</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>一旦<code>fetchData</code>执行结束，此测试就在没有调用回调函数前结束.</p>
 <p>解决的方法之一，是使用jest提供的done函数，相当于可以手动标记执行完该函数才意味着执行完毕。</p>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;the data is peanut butter&#39;</span><span class="p">,</span> <span class="nx">done</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="kd">function</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">try</span> <span class="p">{</span>
-      <span class="nx">expect</span><span class="p">(</span><span class="nx">data</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;peanut butter&#39;</span><span class="p">);</span>
-      <span class="nx">done</span><span class="p">();</span>
-    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">done</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-
-  <span class="nx">fetchData</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>
-<span class="p">});</span>
-</code></pre></div><p>若 <code>done()</code> 函数从未被调用，测试用例会如预期的那样执行失败（显示超时错误）。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;the data is peanut butter&#39;</span><span class="p">,</span> <span class="nx">done</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">function</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">try</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">expect</span><span class="p">(</span><span class="nx">data</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;peanut butter&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">done</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">done</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">fetchData</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>若 <code>done()</code> 函数从未被调用，测试用例会如预期的那样执行失败（显示超时错误）。</p>
 <p>若 <code>expect</code> 执行失败，它会抛出一个错误，后面的 <code>done()</code> 不再执行。 而try被用来捕获这个错误。</p>
 <h4 id="promise">promise</h4>
 <p>使用promise的时候，需要注意返回该promise</p>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;the fetch fails with an error&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="nx">expect</span><span class="p">.</span><span class="nx">assertions</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-  <span class="k">return</span> <span class="nx">fetchData</span><span class="p">().</span><span class="k">catch</span><span class="p">(</span><span class="nx">e</span> <span class="p">=&gt;</span> <span class="nx">expect</span><span class="p">(</span><span class="nx">e</span><span class="p">).</span><span class="nx">toMatch</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">));</span>
-<span class="p">});</span>
-</code></pre></div><p>此处<code>expect.assertions(2)</code>用来确保异步代码里的断言被执行，从而捕获可能的错误。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;the fetch fails with an error&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">expect</span><span class="p">.</span><span class="nx">assertions</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nx">fetchData</span><span class="p">().</span><span class="k">catch</span><span class="p">(</span><span class="nx">e</span> <span class="p">=&gt;</span> <span class="nx">expect</span><span class="p">(</span><span class="nx">e</span><span class="p">).</span><span class="nx">toMatch</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>此处<code>expect.assertions(2)</code>用来确保异步代码里的断言被执行，从而捕获可能的错误。</p>
 <p>想更进一步的判断的话，可以使用<code>.resolves</code> / <code>.rejects</code>这两个api</p>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;the fetch fails with an error&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="nx">expect</span><span class="p">(</span><span class="nx">fetchData</span><span class="p">()).</span><span class="nx">rejects</span><span class="p">.</span><span class="nx">toMatch</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">);</span>
-<span class="p">});</span>
-</code></pre></div><p>或者，可以在测试中使用 <code>async</code> 和 <code>await</code>。</p>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;the data is peanut butter&#39;</span><span class="p">,</span> <span class="kr">async</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="kr">await</span> <span class="nx">expect</span><span class="p">(</span><span class="nx">fetchData</span><span class="p">()).</span><span class="nx">resolves</span><span class="p">.</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;peanut butter&#39;</span><span class="p">);</span>
-<span class="p">});</span>
-
-<span class="nx">test</span><span class="p">(</span><span class="s1">&#39;the fetch fails with an error&#39;</span><span class="p">,</span> <span class="kr">async</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="kr">await</span> <span class="nx">expect</span><span class="p">(</span><span class="nx">fetchData</span><span class="p">()).</span><span class="nx">rejects</span><span class="p">.</span><span class="nx">toThrow</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">);</span>
-<span class="p">});</span>
-</code></pre></div><h3 id="作用域">作用域</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;the fetch fails with an error&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nx">expect</span><span class="p">(</span><span class="nx">fetchData</span><span class="p">()).</span><span class="nx">rejects</span><span class="p">.</span><span class="nx">toMatch</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>或者，可以在测试中使用 <code>async</code> 和 <code>await</code>。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;the data is peanut butter&#39;</span><span class="p">,</span> <span class="kr">async</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">await</span> <span class="nx">expect</span><span class="p">(</span><span class="nx">fetchData</span><span class="p">()).</span><span class="nx">resolves</span><span class="p">.</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;peanut butter&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;the fetch fails with an error&#39;</span><span class="p">,</span> <span class="kr">async</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">await</span> <span class="nx">expect</span><span class="p">(</span><span class="nx">fetchData</span><span class="p">()).</span><span class="nx">rejects</span><span class="p">.</span><span class="nx">toThrow</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="作用域">作用域</h3>
 <ul>
 <li>`test.only</li>
 <li><code>beforeEach</code> 和 <code>afterEach</code></li>
@@ -415,34 +599,67 @@
 <li><code>describe</code></li>
 </ul>
 <p>jest通过 <code>describe</code> 块来将测试分组，在不同的组里可以指定不同的重复性工作，例如数据初始化、结束后执行的数据清理。</p>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">// Applies to all tests in this file
-</span><span class="c1"></span><span class="nx">beforeEach</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="nx">initializeCityDatabase</span><span class="p">();</span>
-<span class="p">});</span>
-
-<span class="nx">test</span><span class="p">(</span><span class="s1">&#39;city database has Vienna&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="nx">expect</span><span class="p">(</span><span class="nx">isCity</span><span class="p">(</span><span class="s1">&#39;Vienna&#39;</span><span class="p">)).</span><span class="nx">toBeTruthy</span><span class="p">();</span>
-<span class="p">});</span>
-
-<span class="nx">test</span><span class="p">(</span><span class="s1">&#39;city database has San Juan&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="nx">expect</span><span class="p">(</span><span class="nx">isCity</span><span class="p">(</span><span class="s1">&#39;San Juan&#39;</span><span class="p">)).</span><span class="nx">toBeTruthy</span><span class="p">();</span>
-<span class="p">});</span>
-
-<span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;matching cities to foods&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="c1">// Applies only to tests in this describe block
-</span><span class="c1"></span>  <span class="nx">beforeEach</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">initializeFoodDatabase</span><span class="p">();</span>
-  <span class="p">});</span>
-
-  <span class="nx">test</span><span class="p">(</span><span class="s1">&#39;Vienna &lt;3 sausage&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
-    <span class="nx">expect</span><span class="p">(</span><span class="nx">isValidCityFoodPair</span><span class="p">(</span><span class="s1">&#39;Vienna&#39;</span><span class="p">,</span> <span class="s1">&#39;Wiener Schnitzel&#39;</span><span class="p">)).</span><span class="nx">toBe</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
-  <span class="p">});</span>
-
-  <span class="nx">test</span><span class="p">(</span><span class="s1">&#39;San Juan &lt;3 plantains&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
-    <span class="nx">expect</span><span class="p">(</span><span class="nx">isValidCityFoodPair</span><span class="p">(</span><span class="s1">&#39;San Juan&#39;</span><span class="p">,</span> <span class="s1">&#39;Mofongo&#39;</span><span class="p">)).</span><span class="nx">toBe</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
-  <span class="p">});</span>
-<span class="p">});</span>
-</code></pre></div><p>Jest 会在所有真正的测试开始<em><strong>之前</strong></em>执行测试文件里所有的 describe 处理程序（handlers）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="c1">// Applies to all tests in this file
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">beforeEach</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nx">initializeCityDatabase</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;city database has Vienna&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">expect</span><span class="p">(</span><span class="nx">isCity</span><span class="p">(</span><span class="s1">&#39;Vienna&#39;</span><span class="p">)).</span><span class="nx">toBeTruthy</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;city database has San Juan&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">expect</span><span class="p">(</span><span class="nx">isCity</span><span class="p">(</span><span class="s1">&#39;San Juan&#39;</span><span class="p">)).</span><span class="nx">toBeTruthy</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;matching cities to foods&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// Applies only to tests in this describe block
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nx">beforeEach</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">initializeFoodDatabase</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">test</span><span class="p">(</span><span class="s1">&#39;Vienna &lt;3 sausage&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">expect</span><span class="p">(</span><span class="nx">isValidCityFoodPair</span><span class="p">(</span><span class="s1">&#39;Vienna&#39;</span><span class="p">,</span> <span class="s1">&#39;Wiener Schnitzel&#39;</span><span class="p">)).</span><span class="nx">toBe</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">test</span><span class="p">(</span><span class="s1">&#39;San Juan &lt;3 plantains&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">expect</span><span class="p">(</span><span class="nx">isValidCityFoodPair</span><span class="p">(</span><span class="s1">&#39;San Juan&#39;</span><span class="p">,</span> <span class="s1">&#39;Mofongo&#39;</span><span class="p">)).</span><span class="nx">toBe</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">});</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Jest 会在所有真正的测试开始<em><strong>之前</strong></em>执行测试文件里所有的 describe 处理程序（handlers）</p>
 <p>当 describe 块运行完后,，默认情况下，Jest 会按照 test 出现的顺序依次运行所有测试,</p>
 <p>注：test也可写作it；test为it的别名，功能是一致的。</p>
 <h3 id="mock">Mock</h3>
@@ -457,42 +674,84 @@
 </ul>
 <p>所有的 mock 函数都有个特殊的 <code>.mock</code>属性，它保存了关于此函数如何被调用、调用时的返回值的信息。 <code>.mock</code> 属性还追踪每次调用时 <code>this</code>的值，</p>
 <p>这些 mock 成员变量在测试中非常有用，用于说明这些 function 是如何被调用、实例化或返回的：</p>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">// The function was called exactly once
-</span><span class="c1"></span><span class="nx">expect</span><span class="p">(</span><span class="nx">someMockFunction</span><span class="p">.</span><span class="nx">mock</span><span class="p">.</span><span class="nx">calls</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-
-<span class="c1">// The first arg of the first call to the function was &#39;first arg&#39;
-</span><span class="c1"></span><span class="nx">expect</span><span class="p">(</span><span class="nx">someMockFunction</span><span class="p">.</span><span class="nx">mock</span><span class="p">.</span><span class="nx">calls</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;first arg&#39;</span><span class="p">);</span>
-
-<span class="c1">// The second arg of the first call to the function was &#39;second arg&#39;
-</span><span class="c1"></span><span class="nx">expect</span><span class="p">(</span><span class="nx">someMockFunction</span><span class="p">.</span><span class="nx">mock</span><span class="p">.</span><span class="nx">calls</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;second arg&#39;</span><span class="p">);</span>
-
-<span class="c1">// The return value of the first call to the function was &#39;return value&#39;
-</span><span class="c1"></span><span class="nx">expect</span><span class="p">(</span><span class="nx">someMockFunction</span><span class="p">.</span><span class="nx">mock</span><span class="p">.</span><span class="nx">results</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">value</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;return value&#39;</span><span class="p">);</span>
-
-<span class="c1">// This function was instantiated exactly twice
-</span><span class="c1"></span><span class="nx">expect</span><span class="p">(</span><span class="nx">someMockFunction</span><span class="p">.</span><span class="nx">mock</span><span class="p">.</span><span class="nx">instances</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
-
-<span class="c1">// The object returned by the first instantiation of this function
-</span><span class="c1">// had a `name` property whose value was set to &#39;test&#39;
-</span><span class="c1"></span><span class="nx">expect</span><span class="p">(</span><span class="nx">someMockFunction</span><span class="p">.</span><span class="nx">mock</span><span class="p">.</span><span class="nx">instances</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">name</span><span class="p">).</span><span class="nx">toEqual</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">);</span>
-</code></pre></div><ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="c1">// The function was called exactly once
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">expect</span><span class="p">(</span><span class="nx">someMockFunction</span><span class="p">.</span><span class="nx">mock</span><span class="p">.</span><span class="nx">calls</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// The first arg of the first call to the function was &#39;first arg&#39;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">expect</span><span class="p">(</span><span class="nx">someMockFunction</span><span class="p">.</span><span class="nx">mock</span><span class="p">.</span><span class="nx">calls</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;first arg&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// The second arg of the first call to the function was &#39;second arg&#39;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">expect</span><span class="p">(</span><span class="nx">someMockFunction</span><span class="p">.</span><span class="nx">mock</span><span class="p">.</span><span class="nx">calls</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;second arg&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// The return value of the first call to the function was &#39;return value&#39;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">expect</span><span class="p">(</span><span class="nx">someMockFunction</span><span class="p">.</span><span class="nx">mock</span><span class="p">.</span><span class="nx">results</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">value</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="s1">&#39;return value&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// This function was instantiated exactly twice
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">expect</span><span class="p">(</span><span class="nx">someMockFunction</span><span class="p">.</span><span class="nx">mock</span><span class="p">.</span><span class="nx">instances</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// The object returned by the first instantiation of this function
+</span></span></span><span class="line"><span class="cl"><span class="c1">// had a `name` property whose value was set to &#39;test&#39;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">expect</span><span class="p">(</span><span class="nx">someMockFunction</span><span class="p">.</span><span class="nx">mock</span><span class="p">.</span><span class="nx">instances</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">name</span><span class="p">).</span><span class="nx">toEqual</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
 <li><code>mockReturnValueOnce</code></li>
 <li><code>mockReturnValue</code></li>
 </ul>
 <p>mock函数的返回值也是可以模拟的</p>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kr">const</span> <span class="nx">filterTestFn</span> <span class="o">=</span> <span class="nx">jest</span><span class="p">.</span><span class="nx">fn</span><span class="p">();</span>
-
-<span class="c1">// Make the mock return `true` for the first call,
-</span><span class="c1">// and `false` for the second call
-</span><span class="c1"></span><span class="nx">filterTestFn</span><span class="p">.</span><span class="nx">mockReturnValueOnce</span><span class="p">(</span><span class="kc">true</span><span class="p">).</span><span class="nx">mockReturnValueOnce</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
-
-<span class="kr">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">].</span><span class="nx">filter</span><span class="p">(</span><span class="nx">num</span> <span class="p">=&gt;</span> <span class="nx">filterTestFn</span><span class="p">(</span><span class="nx">num</span><span class="p">));</span>
-
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
-<span class="c1">// &gt; [11]
-</span><span class="c1"></span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">filterTestFn</span><span class="p">.</span><span class="nx">mock</span><span class="p">.</span><span class="nx">calls</span><span class="p">);</span>
-<span class="c1">// &gt; [ [11], [12] ]
-</span></code></pre></div><p>大多数现实世界例子中，实际是在依赖的组件上配一个模拟函数并配置它，但手法是相同的。 在这些情况下，尽量避免在非真正想要进行测试的任何函数内实现逻辑。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">filterTestFn</span> <span class="o">=</span> <span class="nx">jest</span><span class="p">.</span><span class="nx">fn</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// Make the mock return `true` for the first call,
+</span></span></span><span class="line"><span class="cl"><span class="c1">// and `false` for the second call
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">filterTestFn</span><span class="p">.</span><span class="nx">mockReturnValueOnce</span><span class="p">(</span><span class="kc">true</span><span class="p">).</span><span class="nx">mockReturnValueOnce</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">].</span><span class="nx">filter</span><span class="p">(</span><span class="nx">num</span> <span class="p">=&gt;</span> <span class="nx">filterTestFn</span><span class="p">(</span><span class="nx">num</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// &gt; [11]
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">filterTestFn</span><span class="p">.</span><span class="nx">mock</span><span class="p">.</span><span class="nx">calls</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// &gt; [ [11], [12] ]
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>大多数现实世界例子中，实际是在依赖的组件上配一个模拟函数并配置它，但手法是相同的。 在这些情况下，尽量避免在非真正想要进行测试的任何函数内实现逻辑。</p>
 <h4 id="mock模块">Mock模块</h4>
 <ul>
 <li><code>mock</code></li>
@@ -503,65 +762,143 @@
 <li><code>mockImplementation</code></li>
 </ul>
 <p>当需要定义从另一个模块创建的模拟函数的默认实现时，mockImplementation方法非常有用</p>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kr">const</span> <span class="nx">myMockFn</span> <span class="o">=</span> <span class="nx">jest</span>
-  <span class="p">.</span><span class="nx">fn</span><span class="p">()</span>
-  <span class="p">.</span><span class="nx">mockImplementationOnce</span><span class="p">(</span><span class="nx">cb</span> <span class="p">=&gt;</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kc">true</span><span class="p">))</span>
-  <span class="p">.</span><span class="nx">mockImplementationOnce</span><span class="p">(</span><span class="nx">cb</span> <span class="p">=&gt;</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kc">false</span><span class="p">));</span>
-
-<span class="nx">myMockFn</span><span class="p">((</span><span class="nx">err</span><span class="p">,</span> <span class="nx">val</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">val</span><span class="p">));</span>
-<span class="c1">// &gt; true
-</span><span class="c1"></span>
-<span class="nx">myMockFn</span><span class="p">((</span><span class="nx">err</span><span class="p">,</span> <span class="nx">val</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">val</span><span class="p">));</span>
-<span class="c1">// &gt; false
-</span></code></pre></div><h3 id="快照">快照</h3>
-<pre><code>/*快照测试*/
-import React from 'react';
-// import toJson from 'enzyme-to-json';
-import render from 'react-test-renderer';
-import ALink from '../Link';
-
-describe('Link', () =&gt; {
-  it('正确的快照', function () {
-    const tree = render.create(&lt;ALink page=&quot;http://www.facebook.com&quot;&gt;facebook&lt;/ALink&gt;).toJSON();
-    expect(tree).toMatchSnapshot();
-  });
-
-  it('这个是正确的快照更改', function () {
-    const tree = render.create(&lt;ALink page=&quot;http://www.yanleweb.com&quot;&gt;yanlelele&lt;/ALink&gt;).toJSON();
-    expect(tree).toMatchSnapshot();
-  });
-
-  it('这种时候，快照就要报错了', function () {
-    const user = {
-      createAt: new Date(),
-      id: Math.floor(Math.random() * 20),
-      name: 'yanle',
-    };
-    expect(user).toMatchSnapshot({
-      createAt: expect.any(Date),
-      id: expect.any(Number),
-    });
-  });
-});
-</code></pre><p>如果我们希望更新快照： <code>yarn test --updateSnapshot</code> 或者 <code>yarn test -u</code>;</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">myMockFn</span> <span class="o">=</span> <span class="nx">jest</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">fn</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">mockImplementationOnce</span><span class="p">(</span><span class="nx">cb</span> <span class="p">=&gt;</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kc">true</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">mockImplementationOnce</span><span class="p">(</span><span class="nx">cb</span> <span class="p">=&gt;</span> <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kc">false</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">myMockFn</span><span class="p">((</span><span class="nx">err</span><span class="p">,</span> <span class="nx">val</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">val</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// &gt; true
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="nx">myMockFn</span><span class="p">((</span><span class="nx">err</span><span class="p">,</span> <span class="nx">val</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">val</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// &gt; false
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="快照">快照</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/*快照测试*/
+</span></span><span class="line"><span class="cl">import React from &#39;react&#39;;
+</span></span><span class="line"><span class="cl">// import toJson from &#39;enzyme-to-json&#39;;
+</span></span><span class="line"><span class="cl">import render from &#39;react-test-renderer&#39;;
+</span></span><span class="line"><span class="cl">import ALink from &#39;../Link&#39;;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">describe(&#39;Link&#39;, () =&gt; {
+</span></span><span class="line"><span class="cl">  it(&#39;正确的快照&#39;, function () {
+</span></span><span class="line"><span class="cl">    const tree = render.create(&lt;ALink page=&#34;http://www.facebook.com&#34;&gt;facebook&lt;/ALink&gt;).toJSON();
+</span></span><span class="line"><span class="cl">    expect(tree).toMatchSnapshot();
+</span></span><span class="line"><span class="cl">  });
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  it(&#39;这个是正确的快照更改&#39;, function () {
+</span></span><span class="line"><span class="cl">    const tree = render.create(&lt;ALink page=&#34;http://www.yanleweb.com&#34;&gt;yanlelele&lt;/ALink&gt;).toJSON();
+</span></span><span class="line"><span class="cl">    expect(tree).toMatchSnapshot();
+</span></span><span class="line"><span class="cl">  });
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  it(&#39;这种时候，快照就要报错了&#39;, function () {
+</span></span><span class="line"><span class="cl">    const user = {
+</span></span><span class="line"><span class="cl">      createAt: new Date(),
+</span></span><span class="line"><span class="cl">      id: Math.floor(Math.random() * 20),
+</span></span><span class="line"><span class="cl">      name: &#39;yanle&#39;,
+</span></span><span class="line"><span class="cl">    };
+</span></span><span class="line"><span class="cl">    expect(user).toMatchSnapshot({
+</span></span><span class="line"><span class="cl">      createAt: expect.any(Date),
+</span></span><span class="line"><span class="cl">      id: expect.any(Number),
+</span></span><span class="line"><span class="cl">    });
+</span></span><span class="line"><span class="cl">  });
+</span></span><span class="line"><span class="cl">});
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果我们希望更新快照： <code>yarn test --updateSnapshot</code> 或者 <code>yarn test -u</code>;</p>
 <p>每次运行的时候， 每一个用例就会如果实现了快照， 就会产生一个快照文件</p>
 <h2 id="jest模拟实践">Jest模拟实践</h2>
 <p>实际上，我们的单元测试环境并不会那么单纯，不同的环境需要加上不同的配置，甚至需要测试因为环境关联的特有功能。</p>
 <h3 id="jest-与-typescript--babel">Jest 与 TypeScript &amp; Babel</h3>
 <p>要支持typescript &amp; babel的环境，需要以下几个步骤</p>
 <h4 id="安装依赖">安装依赖</h4>
-<pre><code>$ npm i -D @babel/core @babel/preset-env @babel/preset-typescript @types/jest
-</code></pre><p>然后，最好安装用于jest（<code>ts-jest</code>）的TypeScript预处理程序，以使jest可以即时转换TypeScript并内置源映射支持。</p>
-<pre><code>$ npm i -D ts-jest
-</code></pre><p>添加babel配置</p>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">// babel.config.js
-</span><span class="c1"></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">presets</span><span class="o">:</span> <span class="p">[</span>
-      <span class="p">[</span><span class="s1">&#39;@babel/preset-env&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">targets</span><span class="o">:</span> <span class="p">{</span> <span class="nx">node</span><span class="o">:</span> <span class="s1">&#39;current&#39;</span> <span class="p">}</span> <span class="p">}],</span>
-      <span class="s1">&#39;@babel/preset-typescript&#39;</span><span class="p">,</span>
-    <span class="p">],</span>
-  <span class="p">};</span>
-</code></pre></div><h3 id="jest-与-react">Jest 与 React</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ npm i -D @babel/core @babel/preset-env @babel/preset-typescript @types/jest
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后，最好安装用于jest（<code>ts-jest</code>）的TypeScript预处理程序，以使jest可以即时转换TypeScript并内置源映射支持。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ npm i -D ts-jest
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>添加babel配置</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="c1">// babel.config.js
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">presets</span><span class="o">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">      <span class="p">[</span><span class="s1">&#39;@babel/preset-env&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">targets</span><span class="o">:</span> <span class="p">{</span> <span class="nx">node</span><span class="o">:</span> <span class="s1">&#39;current&#39;</span> <span class="p">}</span> <span class="p">}],</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;@babel/preset-typescript&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="p">],</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="jest-与-react">Jest 与 React</h3>
 <p>React 官方提供了一种方案，用来进行React单元测试——react-test-renderer&amp;react-dom/test-utils</p>
 <p><strong>React-test-renderer</strong></p>
 <p>在说 <code>react-test-renderer</code> 之前，让我们先聊聊什么是 <code>renderer</code>。React 最早是被用来开发网页的，所以早期的 React 库中还包含了大量和 DOM 相关的逻辑。后来 React 的设计思想慢慢被迁移到其它场景，最被人们熟知的莫过于 React Native 了。为了灵活性和扩展性，React 的代码被分拆为 React 核心代码与各种 renderer。React 自带了 3 个 renderer，前两个是大家常见的：</p>
@@ -595,26 +932,64 @@ describe('Link', () =&gt; {
 <p>在使用上的区别，下文会具体介绍。</p>
 <p>最后，综合考虑，还是选用案例更多，更加成熟的enzyme。以下的演示以enzyme为例。</p>
 <h4 id="安装依赖-1">安装依赖</h4>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ npm i -S react react-dom
-$ npm i -D @babel/preset-env @babel/preset-react enzyme enzyme-adapter-react-16
-</code></pre></div><p>其中，enzyme-adapter-react-16是与react对应的enzyme依赖（依赖详见官方文档）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ npm i -S react react-dom
+</span></span><span class="line"><span class="cl">$ npm i -D @babel/preset-env @babel/preset-react enzyme enzyme-adapter-react-16
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中，enzyme-adapter-react-16是与react对应的enzyme依赖（依赖详见官方文档）</p>
 <p>最后，需要手动配置一下对应的适配器</p>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kr">import</span> <span class="nx">Enzyme</span> <span class="nx">from</span> <span class="s1">&#39;enzyme&#39;</span><span class="p">;</span>
-<span class="kr">import</span> <span class="nx">Adapter</span> <span class="nx">from</span> <span class="s1">&#39;enzyme-adapter-react-16&#39;</span><span class="p">;</span>
-
-<span class="nx">Enzyme</span><span class="p">.</span><span class="nx">configure</span><span class="p">({</span> <span class="nx">adapter</span><span class="o">:</span> <span class="k">new</span> <span class="nx">Adapter</span><span class="p">()</span> <span class="p">});</span>
-</code></pre></div><p>enzyme本身是适配不同的测试框架的，如果想要使用带有自定义断言和更方便函数的enzyme，可以安装<code>jest-enzyme</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">import</span> <span class="nx">Enzyme</span> <span class="nx">from</span> <span class="s1">&#39;enzyme&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">import</span> <span class="nx">Adapter</span> <span class="nx">from</span> <span class="s1">&#39;enzyme-adapter-react-16&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">Enzyme</span><span class="p">.</span><span class="nx">configure</span><span class="p">({</span> <span class="nx">adapter</span><span class="o">:</span> <span class="k">new</span> <span class="nx">Adapter</span><span class="p">()</span> <span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>enzyme本身是适配不同的测试框架的，如果想要使用带有自定义断言和更方便函数的enzyme，可以安装<code>jest-enzyme</code></p>
 <h4 id="配置-babel">配置 babel</h4>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">// babel.config.js
-</span><span class="c1"></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">presets</span><span class="o">:</span> <span class="p">[</span>
-    <span class="p">[</span><span class="s1">&#39;@babel/preset-env&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">targets</span><span class="o">:</span> <span class="p">{</span> <span class="nx">node</span><span class="o">:</span> <span class="s1">&#39;current&#39;</span> <span class="p">}</span> <span class="p">}],</span>
-    <span class="s1">&#39;@babel/preset-react&#39;</span><span class="p">,</span>
-  <span class="p">],</span>
-<span class="p">};</span>
-</code></pre></div><p>使用class的写法还需——</p>
-<pre><code>$ npm i -D @babel/plugin-proposal-class-properties
-</code></pre><p>只用React Hook则不用</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="c1">// babel.config.js
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">presets</span><span class="o">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="s1">&#39;@babel/preset-env&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">targets</span><span class="o">:</span> <span class="p">{</span> <span class="nx">node</span><span class="o">:</span> <span class="s1">&#39;current&#39;</span> <span class="p">}</span> <span class="p">}],</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;@babel/preset-react&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="p">],</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用class的写法还需——</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ npm i -D @babel/plugin-proposal-class-properties
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>只用React Hook则不用</p>
 <h4 id="使用">使用</h4>
 <p><strong>shallow</strong></p>
 <p><a class="link" href="https://github.com/airbnb/enzyme/blob/master/docs/api/shallow.md"  target="_blank" rel="noopener"
@@ -640,43 +1015,90 @@ $ npm i -D @babel/preset-env @babel/preset-react enzyme enzyme-adapter-react-16
 <p>最后需要注意的是，shallow的速度是最快的，render的速度落后于shallow，mount最慢。</p>
 <h4 id="测试用例">测试用例</h4>
 <p>组件</p>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">useState</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;react&#39;</span><span class="p">;</span>
-
-<span class="kr">export</span> <span class="k">default</span> <span class="kd">function</span> <span class="nx">CheckboxWithLabel</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kr">const</span> <span class="p">[</span><span class="nx">checkStatus</span><span class="p">,</span> <span class="nx">setCheckStatus</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
-  <span class="kr">const</span> <span class="p">{</span> <span class="nx">labelOn</span><span class="p">,</span> <span class="nx">labelOff</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">props</span><span class="p">;</span>
-  <span class="kd">function</span> <span class="nx">onChange</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">setCheckStatus</span><span class="p">(</span><span class="o">!</span><span class="nx">checkStatus</span><span class="p">);</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="p">(</span>
-    <span class="o">&lt;</span><span class="nx">label</span><span class="o">&gt;</span>
-      <span class="o">&lt;</span><span class="nx">input</span>
-        <span class="nx">type</span><span class="o">=</span><span class="s2">&#34;checkbox&#34;</span>
-        <span class="nx">checked</span><span class="o">=</span><span class="p">{</span><span class="nx">checkStatus</span><span class="p">}</span>
-        <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">onChange</span><span class="p">}</span>
-      <span class="o">/&gt;</span>
-      <span class="p">{</span><span class="nx">checkStatus</span> <span class="o">?</span> <span class="nx">labelOn</span> <span class="o">:</span> <span class="nx">labelOff</span><span class="p">}</span>
-    <span class="o">&lt;</span><span class="err">/label&gt;</span>
-  <span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div><p>测试代码</p>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kr">import</span> <span class="nx">React</span> <span class="nx">from</span> <span class="s1">&#39;react&#39;</span><span class="p">;</span>
-<span class="kr">import</span> <span class="nx">Enzyme</span><span class="p">,</span> <span class="p">{</span> <span class="nx">shallow</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;enzyme&#39;</span><span class="p">;</span>
-<span class="kr">import</span> <span class="nx">Adapter</span> <span class="nx">from</span> <span class="s1">&#39;enzyme-adapter-react-16&#39;</span><span class="p">;</span>
-<span class="kr">import</span> <span class="nx">CheckboxWithLabel</span> <span class="nx">from</span> <span class="s1">&#39;../src/checkbox-with-label&#39;</span><span class="p">;</span>
-<span class="nx">beforeAll</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="c1">// enzyme 初始化
-</span><span class="c1"></span>  <span class="nx">Enzyme</span><span class="p">.</span><span class="nx">configure</span><span class="p">({</span> <span class="nx">adapter</span><span class="o">:</span> <span class="k">new</span> <span class="nx">Adapter</span><span class="p">()</span> <span class="p">});</span>
-<span class="p">})</span>
-<span class="nx">test</span><span class="p">(</span><span class="s1">&#39;CheckboxWithLabel changes the text after click&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="c1">// 渲染组件
-</span><span class="c1"></span>  <span class="kr">const</span> <span class="nx">checkbox</span> <span class="o">=</span> <span class="nx">shallow</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">CheckboxWithLabel</span> <span class="nx">labelOn</span><span class="o">=</span><span class="s2">&#34;On&#34;</span> <span class="nx">labelOff</span><span class="o">=</span><span class="s2">&#34;Off&#34;</span> <span class="o">/&gt;</span><span class="p">);</span>
-  <span class="nx">expect</span><span class="p">(</span><span class="nx">checkbox</span><span class="p">.</span><span class="nx">text</span><span class="p">()).</span><span class="nx">toEqual</span><span class="p">(</span><span class="s1">&#39;Off&#39;</span><span class="p">);</span>
-  <span class="c1">// 触发事件
-</span><span class="c1"></span>  <span class="nx">checkbox</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">).</span><span class="nx">simulate</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">);</span>
-  <span class="nx">expect</span><span class="p">(</span><span class="nx">checkbox</span><span class="p">.</span><span class="nx">text</span><span class="p">()).</span><span class="nx">toEqual</span><span class="p">(</span><span class="s1">&#39;On&#39;</span><span class="p">);</span>
-<span class="p">});</span>
-</code></pre></div><h4 id="如何编写测试用例">如何编写测试用例</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">useState</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;react&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class="k">default</span> <span class="kd">function</span> <span class="nx">CheckboxWithLabel</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="p">[</span><span class="nx">checkStatus</span><span class="p">,</span> <span class="nx">setCheckStatus</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="p">{</span> <span class="nx">labelOn</span><span class="p">,</span> <span class="nx">labelOff</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">props</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">function</span> <span class="nx">onChange</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">setCheckStatus</span><span class="p">(</span><span class="o">!</span><span class="nx">checkStatus</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="nx">label</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="o">&lt;</span><span class="nx">input</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">type</span><span class="o">=</span><span class="s2">&#34;checkbox&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">checked</span><span class="o">=</span><span class="p">{</span><span class="nx">checkStatus</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">onChange</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="o">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span><span class="nx">checkStatus</span> <span class="o">?</span> <span class="nx">labelOn</span> <span class="o">:</span> <span class="nx">labelOff</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="err">/label&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>测试代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">import</span> <span class="nx">React</span> <span class="nx">from</span> <span class="s1">&#39;react&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">import</span> <span class="nx">Enzyme</span><span class="p">,</span> <span class="p">{</span> <span class="nx">shallow</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;enzyme&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">import</span> <span class="nx">Adapter</span> <span class="nx">from</span> <span class="s1">&#39;enzyme-adapter-react-16&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">import</span> <span class="nx">CheckboxWithLabel</span> <span class="nx">from</span> <span class="s1">&#39;../src/checkbox-with-label&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">beforeAll</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// enzyme 初始化
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nx">Enzyme</span><span class="p">.</span><span class="nx">configure</span><span class="p">({</span> <span class="nx">adapter</span><span class="o">:</span> <span class="k">new</span> <span class="nx">Adapter</span><span class="p">()</span> <span class="p">});</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;CheckboxWithLabel changes the text after click&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 渲染组件
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kr">const</span> <span class="nx">checkbox</span> <span class="o">=</span> <span class="nx">shallow</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">CheckboxWithLabel</span> <span class="nx">labelOn</span><span class="o">=</span><span class="s2">&#34;On&#34;</span> <span class="nx">labelOff</span><span class="o">=</span><span class="s2">&#34;Off&#34;</span> <span class="o">/&gt;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">expect</span><span class="p">(</span><span class="nx">checkbox</span><span class="p">.</span><span class="nx">text</span><span class="p">()).</span><span class="nx">toEqual</span><span class="p">(</span><span class="s1">&#39;Off&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 触发事件
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nx">checkbox</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">).</span><span class="nx">simulate</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">expect</span><span class="p">(</span><span class="nx">checkbox</span><span class="p">.</span><span class="nx">text</span><span class="p">()).</span><span class="nx">toEqual</span><span class="p">(</span><span class="s1">&#39;On&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="如何编写测试用例">如何编写测试用例</h4>
 <p>React 组件的单元测试本质是也是单元测试。因此它也符合单元测试的全部特点。唯一不同的地方在于 React 组件的单元测试中我们需要找到合适的方法对执行结果进行断言。换言之，我们要<strong>根据 React 的特点来设置代码是否正确执行的判断条件</strong>。</p>
 <p>那么 React 组件和其它的被测试对象有何不同呢？仔细想过，我们会发现：</p>
 <ul>
@@ -699,18 +1121,40 @@ $ npm i -D @babel/preset-env @babel/preset-react enzyme enzyme-adapter-react-16
     >ES6 Proxy</a>来模拟一个<a class="link" href="https://github.com/css-modules/css-modules"  target="_blank" rel="noopener"
     >CSS Module</a>：</p>
 <h5 id="安装依赖-2">安装依赖</h5>
-<pre><code>yarn add --dev identity-obj-proxy
-</code></pre><p>然后在样式对象上，你的所有类别名称查找都会原样返回,例如<code>styles.foobar === 'foobar'</code></p>
-<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="err">//</span> <span class="err">package.json</span> <span class="err">(for</span> <span class="err">CSS</span> <span class="err">Modules)</span>
-<span class="p">{</span>
-  <span class="nt">&#34;jest&#34;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">&#34;moduleNameMapper&#34;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="nt">&#34;\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$&#34;</span><span class="p">:</span> <span class="s2">&#34;&lt;rootDir&gt;/__mocks__/fileMock.js&#34;</span><span class="p">,</span>
-      <span class="nt">&#34;\\.(css|less)$&#34;</span><span class="p">:</span> <span class="s2">&#34;identity-obj-proxy&#34;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div><p>如果启用了typescript兼容，除了根据官方案例进行配置以外，还需要在tsconfig.json中将”jsx”选项配置为”react”，否则会报语法无法识别的错误。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">yarn add --dev identity-obj-proxy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后在样式对象上，你的所有类别名称查找都会原样返回,例如<code>styles.foobar === 'foobar'</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="c1">// package.json (for CSS Modules)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;jest&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;moduleNameMapper&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$&#34;</span><span class="p">:</span> <span class="s2">&#34;&lt;rootDir&gt;/__mocks__/fileMock.js&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;\\.(css|less)$&#34;</span><span class="p">:</span> <span class="s2">&#34;identity-obj-proxy&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果启用了typescript兼容，除了根据官方案例进行配置以外，还需要在tsconfig.json中将”jsx”选项配置为”react”，否则会报语法无法识别的错误。</p>
 <h4 id="文件">文件</h4>
 <p>详见<a class="link" href="https://jestjs.io/docs/zh-Hans/webpack"  target="_blank" rel="noopener"
     >Using with webpack · Jest</a></p>
@@ -749,13 +1193,25 @@ $ npm i -D @babel/preset-env @babel/preset-react enzyme enzyme-adapter-react-16
 <h3 id="find">find</h3>
 <p>关于<code>find</code>方法，有一个注意点，就是它只支持简单选择器，稍微复杂的一点的CSS选择器都不支持。</p>
 <blockquote>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">component.find<span class="o">(</span><span class="s1">&#39;.my-class&#39;</span><span class="o">)</span><span class="p">;</span> // by class name
-component.find<span class="o">(</span><span class="s1">&#39;#my-id&#39;</span><span class="o">)</span><span class="p">;</span> // by id
-component.find<span class="o">(</span><span class="s1">&#39;td&#39;</span><span class="o">)</span><span class="p">;</span> // by tag
-component.find<span class="o">(</span><span class="s1">&#39;div.custom-class&#39;</span><span class="o">)</span><span class="p">;</span> // by compound selector
-component.find<span class="o">(</span>TableRow<span class="o">)</span><span class="p">;</span> // by constructor
-component.find<span class="o">(</span><span class="s1">&#39;TableRow&#39;</span><span class="o">)</span><span class="p">;</span> // by display name
-</code></pre></div></blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">component.find<span class="o">(</span><span class="s1">&#39;.my-class&#39;</span><span class="o">)</span><span class="p">;</span> // by class name
+</span></span><span class="line"><span class="cl">component.find<span class="o">(</span><span class="s1">&#39;#my-id&#39;</span><span class="o">)</span><span class="p">;</span> // by id
+</span></span><span class="line"><span class="cl">component.find<span class="o">(</span><span class="s1">&#39;td&#39;</span><span class="o">)</span><span class="p">;</span> // by tag
+</span></span><span class="line"><span class="cl">component.find<span class="o">(</span><span class="s1">&#39;div.custom-class&#39;</span><span class="o">)</span><span class="p">;</span> // by compound selector
+</span></span><span class="line"><span class="cl">component.find<span class="o">(</span>TableRow<span class="o">)</span><span class="p">;</span> // by constructor
+</span></span><span class="line"><span class="cl">component.find<span class="o">(</span><span class="s1">&#39;TableRow&#39;</span><span class="o">)</span><span class="p">;</span> // by display name
+</span></span></code></pre></td></tr></table>
+</div>
+</div></blockquote>
 <h2 id="快照-1">快照</h2>
 <p><a class="link" href="https://github.com/frontend9/fe9-library/issues/265"  target="_blank" rel="noopener"
     >react dom交互测试(enzyme)以及快照测试(snapshot) · Issue #265 · frontend9/fe9-library</a></p>
@@ -866,14 +1322,15 @@ component.find<span class="o">(</span><span class="s1">&#39;TableRow&#39;</span>
 <p>React Testing Library 的测试将与实际的DOM节点一起使用，而不是处理呈现的React组件的实例，可能可以更加精确的贴近真实的使用状况。</p>
 <p>“Most of the damaging features have to do with encouraging testing implementation details. ”，而Enzyme提供了过于齐全的功能，在测试代码里可以访问到真实情况里不可能访问到的实例，可能会让使用者不慎写出错误的测试案例。</p>
 <h1 id="参考">参考</h1>
-<section class="footnotes" role="doc-endnotes">
+<div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn:1" role="doc-endnote">
-<p>前端单元测试实践 - 知乎](<a href="https://zhuanlan.zhihu.com/p/55960017">https://zhuanlan.zhihu.com/p/55960017</a>) <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="fn:1">
+<p>前端单元测试实践 - 知乎](<a class="link" href="https://zhuanlan.zhihu.com/p/55960017"  target="_blank" rel="noopener"
+    >https://zhuanlan.zhihu.com/p/55960017</a>)&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
-</section>
+</div>
 
 </section>
 
@@ -901,26 +1358,30 @@ component.find<span class="o">(</span><span class="s1">&#39;TableRow&#39;</span>
     </section>
     </footer>
 
+
     
 </article>
 
-    <aside class="related-contents--wrapper">
     
+
     
-        <h2 class="section-title">Related contents</h2>
-        <div class="related-contents">
-            <div class="flex article-list--tile">
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
                 
-                    
 <article class="has-image">
     <a href="/p/macrotask-and-microtask/">
         
         
             <div class="article-image">
-                <img src="/p/macrotask-and-microtask/cover.2c0b497a02997e594f6136d4eb7b1b77_hu3395bef352bdebb2bcd19cd38ef3c08c_281145_250x150_fill_box_smart1_2.png" 
+                <img src="/p/macrotask-and-microtask/cover.2c0b497a02997e594f6136d4eb7b1b77_hu3395bef352bdebb2bcd19cd38ef3c08c_281145_250x150_fill_box_smart1_3.png" 
                         width="250" 
                         height="150" 
-                        loading="lazy" 
+                        loading="lazy"
+                        alt="Featured image of post 宏任务与微任务"
                         data-key="macrotask-and-microtask" 
                         data-hash="md5-LAtJegKZfllPYTbU63sbdw==">
                 
@@ -932,19 +1393,19 @@ component.find<span class="o">(</span><span class="s1">&#39;TableRow&#39;</span>
         </div>
     </a>
 </article>
-                
-            </div>
+
+            
         </div>
-    
+    </div>
 </aside>
 
-
+     
     
         
     <div class="disqus-container">
     <div id="disqus_thread"></div>
 <script type="application/javascript">
-    var disqus_config = function () {
+    window.disqus_config = function () {
     
     
     
@@ -975,7 +1436,7 @@ component.find<span class="o">(</span><span class="s1">&#39;TableRow&#39;</span>
 
 <script>
     window.addEventListener('onColorSchemeChange', (e) => {
-        if (DISQUS) {
+        if (typeof DISQUS == 'object') {
             DISQUS.reset({
                 reload: true
             });
@@ -991,14 +1452,19 @@ component.find<span class="o">(</span><span class="s1">&#39;TableRow&#39;</span>
         
             2020 - 
         
-        2021 MythC
+        2022 神话C看世界
     </section>
     
     <section class="powerby">
+        
+            <p><a href="https://beian.miit.gov.cn/">沪ICP备19044551号-1</a></p> <br/>
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.0.1">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.12.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
+
+
+    
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
     
@@ -1060,17 +1526,169 @@ component.find<span class="o">(</span><span class="s1">&#39;TableRow&#39;</span>
 
     </div>
 
-</div>
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
 
-<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css">
             </main>
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"
-    integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin="anonymous"></script><script type="text/javascript" src="/ts/main.js" defer></script>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#相关概念">相关概念</a>
+      <ol>
+        <li><a href="#黑盒测试">黑盒测试</a></li>
+        <li><a href="#白盒测试">白盒测试</a></li>
+      </ol>
+    </li>
+    <li><a href="#动机">动机</a></li>
+    <li><a href="#单元测试的基本概念">单元测试的基本概念</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#为什么选择-jest">为什么选择 jest</a></li>
+    <li><a href="#安装">安装</a>
+      <ol>
+        <li><a href="#配置">配置</a>
+          <ol>
+            <li><a href="#基本配置">基本配置</a></li>
+            <li><a href="#路径配置">路径配置</a></li>
+            <li><a href="#转换配置">转换配置</a></li>
+            <li><a href="#匹配配置">匹配配置</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#api">Api</a>
+      <ol>
+        <li><a href="#断言">断言</a>
+          <ol>
+            <li><a href="#相等">相等</a></li>
+            <li><a href="#真值">真值</a></li>
+            <li><a href="#数字">数字</a></li>
+            <li><a href="#包含">包含</a></li>
+          </ol>
+        </li>
+        <li><a href="#异步">异步</a>
+          <ol>
+            <li><a href="#callback">callback</a></li>
+            <li><a href="#promise">promise</a></li>
+          </ol>
+        </li>
+        <li><a href="#作用域">作用域</a></li>
+        <li><a href="#mock">Mock</a>
+          <ol>
+            <li><a href="#mock函数">Mock函数</a></li>
+            <li><a href="#mock模块">Mock模块</a></li>
+            <li><a href="#mock实现">Mock实现</a></li>
+          </ol>
+        </li>
+        <li><a href="#快照">快照</a></li>
+      </ol>
+    </li>
+    <li><a href="#jest模拟实践">Jest模拟实践</a>
+      <ol>
+        <li><a href="#jest-与-typescript--babel">Jest 与 TypeScript &amp; Babel</a>
+          <ol>
+            <li><a href="#安装依赖">安装依赖</a></li>
+          </ol>
+        </li>
+        <li><a href="#jest-与-react">Jest 与 React</a>
+          <ol>
+            <li><a href="#安装依赖-1">安装依赖</a></li>
+            <li><a href="#配置-babel">配置 babel</a></li>
+            <li><a href="#使用">使用</a></li>
+            <li><a href="#测试用例">测试用例</a></li>
+            <li><a href="#如何编写测试用例">如何编写测试用例</a></li>
+            <li><a href="#注意">注意</a></li>
+            <li><a href="#样式css--css-module">样式（CSS &amp; CSS Module)</a></li>
+            <li><a href="#文件">文件</a></li>
+          </ol>
+        </li>
+        <li><a href="#jest-与-nextjs">Jest 与 NextJs</a></li>
+      </ol>
+    </li>
+    <li><a href="#vscode开发插件">VSCode开发插件</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#api-1">Api</a>
+      <ol>
+        <li><a href="#find">find</a></li>
+      </ol>
+    </li>
+    <li><a href="#快照-1">快照</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#单元测试要做多细">单元测试要做多细？</a></li>
+    <li><a href="#何时编写单元测试">何时编写单元测试？</a></li>
+    <li><a href="#单元测试设计">单元测试设计</a>
+      <ol>
+        <li><a href="#幂等">幂等</a></li>
+        <li><a href="#mock-1">Mock</a></li>
+        <li><a href="#白盒覆盖">白盒覆盖</a></li>
+        <li><a href="#单测定级">单测定级</a></li>
+        <li><a href="#测试用例-1">测试用例</a></li>
+      </ol>
+    </li>
+    <li><a href="#react组件单测设计">React组件单测设计</a></li>
+  </ol>
+
+  <ol>
+    <li>
+      <ol>
+        <li><a href="#tdd">TDD</a></li>
+        <li><a href="#bdd">BDD</a></li>
+        <li><a href="#测试原理">测试原理</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');
@@ -1082,6 +1700,6 @@ component.find<span class="o">(</span><span class="s1">&#39;TableRow&#39;</span>
         document.head.appendChild(customFont);
     }());
 </script>
-
+<div>我是底部</div>
     </body>
 </html>
